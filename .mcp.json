@@ -9,8 +9,8 @@
       "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
     },
     "procurementexpress": {
-      "command": "node",
-      "args": ["dist/index.js"],
+      "command": "npx",
+      "args": ["-y", "@procurementexpress/mcp"],
       "env": {
         "PROCUREMENTEXPRESS_API_BASE_URL": "https://staging.procurementexpress.com",
         "PROCUREMENTEXPRESS_API_VERSION": "v1",

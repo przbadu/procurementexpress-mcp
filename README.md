@@ -19,41 +19,10 @@ A [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) server that p
 
 ### Installation
 
-```bash
-git clone <repository-url>
-cd procurementexpress-mcp
-npm install
-npm run build
-```
-
-### Configuration
-
-Copy the example environment file and fill in your credentials:
+No installation required — run directly with `npx`:
 
 ```bash
-cp .env.example .env
-```
-
-#### V1 Authentication (Recommended)
-
-Static token authentication. The token never expires.
-
-```env
-PROCUREMENTEXPRESS_API_BASE_URL=https://app.procurementexpress.com
-PROCUREMENTEXPRESS_API_VERSION=v1
-PROCUREMENTEXPRESS_AUTH_TOKEN=your_authentication_token
-PROCUREMENTEXPRESS_COMPANY_ID=your_company_id
-```
-
-#### V3 Authentication (OAuth2)
-
-OAuth2 password grant. Tokens are time-limited and require `client_id`/`client_secret`.
-
-```env
-PROCUREMENTEXPRESS_API_BASE_URL=https://app.procurementexpress.com
-PROCUREMENTEXPRESS_API_VERSION=v3
-PROCUREMENTEXPRESS_CLIENT_ID=your_client_id
-PROCUREMENTEXPRESS_CLIENT_SECRET=your_client_secret
+npx -y @procurementexpress/mcp
 ```
 
 ### Usage with Claude Desktop
@@ -64,10 +33,9 @@ Add this to your Claude Desktop configuration (`~/Library/Application Support/Cl
 {
   "mcpServers": {
     "procurementexpress": {
-      "command": "node",
-      "args": ["/absolute/path/to/procurementexpress-mcp/dist/index.js"],
+      "command": "npx",
+      "args": ["-y", "@procurementexpress/mcp"],
       "env": {
-        "PROCUREMENTEXPRESS_API_BASE_URL": "https://app.procurementexpress.com",
         "PROCUREMENTEXPRESS_API_VERSION": "v1",
         "PROCUREMENTEXPRESS_AUTH_TOKEN": "your_token",
         "PROCUREMENTEXPRESS_COMPANY_ID": "your_company_id"
@@ -85,10 +53,9 @@ Add to your project's `.mcp.json`:
 {
   "mcpServers": {
     "procurementexpress": {
-      "command": "node",
-      "args": ["dist/index.js"],
+      "command": "npx",
+      "args": ["-y", "@procurementexpress/mcp"],
       "env": {
-        "PROCUREMENTEXPRESS_API_BASE_URL": "https://app.procurementexpress.com",
         "PROCUREMENTEXPRESS_API_VERSION": "v1",
         "PROCUREMENTEXPRESS_AUTH_TOKEN": "your_token",
         "PROCUREMENTEXPRESS_COMPANY_ID": "your_company_id"
@@ -97,6 +64,30 @@ Add to your project's `.mcp.json`:
   }
 }
 ```
+
+### Configuration
+
+The server is configured entirely via environment variables (set them in the `env` block above).
+
+#### V1 Authentication (Recommended)
+
+Static token authentication. The token never expires.
+
+| Variable | Value |
+|----------|-------|
+| `PROCUREMENTEXPRESS_API_VERSION` | `v1` |
+| `PROCUREMENTEXPRESS_AUTH_TOKEN` | Your authentication token |
+| `PROCUREMENTEXPRESS_COMPANY_ID` | Your company ID |
+
+#### V3 Authentication (OAuth2)
+
+OAuth2 password grant. Tokens are time-limited and require `client_id`/`client_secret`.
+
+| Variable | Value |
+|----------|-------|
+| `PROCUREMENTEXPRESS_API_VERSION` | `v3` |
+| `PROCUREMENTEXPRESS_CLIENT_ID` | Your OAuth2 client ID |
+| `PROCUREMENTEXPRESS_CLIENT_SECRET` | Your OAuth2 client secret |
 
 ## Authentication
 
@@ -299,6 +290,14 @@ tests/
 ```
 
 ## Development
+
+For contributors who want to work on the server itself:
+
+```bash
+git clone https://github.com/procurementexpress/mcp.git
+cd mcp
+npm install
+```
 
 ### Build
 

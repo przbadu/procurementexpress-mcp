@@ -1,5 +1,5 @@
 {
-  "name": "procurementexpress-mcp",
+  "name": "@procurementexpress/mcp",
   "version": "1.0.0",
   "description": "MCP server for ProcurementExpress API",
   "type": "module",
@@ -13,7 +13,8 @@
     "dev": "tsc --watch",
     "test": "vitest run",
     "test:e2e": "vitest run tests/e2e",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "mcp",
@@ -26,6 +27,17 @@
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/procurementexpress/mcp.git"
+  },
+  "homepage": "https://github.com/procurementexpress/mcp#readme",
+  "bugs": {
+    "url": "https://github.com/procurementexpress/mcp/issues"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.26.0",
     "zod": "^3.25.76"
