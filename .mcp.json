@@ -1,0 +1,21 @@
+{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
+    },
+    "procurementexpress": {
+      "command": "node",
+      "args": ["dist/index.js"],
+      "env": {
+        "PE_API_BASE_URL": "https://app.procurementexpress.com",
+        "PE_CLIENT_ID": "",
+        "PE_CLIENT_SECRET": ""
+      }
+    }
+  }
+}

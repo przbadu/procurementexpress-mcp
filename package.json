@@ -1,0 +1,38 @@
+{
+  "name": "procurementexpress-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for ProcurementExpress API",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "procurementexpress-mcp": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "test:e2e": "vitest run tests/e2e",
+    "test:watch": "vitest"
+  },
+  "keywords": [
+    "mcp",
+    "procurementexpress",
+    "procurement",
+    "api"
+  ],
+  "author": "",
+  "license": "ISC",
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.26.0",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^25.2.3",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
+  }
+}

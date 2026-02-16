@@ -1,0 +1,817 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": "1",
+        "title": "Initialize Project Structure and Dependencies",
+        "description": "Set up the Node.js project with TypeScript, install required dependencies, and configure build tooling for the MCP server.",
+        "details": "1. Initialize npm project:\n   ```bash\n   npm init -y\n   ```\n\n2. Install production dependencies:\n   ```bash\n   npm install @modelcontextprotocol/sdk zod\n   ```\n\n3. Install dev dependencies:\n   ```bash\n   npm install -D typescript @types/node vitest\n   ```\n\n4. Create tsconfig.json with strict mode:\n   ```json\n   {\n     \"compilerOptions\": {\n       \"target\": \"ES2022\",\n       \"module\": \"NodeNext\",\n       \"moduleResolution\": \"NodeNext\",\n       \"strict\": true,\n       \"esModuleInterop\": true,\n       \"skipLibCheck\": true,\n       \"outDir\": \"./dist\",\n       \"rootDir\": \"./src\",\n       \"declaration\": true,\n       \"resolveJsonModule\": true\n     },\n     \"include\": [\"src/**/*\"],\n     \"exclude\": [\"node_modules\", \"dist\", \"tests\"]\n   }\n   ```\n\n5. Update package.json scripts:\n   ```json\n   {\n     \"type\": \"module\",\n     \"main\": \"dist/index.js\",\n     \"scripts\": {\n       \"build\": \"tsc\",\n       \"start\": \"node dist/index.js\",\n       \"dev\": \"tsc --watch\",\n       \"test\": \"vitest\",\n       \"test:e2e\": \"vitest run tests/e2e\"\n     }\n   }\n   ```\n\n6. Create directory structure:\n   - src/\n   - src/tools/\n   - tests/\n   - tests/e2e/\n\n7. Update .env.example with ProcurementExpress variables:\n   ```\n   PE_API_BASE_URL=https://api.procurementexpress.com\n   PE_CLIENT_ID=your_client_id\n   PE_CLIENT_SECRET=your_client_secret\n   ```\n\n8. Update .gitignore to include dist/",
+        "testStrategy": "Verify setup by running: npm install (no errors), npm run build (compiles successfully), npm test (vitest runs). Check that tsconfig.json strict mode catches type errors. Ensure all directories exist and package.json has correct scripts.",
+        "priority": "high",
+        "dependencies": [],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Initialize npm Project and Configure package.json",
+            "description": "Run npm init to create package.json and configure it with ESM module type, entry point, and all required npm scripts for building, testing, and development.",
+            "dependencies": [],
+            "details": "Execute 'npm init -y' to create package.json, then modify it to include: \"type\": \"module\", \"main\": \"dist/index.js\", and scripts section with build (tsc), start (node dist/index.js), dev (tsc --watch), test (vitest), and test:e2e (vitest run tests/e2e). The current project has .gitignore and .env.example but no package.json exists yet.",
+            "status": "pending",
+            "testStrategy": "Verify package.json exists with correct 'type: module' setting, 'main' pointing to dist/index.js, and all five scripts (build, start, dev, test, test:e2e) are present and correctly configured.",
+            "parentId": "undefined"
+          },
+          {
+            "id": 2,
+            "title": "Install Production and Development Dependencies",
+            "description": "Install the MCP SDK and Zod as production dependencies, and TypeScript tooling plus Vitest as development dependencies.",
+            "dependencies": [
+              1
+            ],
+            "details": "Run 'npm install @modelcontextprotocol/sdk zod' for production dependencies (MCP SDK for Model Context Protocol server implementation, Zod for schema validation). Then run 'npm install -D typescript @types/node vitest' for development dependencies (TypeScript compiler, Node.js type definitions, Vitest for testing framework).",
+            "status": "pending",
+            "testStrategy": "Run 'npm install' and verify no errors. Check package.json has dependencies and devDependencies sections with all required packages. Verify node_modules directory is created with the installed packages.",
+            "parentId": "undefined"
+          },
+          {
+            "id": 3,
+            "title": "Create TypeScript Configuration with Strict Mode",
+            "description": "Create tsconfig.json with ES2022 target, NodeNext module resolution, strict type checking enabled, and proper directory configuration.",
+            "dependencies": [
+              2
+            ],
+            "details": "Create tsconfig.json with compilerOptions: target ES2022, module NodeNext, moduleResolution NodeNext, strict true, esModuleInterop true, skipLibCheck true, outDir ./dist, rootDir ./src, declaration true, resolveJsonModule true. Set include to ['src/**/*'] and exclude to ['node_modules', 'dist', 'tests']. This enables strict TypeScript checking and proper ESM module handling.",
+            "status": "pending",
+            "testStrategy": "Run 'npx tsc --noEmit' after creating a minimal src/index.ts file to verify TypeScript compilation works. Confirm strict mode catches type errors by intentionally adding a type violation and seeing it fail.",
+            "parentId": "undefined"
+          },
+          {
+            "id": 4,
+            "title": "Create Project Directory Structure",
+            "description": "Create the required directory structure including src/, src/tools/, tests/, and tests/e2e/ directories with placeholder files.",
+            "dependencies": [
+              1
+            ],
+            "details": "Create the following directories: src/ (main source code), src/tools/ (MCP tool implementations), tests/ (unit tests), tests/e2e/ (end-to-end tests). Add a minimal src/index.ts placeholder file with a comment to enable TypeScript compilation verification. The src/ directory does not currently exist in the project.",
+            "status": "pending",
+            "testStrategy": "Verify all four directories exist: src/, src/tools/, tests/, tests/e2e/. Confirm src/index.ts exists. Run 'ls -la src src/tools tests tests/e2e' to validate directory structure.",
+            "parentId": "undefined"
+          },
+          {
+            "id": 5,
+            "title": "Update Environment and Git Configuration Files",
+            "description": "Update .env.example with ProcurementExpress API variables and add dist/ to .gitignore for compiled output.",
+            "dependencies": [
+              1
+            ],
+            "details": "Update .env.example to add ProcurementExpress-specific variables: PE_API_BASE_URL (default https://api.procurementexpress.com), PE_CLIENT_ID, PE_CLIENT_SECRET. The current .env.example has AI service API keys but lacks ProcurementExpress configuration. Also update .gitignore (currently at 26 lines) to include 'dist/' directory to exclude compiled TypeScript output from version control.",
+            "status": "pending",
+            "testStrategy": "Verify .env.example contains PE_API_BASE_URL, PE_CLIENT_ID, and PE_CLIENT_SECRET entries. Confirm .gitignore includes 'dist/' line. Run 'grep -E \"PE_|dist\" .env.example .gitignore' to validate both files.",
+            "parentId": "undefined"
+          }
+        ],
+        "complexity": 2,
+        "recommendedSubtasks": 0,
+        "expansionPrompt": "",
+        "updatedAt": "2026-02-16T05:55:58.112Z"
+      },
+      {
+        "id": "2",
+        "title": "Implement Core Types and API Client",
+        "description": "Create shared TypeScript interfaces for API responses and implement the HTTP client wrapper with proper error handling and header injection.",
+        "details": "1. Create src/types.ts with shared interfaces:\n   ```typescript\n   // API Response types\n   export interface ApiError {\n     code: number;\n     message: string;\n     errors?: Record<string, string[]>;\n   }\n\n   export interface PaginatedResponse<T> {\n     data: T[];\n     meta: {\n       current_page: number;\n       total_pages: number;\n       total_count: number;\n       per_page: number;\n     };\n   }\n\n   export interface User {\n     id: string;\n     email: string;\n     name: string;\n     phone?: string;\n     company_memberships: CompanyMembership[];\n   }\n\n   export interface CompanyMembership {\n     company_id: string;\n     role: string;\n   }\n\n   // Add interfaces for: Budget, Company, Department, Supplier, Product, PurchaseOrder, Invoice, ApprovalFlow, TaxRate, Webhook, etc.\n   ```\n\n2. Create src/api-client.ts:\n   ```typescript\n   import { ApiError } from './types.js';\n\n   export class ApiClient {\n     private baseUrl: string;\n     private token: string | null = null;\n     private companyId: string | null = null;\n\n     constructor(baseUrl: string) {\n       this.baseUrl = baseUrl;\n     }\n\n     setToken(token: string): void {\n       this.token = token;\n     }\n\n     setCompanyId(companyId: string): void {\n       this.companyId = companyId;\n     }\n\n     private getHeaders(): Record<string, string> {\n       const headers: Record<string, string> = {\n         'Content-Type': 'application/json',\n       };\n       if (this.token) {\n         headers['Authorization'] = `Bearer ${this.token}`;\n       }\n       if (this.companyId) {\n         headers['app_company_id'] = this.companyId;\n       }\n       return headers;\n     }\n\n     async request<T>(method: string, path: string, body?: unknown): Promise<T> {\n       const response = await fetch(`${this.baseUrl}${path}`, {\n         method,\n         headers: this.getHeaders(),\n         body: body ? JSON.stringify(body) : undefined,\n       });\n\n       if (!response.ok) {\n         const error = await response.json().catch(() => ({}));\n         throw new ApiClientError(response.status, error.message || 'API request failed', error.errors);\n       }\n\n       return response.json() as Promise<T>;\n     }\n\n     get<T>(path: string): Promise<T> { return this.request('GET', path); }\n     post<T>(path: string, body: unknown): Promise<T> { return this.request('POST', path, body); }\n     put<T>(path: string, body: unknown): Promise<T> { return this.request('PUT', path, body); }\n     patch<T>(path: string, body: unknown): Promise<T> { return this.request('PATCH', path, body); }\n     delete<T>(path: string): Promise<T> { return this.request('DELETE', path); }\n   }\n\n   export class ApiClientError extends Error {\n     constructor(\n       public statusCode: number,\n       message: string,\n       public errors?: Record<string, string[]>\n     ) {\n       super(message);\n       this.name = 'ApiClientError';\n     }\n   }\n   ```",
+        "testStrategy": "Unit test ApiClient methods with mocked fetch. Test header injection with/without token and companyId. Test error handling for 400, 401, 403, 404, 500 status codes. Verify ApiClientError contains correct statusCode and error details.",
+        "priority": "high",
+        "dependencies": [
+          "1"
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create types.ts with all interface definitions",
+            "description": "Create src/types.ts containing TypeScript interfaces for all API response types used throughout the MCP server.",
+            "dependencies": [],
+            "details": "Define comprehensive TypeScript interfaces in src/types.ts:\n\n1. Error and pagination types:\n   - ApiError: { code: number, message: string, errors?: Record<string, string[]> }\n   - PaginatedResponse<T>: { data: T[], meta: { current_page, total_pages, total_count, per_page } }\n\n2. User/Company types:\n   - User: { id, email, name, phone?, company_memberships: CompanyMembership[] }\n   - CompanyMembership: { company_id, role }\n   - Company: { id, name, settings, custom_fields, created_at, updated_at }\n\n3. Core entity types:\n   - Budget: { id, name, amount, remaining_amount, department_id?, archived, active, currency }\n   - Department: { id, name, company_id, archived }\n   - Supplier: { id, name, email?, phone?, address?, archived }\n   - Product: { id, name, description?, sku?, unit_price?, supplier_id? }\n\n4. Transaction types:\n   - PurchaseOrder: { id, number, status, supplier_id, line_items: LineItem[], total, created_at, accept_token?, reject_token? }\n   - LineItem: { description, quantity, unit_price, budget_id?, tax_rate_id? }\n   - Invoice: { id, number, status, supplier_id, purchase_order_id?, amount, created_at }\n   - Payment: { id, amount, purchase_order_id?, invoice_id?, created_at }\n\n5. Workflow types:\n   - ApprovalFlow: { id, name, steps: ApprovalStep[], conditions?, archived }\n   - ApprovalStep: { approver_id, order, condition? }\n   - ApprovalCondition: { field, operator, value }\n\n6. Supporting types:\n   - TaxRate: { id, name, rate, archived }\n   - Webhook: { id, url, events: string[], active }\n   - Currency: { code, name, symbol }\n\nAll interfaces should use optional properties (?) where fields may not always be present. Export all interfaces for use across the codebase.",
+            "status": "pending",
+            "testStrategy": "Type definitions are validated at compile time by TypeScript strict mode. No runtime tests needed for interfaces, but ensure all types are correctly exported and can be imported by other modules. The TypeScript compiler will verify type correctness when used in api-client.ts and tool implementations.",
+            "parentId": "undefined"
+          },
+          {
+            "id": 2,
+            "title": "Implement ApiClient class with HTTP methods and header injection",
+            "description": "Create src/api-client.ts with the ApiClient class that handles all HTTP requests, authentication headers, and company ID injection.",
+            "dependencies": [
+              1
+            ],
+            "details": "Implement the ApiClient class in src/api-client.ts:\n\n1. Class structure:\n   - Private properties: baseUrl: string, token: string | null, companyId: string | null\n   - Constructor accepting baseUrl parameter\n\n2. Token and company management:\n   - setToken(token: string): void - stores bearer token\n   - setCompanyId(companyId: string): void - stores company ID for header\n   - getToken(): string | null - retrieves current token (for validation)\n   - clearAuth(): void - clears both token and companyId (for logout)\n\n3. Header injection (private getHeaders method):\n   - Always include 'Content-Type': 'application/json'\n   - Add 'Authorization': `Bearer ${token}` when token is set\n   - Add 'app_company_id': companyId when companyId is set\n\n4. Core request method:\n   - async request<T>(method: string, path: string, body?: unknown): Promise<T>\n   - Construct full URL: `${baseUrl}${path}`\n   - Use native fetch with method, headers, and JSON-stringified body\n   - Handle non-ok responses by throwing ApiClientError\n   - Parse and return JSON response typed as T\n\n5. HTTP convenience methods (all call request internally):\n   - get<T>(path: string): Promise<T>\n   - post<T>(path: string, body: unknown): Promise<T>\n   - put<T>(path: string, body: unknown): Promise<T>\n   - patch<T>(path: string, body: unknown): Promise<T>\n   - delete<T>(path: string): Promise<T>\n\nUse ES module syntax with .js extensions in imports. Export the ApiClient class as a named export.",
+            "status": "pending",
+            "testStrategy": "Unit test ApiClient methods using mocked fetch (vi.mock('node:fetch') or global.fetch mock). Test cases:\n1. Verify headers include Content-Type always\n2. Verify Authorization header added when token is set\n3. Verify app_company_id header added when companyId is set\n4. Verify headers work correctly with both, one, or neither auth values\n5. Test each HTTP verb method calls request with correct method string\n6. Verify body is JSON-stringified for POST/PUT/PATCH\n7. Verify GET/DELETE don't include body",
+            "parentId": "undefined"
+          },
+          {
+            "id": 3,
+            "title": "Implement ApiClientError class and error handling unit tests",
+            "description": "Create the ApiClientError custom error class and comprehensive unit tests for error handling across HTTP status codes 400, 401, 403, 404, and 500.",
+            "dependencies": [
+              2
+            ],
+            "details": "1. Implement ApiClientError class in src/api-client.ts:\n   - Extend Error base class\n   - Constructor parameters: statusCode: number, message: string, errors?: Record<string, string[]>\n   - Set this.name = 'ApiClientError'\n   - Store statusCode and errors as public properties\n   - Call super(message) to set error message\n\n2. Update ApiClient.request() error handling:\n   - Check response.ok, if false handle error\n   - Try to parse error response body as JSON\n   - Extract message from error.message or use default 'API request failed'\n   - Extract errors object from error.errors if present\n   - Throw new ApiClientError(response.status, message, errors)\n   - Handle JSON parse failures gracefully (use empty object)\n\n3. Create unit tests in tests/api-client.test.ts:\n   - Test ApiClientError construction preserves all properties\n   - Test instanceof Error returns true\n   - Test error.name equals 'ApiClientError'\n\n4. Test error handling scenarios:\n   - 400 Bad Request: Returns validation errors in errors property\n   - 401 Unauthorized: Token invalid or missing\n   - 403 Forbidden: User lacks permission\n   - 404 Not Found: Resource doesn't exist\n   - 500 Internal Server Error: Server-side failure\n   - Malformed JSON response: Graceful handling with default message\n\nEnsure all tests use mocked fetch to simulate API responses. Use Vitest describe/it/expect syntax.",
+            "status": "pending",
+            "testStrategy": "Create tests/api-client.test.ts with Vitest:\n1. Mock global.fetch for all tests\n2. Test 400 error includes validation errors: mock response with { message: 'Validation failed', errors: { email: ['invalid format'] } }, verify ApiClientError.errors contains the validation details\n3. Test 401 error for expired token scenario\n4. Test 403 error for permission denied\n5. Test 404 error for resource not found\n6. Test 500 error for server errors\n7. Test malformed/empty JSON response body doesn't crash, uses default message\n8. Verify error statusCode property matches HTTP status\n9. Test successful responses (200, 201) return parsed JSON data",
+            "parentId": "undefined"
+          }
+        ],
+        "complexity": 4,
+        "recommendedSubtasks": 3,
+        "expansionPrompt": "Break down into: 1) Create types.ts with all interface definitions (User, Budget, Company, Department, Supplier, Product, PurchaseOrder, Invoice, ApprovalFlow, TaxRate, Webhook, pagination, error types), 2) Implement ApiClient class with request method, header injection, and HTTP verb convenience methods, 3) Implement ApiClientError class and unit tests for error handling scenarios (400, 401, 403, 404, 500).",
+        "updatedAt": "2026-02-16T06:00:08.023Z"
+      },
+      {
+        "id": "3",
+        "title": "Implement Authentication Manager and MCP Server Skeleton",
+        "description": "Create the authentication manager for OAuth2 token lifecycle and set up the MCP server entry point with stdio transport.",
+        "details": "1. Create src/auth.ts:\n   ```typescript\n   import { ApiClient } from './api-client.js';\n\n   interface AuthTokenResponse {\n     access_token: string;\n     token_type: string;\n     expires_in: number;\n     created_at: number;\n   }\n\n   export class AuthManager {\n     private apiClient: ApiClient;\n     private clientId: string;\n     private clientSecret: string;\n     private currentToken: string | null = null;\n\n     constructor(apiClient: ApiClient, clientId: string, clientSecret: string) {\n       this.apiClient = apiClient;\n       this.clientId = clientId;\n       this.clientSecret = clientSecret;\n     }\n\n     async authenticate(email: string, password: string): Promise<string> {\n       const response = await this.apiClient.post<AuthTokenResponse>('/oauth/token', {\n         grant_type: 'password',\n         email,\n         password,\n         client_id: this.clientId,\n         client_secret: this.clientSecret,\n       });\n       this.currentToken = response.access_token;\n       this.apiClient.setToken(this.currentToken);\n       return this.currentToken;\n     }\n\n     async validateToken(): Promise<boolean> {\n       if (!this.currentToken) return false;\n       try {\n         await this.apiClient.get('/oauth/token/info');\n         return true;\n       } catch {\n         return false;\n       }\n     }\n\n     async revokeToken(): Promise<void> {\n       if (this.currentToken) {\n         await this.apiClient.post('/oauth/revoke', { token: this.currentToken });\n         this.currentToken = null;\n         this.apiClient.setToken('');\n       }\n     }\n\n     getToken(): string | null {\n       return this.currentToken;\n     }\n   }\n   ```\n\n2. Create src/index.ts MCP server skeleton:\n   ```typescript\n   import { Server } from '@modelcontextprotocol/sdk/server/index.js';\n   import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';\n   import { ApiClient } from './api-client.js';\n   import { AuthManager } from './auth.js';\n\n   const PE_API_BASE_URL = process.env.PE_API_BASE_URL || 'https://api.procurementexpress.com';\n   const PE_CLIENT_ID = process.env.PE_CLIENT_ID || '';\n   const PE_CLIENT_SECRET = process.env.PE_CLIENT_SECRET || '';\n\n   const apiClient = new ApiClient(PE_API_BASE_URL);\n   const authManager = new AuthManager(apiClient, PE_CLIENT_ID, PE_CLIENT_SECRET);\n\n   const server = new Server(\n     { name: 'procurementexpress-mcp', version: '1.0.0' },\n     { capabilities: { tools: {} } }\n   );\n\n   // Tool handlers will be registered here\n\n   async function main() {\n     const transport = new StdioServerTransport();\n     await server.connect(transport);\n     console.error('ProcurementExpress MCP Server running on stdio');\n   }\n\n   main().catch((error) => {\n     console.error('Fatal error:', error);\n     process.exit(1);\n   });\n   ```",
+        "testStrategy": "Test AuthManager with mocked API responses for successful authentication, failed authentication (invalid credentials), token validation (valid/expired), and token revocation. Verify server starts without errors and responds to MCP protocol handshake via stdio.",
+        "priority": "high",
+        "dependencies": [
+          "2"
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create AuthManager class with OAuth2 token lifecycle management",
+            "description": "Implement src/auth.ts containing the AuthManager class that handles OAuth2 password grant authentication, token validation, and token revocation.",
+            "dependencies": [],
+            "details": "Create src/auth.ts with the AuthManager class:\n\n1. Define AuthTokenResponse interface with: access_token, token_type, expires_in, created_at\n\n2. Implement AuthManager class:\n   - Private properties: apiClient (ApiClient), clientId, clientSecret, currentToken (string | null)\n   - Constructor accepting ApiClient, clientId, clientSecret parameters\n\n3. Implement authenticate(email, password) method:\n   - POST to /oauth/token with grant_type='password', email, password, client_id, client_secret\n   - Store access_token in currentToken\n   - Call apiClient.setToken() to configure subsequent requests\n   - Return the access token\n\n4. Implement validateToken() method:\n   - Return false if no currentToken exists\n   - GET /oauth/token/info to verify token validity\n   - Return true on success, false on any error\n\n5. Implement revokeToken() method:\n   - Skip if no currentToken\n   - POST to /oauth/revoke with the current token\n   - Clear currentToken and reset apiClient token\n\n6. Implement getToken() method returning currentToken\n\nUse ES module imports with .js extension for api-client import.",
+            "status": "pending",
+            "testStrategy": "Unit test AuthManager with mocked ApiClient: 1) authenticate() stores token and calls apiClient.setToken(), 2) validateToken() returns true when API succeeds, false when token is null or API fails, 3) revokeToken() calls API and clears token, 4) getToken() returns current token value. Mock ApiClient.post/get methods to simulate API responses.",
+            "parentId": "undefined"
+          },
+          {
+            "id": 2,
+            "title": "Create MCP server skeleton with stdio transport",
+            "description": "Implement src/index.ts as the MCP server entry point with Server initialization, StdioServerTransport, and environment variable configuration.",
+            "dependencies": [
+              1
+            ],
+            "details": "Create src/index.ts with the MCP server setup:\n\n1. Import required modules:\n   - Server from @modelcontextprotocol/sdk/server/index.js\n   - StdioServerTransport from @modelcontextprotocol/sdk/server/stdio.js\n   - ApiClient from ./api-client.js\n   - AuthManager from ./auth.js\n\n2. Define environment variable constants:\n   - PE_API_BASE_URL: process.env.PE_API_BASE_URL || 'https://api.procurementexpress.com'\n   - PE_CLIENT_ID: process.env.PE_CLIENT_ID || ''\n   - PE_CLIENT_SECRET: process.env.PE_CLIENT_SECRET || ''\n\n3. Instantiate core components:\n   - Create ApiClient with PE_API_BASE_URL\n   - Create AuthManager with apiClient, PE_CLIENT_ID, PE_CLIENT_SECRET\n\n4. Create MCP Server instance:\n   - Server info: { name: 'procurementexpress-mcp', version: '1.0.0' }\n   - Capabilities: { capabilities: { tools: {} } }\n\n5. Implement main() async function:\n   - Create StdioServerTransport instance\n   - Connect server to transport\n   - Log startup message to stderr (not stdout, as stdout is for MCP protocol)\n\n6. Call main() with error handler that logs to stderr and exits with code 1",
+            "status": "pending",
+            "testStrategy": "Verify server compiles with 'npm run build' and starts without errors via 'node dist/index.js'. Test that startup message appears on stderr. Verify environment variables are read correctly by setting custom values and checking they propagate to ApiClient. Manual verification that server process stays running awaiting stdio input.",
+            "parentId": "undefined"
+          },
+          {
+            "id": 3,
+            "title": "Wire AuthManager with ApiClient and verify server startup",
+            "description": "Integrate AuthManager and ApiClient instances correctly, ensure proper initialization order, and verify the complete server starts and responds to MCP protocol.",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Complete the integration and verification:\n\n1. Verify dependency chain:\n   - ApiClient must be created before AuthManager (AuthManager requires ApiClient in constructor)\n   - Both must be created before Server tool handlers are registered\n   - Export authManager and apiClient for future tool handler access\n\n2. Add placeholder comment for tool handler registration:\n   - Mark location where ListToolsRequestSchema and CallToolRequestSchema handlers will be added (Task 4)\n   - Ensure server structure supports adding handlers later\n\n3. Validate environment variable handling:\n   - Add warning log if PE_CLIENT_ID or PE_CLIENT_SECRET are empty\n   - Ensure server still starts (some tools may work without auth)\n\n4. End-to-end startup verification:\n   - Build project: npm run build\n   - Start server: npm start (or node dist/index.js)\n   - Verify process runs and outputs startup message to stderr\n   - Test with MCP inspector or simple stdio test to confirm protocol handshake\n\n5. Add graceful shutdown handling:\n   - Handle SIGINT/SIGTERM signals\n   - Log shutdown message to stderr\n   - Exit cleanly with code 0",
+            "status": "pending",
+            "testStrategy": "Integration test: 1) Build succeeds with 'npm run build', 2) Server starts without crashing: 'timeout 2 npm start || true' exits without error output, 3) Startup message appears on stderr, 4) Server responds to MCP initialize request (can use @modelcontextprotocol/sdk Client in stdio mode), 5) SIGTERM causes clean shutdown. If MCP SDK test client is complex, manual testing with pipe/process spawn is acceptable.",
+            "parentId": "undefined"
+          }
+        ],
+        "complexity": 5,
+        "recommendedSubtasks": 3,
+        "expansionPrompt": "Break down into: 1) Create AuthManager class with authenticate, validateToken, revokeToken methods and token lifecycle management, 2) Create MCP server skeleton in index.ts with Server initialization, StdioServerTransport setup, and environment variable handling, 3) Wire AuthManager with ApiClient and verify server starts correctly via stdio.",
+        "updatedAt": "2026-02-16T06:00:10.360Z"
+      },
+      {
+        "id": "4",
+        "title": "Implement Authentication Tools",
+        "description": "Create MCP tools for authenticate, validate_token, and revoke_token with zod input validation.",
+        "details": "1. Create src/tools/auth.ts:\n   ```typescript\n   import { z } from 'zod';\n   import { AuthManager } from '../auth.js';\n   import { ApiClient } from '../api-client.js';\n\n   // Input schemas\n   export const authenticateSchema = z.object({\n     email: z.string().email('Valid email required'),\n     password: z.string().min(1, 'Password required'),\n     company_id: z.string().optional(),\n   });\n\n   export const validateTokenSchema = z.object({});\n   export const revokeTokenSchema = z.object({});\n\n   // Tool definitions\n   export const authToolDefinitions = [\n     {\n       name: 'authenticate',\n       description: 'Sign in via OAuth2 to get a bearer token. Required before using other tools.',\n       inputSchema: {\n         type: 'object',\n         properties: {\n           email: { type: 'string', description: 'User email address' },\n           password: { type: 'string', description: 'User password' },\n           company_id: { type: 'string', description: 'Optional company ID to set as default' },\n         },\n         required: ['email', 'password'],\n       },\n     },\n     {\n       name: 'validate_token',\n       description: 'Check if the current authentication token is valid.',\n       inputSchema: { type: 'object', properties: {} },\n     },\n     {\n       name: 'revoke_token',\n       description: 'Sign out and revoke the current bearer token.',\n       inputSchema: { type: 'object', properties: {} },\n     },\n   ];\n\n   // Tool handlers\n   export function createAuthToolHandlers(authManager: AuthManager, apiClient: ApiClient) {\n     return {\n       authenticate: async (args: unknown) => {\n         const parsed = authenticateSchema.parse(args);\n         const token = await authManager.authenticate(parsed.email, parsed.password);\n         if (parsed.company_id) {\n           apiClient.setCompanyId(parsed.company_id);\n         }\n         return { success: true, message: 'Authentication successful' };\n       },\n       validate_token: async () => {\n         const isValid = await authManager.validateToken();\n         return { valid: isValid };\n       },\n       revoke_token: async () => {\n         await authManager.revokeToken();\n         return { success: true, message: 'Token revoked' };\n       },\n     };\n   }\n   ```\n\n2. Register tools in src/index.ts:\n   ```typescript\n   import { authToolDefinitions, createAuthToolHandlers } from './tools/auth.js';\n\n   const authHandlers = createAuthToolHandlers(authManager, apiClient);\n\n   server.setRequestHandler(ListToolsRequestSchema, async () => ({\n     tools: [...authToolDefinitions],\n   }));\n\n   server.setRequestHandler(CallToolRequestSchema, async (request) => {\n     const { name, arguments: args } = request.params;\n     try {\n       switch (name) {\n         case 'authenticate':\n           return { content: [{ type: 'text', text: JSON.stringify(await authHandlers.authenticate(args)) }] };\n         case 'validate_token':\n           return { content: [{ type: 'text', text: JSON.stringify(await authHandlers.validate_token()) }] };\n         case 'revoke_token':\n           return { content: [{ type: 'text', text: JSON.stringify(await authHandlers.revoke_token()) }] };\n         default:\n           throw new Error(`Unknown tool: ${name}`);\n       }\n     } catch (error) {\n       return { content: [{ type: 'text', text: JSON.stringify({ error: error.message }) }], isError: true };\n     }\n   });\n   ```",
+        "testStrategy": "E2E tests: 1) authenticate with valid credentials returns success, 2) authenticate with invalid credentials returns error, 3) validate_token after authentication returns valid:true, 4) validate_token without authentication returns valid:false, 5) revoke_token clears session, 6) zod validation rejects invalid email format.",
+        "priority": "high",
+        "dependencies": [
+          "3"
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create src/tools/auth.ts with zod schemas, tool definitions, and handler factory",
+            "description": "Create the authentication tools module with zod validation schemas for authenticate/validate_token/revoke_token, MCP-compatible tool definitions array, and a handler factory function that creates tool handlers bound to AuthManager and ApiClient instances.",
+            "dependencies": [],
+            "details": "1. Create src/tools/auth.ts file\n2. Import dependencies: z from 'zod', AuthManager from '../auth.js', ApiClient from '../api-client.js'\n3. Define zod schemas:\n   - authenticateSchema: email (string().email()), password (string().min(1)), company_id (string().optional())\n   - validateTokenSchema: empty object z.object({})\n   - revokeTokenSchema: empty object z.object({})\n4. Export authToolDefinitions array with MCP JSON Schema format:\n   - 'authenticate' tool with email, password (required), company_id (optional) properties\n   - 'validate_token' tool with empty properties\n   - 'revoke_token' tool with empty properties\n5. Export createAuthToolHandlers factory function that takes AuthManager and ApiClient:\n   - authenticate: parse args with zod, call authManager.authenticate(), optionally set company_id, return success object\n   - validate_token: call authManager.validateToken(), return { valid: boolean }\n   - revoke_token: call authManager.revokeToken(), return success object",
+            "status": "pending",
+            "testStrategy": "Unit tests: 1) Verify zod schemas reject invalid input (bad email format, empty password), 2) Verify schemas accept valid input, 3) Test handler functions call AuthManager methods correctly with mocked dependencies, 4) Verify company_id is set on ApiClient when provided to authenticate",
+            "parentId": "undefined"
+          },
+          {
+            "id": 2,
+            "title": "Integrate auth tools into src/index.ts with MCP request handlers",
+            "description": "Register authentication tools in the main MCP server by importing auth tools, setting up ListToolsRequestSchema handler to expose available tools, and CallToolRequestSchema handler to route tool calls to appropriate handlers with error handling and JSON response formatting.",
+            "dependencies": [
+              1
+            ],
+            "details": "1. Import authToolDefinitions and createAuthToolHandlers from './tools/auth.js'\n2. Initialize auth handlers by calling createAuthToolHandlers(authManager, apiClient)\n3. Register ListToolsRequestSchema handler:\n   - Return { tools: [...authToolDefinitions] } to expose auth tools\n4. Register CallToolRequestSchema handler:\n   - Extract name and arguments from request.params\n   - Implement switch statement for tool routing:\n     - 'authenticate': call authHandlers.authenticate(args)\n     - 'validate_token': call authHandlers.validate_token()\n     - 'revoke_token': call authHandlers.revoke_token()\n     - default: throw Error('Unknown tool: ${name}')\n   - Wrap handler results in MCP response format: { content: [{ type: 'text', text: JSON.stringify(result) }] }\n   - Implement try/catch for error handling: return { content: [{ type: 'text', text: JSON.stringify({ error: error.message }) }], isError: true }",
+            "status": "pending",
+            "testStrategy": "E2E tests: 1) ListToolsRequestSchema returns all 3 auth tools, 2) authenticate with valid credentials returns success JSON, 3) authenticate with invalid credentials returns isError: true, 4) validate_token returns { valid: true/false }, 5) revoke_token returns success, 6) Unknown tool name returns error response, 7) Verify zod validation errors are caught and returned properly",
+            "parentId": "undefined"
+          }
+        ],
+        "complexity": 4,
+        "recommendedSubtasks": 2,
+        "expansionPrompt": "Break down into: 1) Create src/tools/auth.ts with zod schemas, tool definitions array, and handler factory function for authenticate/validate_token/revoke_token, 2) Integrate auth tools into src/index.ts by registering ListToolsRequestSchema and CallToolRequestSchema handlers with proper error handling and JSON response formatting.",
+        "updatedAt": "2026-02-16T06:00:12.662Z"
+      },
+      {
+        "id": "5",
+        "title": "Implement User and Budget Management Tools",
+        "description": "Create MCP tools for user profile operations (get_current_user, update_current_user, list_currencies, list_all_currencies) and budget CRUD operations.",
+        "details": "1. Create src/tools/users.ts:\n   ```typescript\n   import { z } from 'zod';\n   import { ApiClient } from '../api-client.js';\n\n   export const updateUserSchema = z.object({\n     email: z.string().email().optional(),\n     name: z.string().optional(),\n     phone: z.string().optional(),\n   });\n\n   export const userToolDefinitions = [\n     {\n       name: 'get_current_user',\n       description: 'Get the authenticated user profile and company memberships.',\n       inputSchema: { type: 'object', properties: {} },\n     },\n     {\n       name: 'update_current_user',\n       description: 'Update the authenticated user profile.',\n       inputSchema: {\n         type: 'object',\n         properties: {\n           email: { type: 'string' },\n           name: { type: 'string' },\n           phone: { type: 'string' },\n         },\n       },\n     },\n     {\n       name: 'list_currencies',\n       description: 'List enabled currencies for the current company.',\n       inputSchema: { type: 'object', properties: {} },\n     },\n     {\n       name: 'list_all_currencies',\n       description: 'List all available currencies.',\n       inputSchema: { type: 'object', properties: {} },\n     },\n   ];\n\n   export function createUserToolHandlers(apiClient: ApiClient) {\n     return {\n       get_current_user: async () => apiClient.get('/api/v1/me'),\n       update_current_user: async (args: unknown) => {\n         const parsed = updateUserSchema.parse(args);\n         return apiClient.put('/api/v1/me', parsed);\n       },\n       list_currencies: async () => apiClient.get('/api/v1/currencies'),\n       list_all_currencies: async () => apiClient.get('/api/v1/currencies/all'),\n     };\n   }\n   ```\n\n2. Create src/tools/budgets.ts:\n   ```typescript\n   import { z } from 'zod';\n   import { ApiClient } from '../api-client.js';\n\n   export const listBudgetsSchema = z.object({\n     page: z.number().optional(),\n     per_page: z.number().optional(),\n     department_id: z.string().optional(),\n     archived: z.boolean().optional(),\n     active: z.boolean().optional(),\n   });\n\n   export const createBudgetSchema = z.object({\n     name: z.string().min(1),\n     amount: z.number().positive(),\n     currency: z.string(),\n     department_id: z.string().optional(),\n     start_date: z.string().optional(),\n     end_date: z.string().optional(),\n   });\n\n   export const updateBudgetSchema = createBudgetSchema.partial().extend({\n     id: z.string(),\n   });\n\n   export const budgetToolDefinitions = [\n     {\n       name: 'list_budgets',\n       description: 'List budgets with pagination and filters.',\n       inputSchema: {\n         type: 'object',\n         properties: {\n           page: { type: 'number' },\n           per_page: { type: 'number' },\n           department_id: { type: 'string' },\n           archived: { type: 'boolean' },\n           active: { type: 'boolean' },\n         },\n       },\n     },\n     {\n       name: 'get_budget',\n       description: 'Get a specific budget with remaining amount.',\n       inputSchema: { type: 'object', properties: { id: { type: 'string' } }, required: ['id'] },\n     },\n     {\n       name: 'create_budget',\n       description: 'Create a new budget.',\n       inputSchema: {\n         type: 'object',\n         properties: {\n           name: { type: 'string' },\n           amount: { type: 'number' },\n           currency: { type: 'string' },\n           department_id: { type: 'string' },\n           start_date: { type: 'string' },\n           end_date: { type: 'string' },\n         },\n         required: ['name', 'amount', 'currency'],\n       },\n     },\n     {\n       name: 'update_budget',\n       description: 'Update an existing budget.',\n       inputSchema: {\n         type: 'object',\n         properties: {\n           id: { type: 'string' },\n           name: { type: 'string' },\n           amount: { type: 'number' },\n           currency: { type: 'string' },\n         },\n         required: ['id'],\n       },\n     },\n   ];\n\n   export function createBudgetToolHandlers(apiClient: ApiClient) {\n     return {\n       list_budgets: async (args: unknown) => {\n         const parsed = listBudgetsSchema.parse(args);\n         const params = new URLSearchParams();\n         Object.entries(parsed).forEach(([k, v]) => v !== undefined && params.append(k, String(v)));\n         return apiClient.get(`/api/v1/budgets?${params}`);\n       },\n       get_budget: async (args: unknown) => {\n         const { id } = z.object({ id: z.string() }).parse(args);\n         return apiClient.get(`/api/v1/budgets/${id}`);\n       },\n       create_budget: async (args: unknown) => {\n         const parsed = createBudgetSchema.parse(args);\n         return apiClient.post('/api/v1/budgets', parsed);\n       },\n       update_budget: async (args: unknown) => {\n         const { id, ...data } = updateBudgetSchema.parse(args);\n         return apiClient.put(`/api/v1/budgets/${id}`, data);\n       },\n     };\n   }\n   ```\n\n3. Register both tool modules in src/index.ts with the pattern established in task 4.",
+        "testStrategy": "E2E tests for each tool: 1) get_current_user returns user object with company_memberships, 2) update_current_user modifies profile, 3) list_budgets with filters returns paginated results, 4) get_budget returns budget with remaining amount, 5) create_budget with valid data returns new budget, 6) update_budget modifies existing budget. Test zod validation rejects invalid inputs.",
+        "priority": "high",
+        "dependencies": [
+          "4"
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create src/tools/users.ts with user profile and currency tools",
+            "description": "Implement the users tool module with zod schemas, MCP tool definitions, and handler factory for get_current_user, update_current_user, list_currencies, and list_all_currencies operations.",
+            "dependencies": [],
+            "details": "Create src/tools/users.ts file with: 1) Import dependencies (z from 'zod', ApiClient from '../api-client.js'). 2) Define updateUserSchema with optional email (string().email()), name, and phone fields. 3) Export userToolDefinitions array with 4 MCP-compatible tool definitions: get_current_user (empty properties), update_current_user (email/name/phone properties), list_currencies (empty properties), list_all_currencies (empty properties). 4) Export createUserToolHandlers factory function that takes ApiClient and returns handlers: get_current_user calls GET /api/v1/me, update_current_user validates args with zod then calls PUT /api/v1/me, list_currencies calls GET /api/v1/currencies, list_all_currencies calls GET /api/v1/currencies/all. Follow the exact patterns established in task 4's auth.ts implementation.",
+            "status": "pending",
+            "testStrategy": "Unit tests: 1) Verify updateUserSchema accepts valid partial updates and rejects invalid email format. 2) Test createUserToolHandlers returns object with all 4 handler functions. 3) Mock ApiClient and verify each handler calls correct endpoint. E2E tests: 1) get_current_user returns user object with company_memberships. 2) update_current_user modifies profile fields. 3) list_currencies and list_all_currencies return currency arrays.",
+            "parentId": "undefined"
+          },
+          {
+            "id": 2,
+            "title": "Create src/tools/budgets.ts with CRUD operations and complex schemas",
+            "description": "Implement the budgets tool module with complex zod schemas including pagination/filters, MCP tool definitions, and handler factory for list_budgets, get_budget, create_budget, and update_budget operations.",
+            "dependencies": [
+              1
+            ],
+            "details": "Create src/tools/budgets.ts file with: 1) Import dependencies (z from 'zod', ApiClient from '../api-client.js'). 2) Define listBudgetsSchema with optional page, per_page (numbers), department_id (string), archived, active (booleans). 3) Define createBudgetSchema with required name (string.min(1)), amount (number.positive()), currency (string), and optional department_id, start_date, end_date (strings). 4) Define updateBudgetSchema extending createBudgetSchema.partial() with required id field. 5) Export budgetToolDefinitions array with 4 tools including JSON Schema inputSchema with appropriate required arrays. 6) Export createBudgetToolHandlers factory function: list_budgets parses args, builds URLSearchParams from non-undefined values, calls GET /api/v1/budgets?{params}; get_budget validates id then calls GET /api/v1/budgets/{id}; create_budget validates with createBudgetSchema then calls POST /api/v1/budgets; update_budget validates with updateBudgetSchema, extracts id, calls PUT /api/v1/budgets/{id} with remaining data.",
+            "status": "pending",
+            "testStrategy": "Unit tests: 1) Verify listBudgetsSchema accepts partial filters. 2) Verify createBudgetSchema rejects missing required fields (name/amount/currency). 3) Verify updateBudgetSchema requires id. 4) Test URLSearchParams building logic handles undefined values correctly. E2E tests: 1) list_budgets with filters returns paginated results. 2) get_budget returns budget with remaining_amount. 3) create_budget with valid data returns new budget. 4) update_budget modifies existing budget. 5) Zod validation rejects invalid inputs (negative amount, missing currency).",
+            "parentId": "undefined"
+          },
+          {
+            "id": 3,
+            "title": "Register user and budget tools in src/index.ts with expanded switch statement",
+            "description": "Integrate both users.ts and budgets.ts tool modules into the main MCP server by importing definitions and handlers, adding to ListToolsRequestSchema response, and expanding CallToolRequestSchema switch statement.",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Update src/index.ts to: 1) Add imports for userToolDefinitions, createUserToolHandlers from './tools/users.js' and budgetToolDefinitions, createBudgetToolHandlers from './tools/budgets.js'. 2) Initialize handlers by calling createUserToolHandlers(apiClient) and createBudgetToolHandlers(apiClient) after apiClient is created. 3) Update ListToolsRequestSchema handler to spread all tool definitions: { tools: [...authToolDefinitions, ...userToolDefinitions, ...budgetToolDefinitions] }. 4) Expand CallToolRequestSchema switch statement with 8 new cases: get_current_user, update_current_user, list_currencies, list_all_currencies, list_budgets, get_budget, create_budget, update_budget. Each case follows the pattern: return { content: [{ type: 'text', text: JSON.stringify(await handler(args)) }] }. 5) Maintain the try/catch error handling wrapper and isError response format from task 4.",
+            "status": "pending",
+            "testStrategy": "E2E tests: 1) ListToolsRequestSchema returns all 11 tools (3 auth + 4 user + 4 budget). 2) Each tool can be called and returns valid JSON response. 3) Unknown tool names return error with isError: true. 4) Zod validation errors from user/budget tools are caught and returned properly. 5) Verify server starts without errors after adding new imports. Integration test: Call list_budgets followed by create_budget then get_budget to verify full workflow.",
+            "parentId": "undefined"
+          }
+        ],
+        "complexity": 5,
+        "recommendedSubtasks": 3,
+        "expansionPrompt": "Break down into: 1) Create src/tools/users.ts with 4 tools (get_current_user, update_current_user, list_currencies, list_all_currencies) including zod schemas and handlers, 2) Create src/tools/budgets.ts with 4 CRUD tools (list with pagination/filters, get, create, update) including complex zod schemas, 3) Register both tool modules in src/index.ts, expanding the tool handler switch statement.",
+        "updatedAt": "2026-02-16T06:00:14.991Z"
+      },
+      {
+        "id": "6",
+        "title": "Implement Company, Department, and Supplier Management Tools",
+        "description": "Create MCP tools for company operations (list_companies, get_company, create_company, list_approvers, list_employees, invite_user), department CRUD, and supplier CRUD.",
+        "details": "1. Create src/tools/companies.ts:\n   ```typescript\n   import { z } from 'zod';\n   import { ApiClient } from '../api-client.js';\n\n   export const createCompanySchema = z.object({\n     name: z.string().min(1),\n     currency: z.string(),\n     settings: z.object({\n       require_budget: z.boolean().optional(),\n       require_supplier: z.boolean().optional(),\n     }).optional(),\n   });\n\n   export const inviteUserSchema = z.object({\n     email: z.string().email(),\n     role: z.enum(['admin', 'finance', 'user', 'viewer']),\n     department_ids: z.array(z.string()).optional(),\n   });\n\n   export const companyToolDefinitions = [\n     { name: 'list_companies', description: 'List all companies the user belongs to.', inputSchema: { type: 'object', properties: {} } },\n     { name: 'get_company', description: 'Get company details with settings and custom fields.', inputSchema: { type: 'object', properties: { id: { type: 'string' } }, required: ['id'] } },\n     { name: 'create_company', description: 'Create a new company.', inputSchema: { type: 'object', properties: { name: { type: 'string' }, currency: { type: 'string' }, settings: { type: 'object' } }, required: ['name', 'currency'] } },\n     { name: 'list_approvers', description: 'List approvers, optionally filtered by department.', inputSchema: { type: 'object', properties: { department_id: { type: 'string' } } } },\n     { name: 'list_all_approvers', description: 'List all approvers in the company.', inputSchema: { type: 'object', properties: {} } },\n     { name: 'list_employees', description: 'List all employees with roles.', inputSchema: { type: 'object', properties: {} } },\n     { name: 'invite_user', description: 'Invite a user to the company.', inputSchema: { type: 'object', properties: { email: { type: 'string' }, role: { type: 'string' }, department_ids: { type: 'array', items: { type: 'string' } } }, required: ['email', 'role'] } },\n   ];\n\n   export function createCompanyToolHandlers(apiClient: ApiClient) {\n     return {\n       list_companies: async () => apiClient.get('/api/v1/companies'),\n       get_company: async (args: unknown) => {\n         const { id } = z.object({ id: z.string() }).parse(args);\n         return apiClient.get(`/api/v1/companies/${id}`);\n       },\n       create_company: async (args: unknown) => apiClient.post('/api/v1/companies', createCompanySchema.parse(args)),\n       list_approvers: async (args: unknown) => {\n         const parsed = z.object({ department_id: z.string().optional() }).parse(args);\n         const params = parsed.department_id ? `?department_id=${parsed.department_id}` : '';\n         return apiClient.get(`/api/v1/approvers${params}`);\n       },\n       list_all_approvers: async () => apiClient.get('/api/v1/approvers/all'),\n       list_employees: async () => apiClient.get('/api/v1/employees'),\n       invite_user: async (args: unknown) => apiClient.post('/api/v1/invitations', inviteUserSchema.parse(args)),\n     };\n   }\n   ```\n\n2. Create src/tools/departments.ts with CRUD operations following the same pattern.\n\n3. Create src/tools/suppliers.ts with CRUD operations and pagination support.\n\n4. Register all tool modules in src/index.ts.",
+        "testStrategy": "E2E tests: 1) list_companies returns array, 2) get_company returns details with settings, 3) create_company with valid data succeeds, 4) list_approvers with/without department filter, 5) invite_user sends invitation. For departments: CRUD operations with filters. For suppliers: CRUD with pagination. Test invalid inputs rejected by zod.",
+        "priority": "medium",
+        "dependencies": [
+          "4"
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create src/tools/companies.ts with 7 Company Management Tools",
+            "description": "Implement the companies.ts module with 7 MCP tools: list_companies, get_company, create_company, list_approvers, list_all_approvers, list_employees, and invite_user. Include zod schemas for input validation.",
+            "dependencies": [],
+            "details": "Create src/tools/companies.ts following the provided implementation template. Define zod schemas for createCompanySchema (name, currency, settings with require_budget and require_supplier options) and inviteUserSchema (email, role enum with admin/finance/user/viewer, optional department_ids). Export companyToolDefinitions array with all 7 tool definitions including proper inputSchema JSON structures. Implement createCompanyToolHandlers function that returns handlers for each tool: list_companies (GET /api/v1/companies), get_company (GET /api/v1/companies/:id), create_company (POST /api/v1/companies), list_approvers (GET /api/v1/approvers with optional department_id filter), list_all_approvers (GET /api/v1/approvers/all), list_employees (GET /api/v1/employees), and invite_user (POST /api/v1/invitations). All handlers should use the ApiClient for HTTP requests and zod for argument parsing.",
+            "status": "pending",
+            "testStrategy": "E2E tests: 1) list_companies returns array of companies, 2) get_company returns company details with settings, 3) create_company with valid data succeeds, 4) list_approvers with/without department filter returns filtered results, 5) list_all_approvers returns all approvers, 6) list_employees returns employee list with roles, 7) invite_user sends invitation with role validation. Test invalid inputs rejected by zod validation (invalid email, invalid role enum).",
+            "parentId": "undefined"
+          },
+          {
+            "id": 2,
+            "title": "Create src/tools/departments.ts with 4 Department CRUD Tools",
+            "description": "Implement the departments.ts module with 4 CRUD MCP tools: list_departments, get_department, create_department, and update_department following established patterns from companies.ts.",
+            "dependencies": [
+              1
+            ],
+            "details": "Create src/tools/departments.ts following the same pattern as companies.ts. Define zod schemas for createDepartmentSchema (name required, description optional, manager_id optional, parent_department_id optional) and updateDepartmentSchema (all fields optional). Export departmentToolDefinitions array with tool definitions: list_departments (supports search, pagination with page/per_page, and active filter), get_department (requires id), create_department (requires name), update_department (requires id). Implement createDepartmentToolHandlers function with handlers: list_departments (GET /api/v1/departments with query params), get_department (GET /api/v1/departments/:id), create_department (POST /api/v1/departments), update_department (PATCH /api/v1/departments/:id). Use consistent error handling and validation patterns.",
+            "status": "pending",
+            "testStrategy": "E2E tests: 1) list_departments returns paginated results with optional search filter, 2) get_department returns department details including manager info, 3) create_department with valid name creates new department, 4) update_department modifies department fields. Test validation: invalid department_id format rejected, missing required 'name' field in create rejected.",
+            "parentId": "undefined"
+          },
+          {
+            "id": 3,
+            "title": "Create src/tools/suppliers.ts with 4 Supplier CRUD Tools and Pagination",
+            "description": "Implement the suppliers.ts module with 4 CRUD MCP tools: list_suppliers, get_supplier, create_supplier, and update_supplier with comprehensive pagination support.",
+            "dependencies": [
+              1
+            ],
+            "details": "Create src/tools/suppliers.ts following established patterns. Define zod schemas for listSuppliersSchema (page, per_page, search, active filter), createSupplierSchema (name required, email optional, phone optional, address optional, payment_terms optional, tax_id optional, notes optional), and updateSupplierSchema (all fields optional). Export supplierToolDefinitions array with pagination parameters for list_suppliers (page, per_page as numbers, search as string, active as boolean). Implement createSupplierToolHandlers function with handlers: list_suppliers (GET /api/v1/suppliers with pagination query params ?page=&per_page=&search=&active=), get_supplier (GET /api/v1/suppliers/:id), create_supplier (POST /api/v1/suppliers), update_supplier (PATCH /api/v1/suppliers/:id). Ensure pagination response includes total_count, page, per_page, and total_pages metadata.",
+            "status": "pending",
+            "testStrategy": "E2E tests: 1) list_suppliers with pagination returns paginated results with metadata, 2) list_suppliers with search filter returns filtered results, 3) get_supplier returns full supplier details, 4) create_supplier with valid data creates supplier, 5) update_supplier modifies supplier fields. Test pagination edge cases: page=0, per_page exceeds max, empty results. Test validation: invalid email format rejected.",
+            "parentId": "undefined"
+          },
+          {
+            "id": 4,
+            "title": "Register All Three Tool Modules in index.ts with Handler Registry Pattern",
+            "description": "Register companies, departments, and suppliers tool modules in src/index.ts. Refactor tool organization to use a handler registry pattern to avoid unwieldy switch statements as tool count grows.",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "Update src/index.ts to import and register all three new tool modules. Create a handler registry pattern to manage growing tool definitions: 1) Import companyToolDefinitions, departmentToolDefinitions, supplierToolDefinitions and their corresponding handler creators. 2) Create a consolidated toolDefinitions array by spreading all module definitions. 3) Implement a createHandlerRegistry function that merges all tool handlers into a single object keyed by tool name. 4) Replace any existing switch statement in the CallToolRequest handler with a registry lookup pattern: const handler = handlerRegistry[request.params.name]; if (!handler) throw new McpError(...); return handler(request.params.arguments). 5) Register tools with server.setRequestHandler(ListToolsRequestSchema, ...) and server.setRequestHandler(CallToolRequestSchema, ...). This pattern scales cleanly as more tool modules are added in future tasks (Task 7, 8, 9, 10).",
+            "status": "pending",
+            "testStrategy": "Integration tests: 1) ListTools request returns all 15 tools from three modules, 2) CallTool for each tool type routes to correct handler, 3) Unknown tool name returns proper McpError. Verify tool definitions have unique names (no collisions). Test that existing auth/user/budget tools (if present) continue to work after refactoring.",
+            "parentId": "undefined"
+          }
+        ],
+        "complexity": 6,
+        "recommendedSubtasks": 4,
+        "expansionPrompt": "Break down into: 1) Create src/tools/companies.ts with 7 tools including list_companies, get_company, create_company, list_approvers, list_all_approvers, list_employees, invite_user, 2) Create src/tools/departments.ts with 4 CRUD tools following established patterns, 3) Create src/tools/suppliers.ts with 4 CRUD tools including pagination support, 4) Register all three modules in index.ts and refactor handler organization if needed.",
+        "updatedAt": "2026-02-16T06:00:17.430Z"
+      },
+      {
+        "id": "7",
+        "title": "Implement Purchase Order Management Tools",
+        "description": "Create MCP tools for purchase order CRUD, approval workflows, and related operations (list, get, create, approve, reject, cancel, archive, pending requests).",
+        "details": "1. Create src/tools/purchase-orders.ts:\n   ```typescript\n   import { z } from 'zod';\n   import { ApiClient } from '../api-client.js';\n\n   const lineItemSchema = z.object({\n     description: z.string(),\n     quantity: z.number().positive(),\n     unit_price: z.number(),\n     budget_id: z.string().optional(),\n     tax_rate_id: z.string().optional(),\n   });\n\n   export const listPOsSchema = z.object({\n     page: z.number().optional(),\n     per_page: z.number().optional(),\n     status: z.enum(['draft', 'pending', 'approved', 'rejected', 'cancelled']).optional(),\n     supplier_id: z.string().optional(),\n     department_id: z.string().optional(),\n     search: z.string().optional(),\n   });\n\n   export const createPOSchema = z.object({\n     supplier_id: z.string(),\n     department_id: z.string().optional(),\n     currency: z.string(),\n     line_items: z.array(lineItemSchema).min(1),\n     notes: z.string().optional(),\n     send: z.boolean().optional().default(false),\n   });\n\n   export const purchaseOrderToolDefinitions = [\n     {\n       name: 'list_purchase_orders',\n       description: 'List purchase orders with pagination, filters, and search.',\n       inputSchema: {\n         type: 'object',\n         properties: {\n           page: { type: 'number' },\n           per_page: { type: 'number' },\n           status: { type: 'string', enum: ['draft', 'pending', 'approved', 'rejected', 'cancelled'] },\n           supplier_id: { type: 'string' },\n           department_id: { type: 'string' },\n           search: { type: 'string' },\n         },\n       },\n     },\n     {\n       name: 'get_purchase_order',\n       description: 'Get PO details with line items, comments, and approval history.',\n       inputSchema: { type: 'object', properties: { id: { type: 'string' } }, required: ['id'] },\n     },\n     {\n       name: 'create_purchase_order',\n       description: 'Create a purchase order. Set send:true to submit for approval, false for draft.',\n       inputSchema: {\n         type: 'object',\n         properties: {\n           supplier_id: { type: 'string' },\n           department_id: { type: 'string' },\n           currency: { type: 'string' },\n           line_items: { type: 'array', items: { type: 'object' } },\n           notes: { type: 'string' },\n           send: { type: 'boolean' },\n         },\n         required: ['supplier_id', 'currency', 'line_items'],\n       },\n     },\n     {\n       name: 'approve_purchase_order',\n       description: 'Approve a purchase order using the accept token.',\n       inputSchema: { type: 'object', properties: { id: { type: 'string' }, accept_token: { type: 'string' } }, required: ['id', 'accept_token'] },\n     },\n     {\n       name: 'reject_purchase_order',\n       description: 'Reject a purchase order using the reject token.',\n       inputSchema: { type: 'object', properties: { id: { type: 'string' }, reject_token: { type: 'string' }, reason: { type: 'string' } }, required: ['id', 'reject_token'] },\n     },\n     {\n       name: 'cancel_purchase_order',\n       description: 'Cancel a purchase order.',\n       inputSchema: { type: 'object', properties: { id: { type: 'string' } }, required: ['id'] },\n     },\n     {\n       name: 'archive_purchase_order',\n       description: 'Archive a purchase order.',\n       inputSchema: { type: 'object', properties: { id: { type: 'string' } }, required: ['id'] },\n     },\n     {\n       name: 'list_pending_requests',\n       description: 'List pending approval requests for the current user.',\n       inputSchema: { type: 'object', properties: { page: { type: 'number' }, per_page: { type: 'number' } } },\n     },\n     {\n       name: 'get_pending_request_count',\n       description: 'Get count of pending approval requests.',\n       inputSchema: { type: 'object', properties: {} },\n     },\n     {\n       name: 'override_and_approve_purchase_order',\n       description: 'Finance user override approval for a purchase order.',\n       inputSchema: { type: 'object', properties: { id: { type: 'string' } }, required: ['id'] },\n     },\n   ];\n\n   export function createPurchaseOrderToolHandlers(apiClient: ApiClient) {\n     return {\n       list_purchase_orders: async (args: unknown) => {\n         const parsed = listPOsSchema.parse(args);\n         const params = new URLSearchParams();\n         Object.entries(parsed).forEach(([k, v]) => v !== undefined && params.append(k, String(v)));\n         return apiClient.get(`/api/v1/purchase_orders?${params}`);\n       },\n       get_purchase_order: async (args: unknown) => {\n         const { id } = z.object({ id: z.string() }).parse(args);\n         return apiClient.get(`/api/v1/purchase_orders/${id}`);\n       },\n       create_purchase_order: async (args: unknown) => {\n         const parsed = createPOSchema.parse(args);\n         return apiClient.post('/api/v1/purchase_orders', parsed);\n       },\n       approve_purchase_order: async (args: unknown) => {\n         const { id, accept_token } = z.object({ id: z.string(), accept_token: z.string() }).parse(args);\n         return apiClient.post(`/api/v1/purchase_orders/${id}/approve`, { accept_token });\n       },\n       reject_purchase_order: async (args: unknown) => {\n         const { id, reject_token, reason } = z.object({ id: z.string(), reject_token: z.string(), reason: z.string().optional() }).parse(args);\n         return apiClient.post(`/api/v1/purchase_orders/${id}/reject`, { reject_token, reason });\n       },\n       cancel_purchase_order: async (args: unknown) => {\n         const { id } = z.object({ id: z.string() }).parse(args);\n         return apiClient.post(`/api/v1/purchase_orders/${id}/cancel`, {});\n       },\n       archive_purchase_order: async (args: unknown) => {\n         const { id } = z.object({ id: z.string() }).parse(args);\n         return apiClient.post(`/api/v1/purchase_orders/${id}/archive`, {});\n       },\n       list_pending_requests: async (args: unknown) => {\n         const parsed = z.object({ page: z.number().optional(), per_page: z.number().optional() }).parse(args);\n         const params = new URLSearchParams();\n         Object.entries(parsed).forEach(([k, v]) => v !== undefined && params.append(k, String(v)));\n         return apiClient.get(`/api/v1/pending_requests?${params}`);\n       },\n       get_pending_request_count: async () => apiClient.get('/api/v1/pending_requests/count'),\n       override_and_approve_purchase_order: async (args: unknown) => {\n         const { id } = z.object({ id: z.string() }).parse(args);\n         return apiClient.post(`/api/v1/purchase_orders/${id}/override_approve`, {});\n       },\n     };\n   }\n   ```\n\n2. Create src/tools/products.ts with CRUD operations for product management.\n\n3. Register in src/index.ts.",
+        "testStrategy": "E2E tests: 1) list_purchase_orders with various filters returns paginated results, 2) get_purchase_order returns full details with line items, 3) create_purchase_order as draft and with send:true, 4) approve/reject with valid tokens, 5) cancel/archive operations, 6) list_pending_requests returns approver's queue, 7) get_pending_request_count returns number. Test validation rejects missing required fields.",
+        "priority": "high",
+        "dependencies": [
+          "5",
+          "6"
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create PO listing and retrieval tools with filtering",
+            "description": "Implement list_purchase_orders with 6 filter parameters (page, per_page, status, supplier_id, department_id, search) and get_purchase_order for retrieving PO details with line items.",
+            "dependencies": [],
+            "details": "Create src/tools/purchase-orders.ts with the initial structure:\n\n1. Import dependencies (zod, ApiClient)\n\n2. Define listPOsSchema with zod:\n   - page: z.number().optional()\n   - per_page: z.number().optional()\n   - status: z.enum(['draft', 'pending', 'approved', 'rejected', 'cancelled']).optional()\n   - supplier_id: z.string().optional()\n   - department_id: z.string().optional()\n   - search: z.string().optional()\n\n3. Create tool definitions for list_purchase_orders and get_purchase_order with JSON Schema inputSchema matching the zod schemas\n\n4. Implement handlers:\n   - list_purchase_orders: Parse args with listPOsSchema, build URLSearchParams from defined values, call apiClient.get('/api/v1/purchase_orders?${params}')\n   - get_purchase_order: Parse { id: z.string() }, call apiClient.get('/api/v1/purchase_orders/${id}')\n\n5. Export purchaseOrderToolDefinitions array and createPurchaseOrderToolHandlers factory function",
+            "status": "pending",
+            "testStrategy": "E2E tests: 1) list_purchase_orders without filters returns paginated results, 2) list_purchase_orders with status='pending' returns only pending POs, 3) list_purchase_orders with supplier_id filter returns POs for that supplier, 4) list_purchase_orders with search term returns matching results, 5) get_purchase_order with valid ID returns full PO details including line_items array, 6) get_purchase_order with invalid ID returns appropriate error",
+            "parentId": "undefined"
+          },
+          {
+            "id": 2,
+            "title": "Create PO creation tool with nested line item validation",
+            "description": "Implement create_purchase_order tool with complex lineItemSchema for nested object validation including description, quantity, unit_price, budget_id, and tax_rate_id fields.",
+            "dependencies": [
+              1
+            ],
+            "details": "Add to src/tools/purchase-orders.ts:\n\n1. Define lineItemSchema with zod:\n   - description: z.string()\n   - quantity: z.number().positive()\n   - unit_price: z.number()\n   - budget_id: z.string().optional()\n   - tax_rate_id: z.string().optional()\n\n2. Define createPOSchema with zod:\n   - supplier_id: z.string()\n   - department_id: z.string().optional()\n   - currency: z.string()\n   - line_items: z.array(lineItemSchema).min(1)\n   - notes: z.string().optional()\n   - send: z.boolean().optional().default(false)\n\n3. Add create_purchase_order tool definition with JSON Schema:\n   - Properties for supplier_id, department_id, currency, line_items (array of objects), notes, send\n   - Required: ['supplier_id', 'currency', 'line_items']\n   - Description explains send:true submits for approval, false saves as draft\n\n4. Implement create_purchase_order handler:\n   - Parse args with createPOSchema\n   - POST to '/api/v1/purchase_orders' with parsed body\n   - Return created PO response",
+            "status": "pending",
+            "testStrategy": "E2E tests: 1) create_purchase_order with send:false creates draft PO, 2) create_purchase_order with send:true creates pending PO submitted for approval, 3) create_purchase_order validates line_items.min(1) - rejects empty array, 4) create_purchase_order validates quantity is positive number, 5) create_purchase_order with optional budget_id and tax_rate_id on line items works correctly, 6) zod validation rejects invalid input (missing required fields, wrong types)",
+            "parentId": "undefined"
+          },
+          {
+            "id": 3,
+            "title": "Create PO approval workflow tools with token-based operations",
+            "description": "Implement approve_purchase_order, reject_purchase_order, cancel_purchase_order, archive_purchase_order, and override_and_approve_purchase_order tools for managing PO lifecycle with token-based approval/rejection.",
+            "dependencies": [
+              1
+            ],
+            "details": "Add to src/tools/purchase-orders.ts:\n\n1. Add tool definitions for workflow operations:\n   - approve_purchase_order: requires id and accept_token\n   - reject_purchase_order: requires id and reject_token, optional reason\n   - cancel_purchase_order: requires id\n   - archive_purchase_order: requires id\n   - override_and_approve_purchase_order: requires id (finance user override)\n\n2. Implement handlers:\n   - approve_purchase_order: Parse { id, accept_token }, POST to '/api/v1/purchase_orders/${id}/approve' with { accept_token }\n   - reject_purchase_order: Parse { id, reject_token, reason? }, POST to '/api/v1/purchase_orders/${id}/reject' with { reject_token, reason }\n   - cancel_purchase_order: Parse { id }, POST to '/api/v1/purchase_orders/${id}/cancel' with {}\n   - archive_purchase_order: Parse { id }, POST to '/api/v1/purchase_orders/${id}/archive' with {}\n   - override_and_approve_purchase_order: Parse { id }, POST to '/api/v1/purchase_orders/${id}/override_approve' with {}\n\n3. Define zod schemas for each operation to validate inputs properly",
+            "status": "pending",
+            "testStrategy": "E2E tests: 1) approve_purchase_order with valid accept_token changes PO status to approved, 2) approve_purchase_order with invalid token returns error, 3) reject_purchase_order with valid reject_token and reason changes PO status to rejected, 4) reject_purchase_order without reason still works, 5) cancel_purchase_order changes status to cancelled, 6) archive_purchase_order archives the PO, 7) override_and_approve_purchase_order (finance role) approves without token, 8) verify non-finance user cannot use override_approve",
+            "parentId": "undefined"
+          },
+          {
+            "id": 4,
+            "title": "Create pending request tools and products module with registration",
+            "description": "Implement list_pending_requests, get_pending_request_count tools, create src/tools/products.ts with CRUD operations, and register all purchase order tools in src/index.ts.",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "1. Add pending request tools to src/tools/purchase-orders.ts:\n   - list_pending_requests: page/per_page params, GET '/api/v1/pending_requests?${params}'\n   - get_pending_request_count: no params, GET '/api/v1/pending_requests/count'\n\n2. Create src/tools/products.ts:\n   - listProductsSchema: page, per_page, search, supplier_id (all optional)\n   - createProductSchema: name, description?, sku?, unit_price?, supplier_id?\n   - updateProductSchema: partial of createProductSchema\n   - Tool definitions: list_products, get_product, create_product, update_product, delete_product\n   - Handlers: CRUD operations to '/api/v1/products' endpoints\n   - Export productToolDefinitions and createProductToolHandlers\n\n3. Register in src/index.ts:\n   - Import purchaseOrderToolDefinitions, createPurchaseOrderToolHandlers from './tools/purchase-orders.js'\n   - Import productToolDefinitions, createProductToolHandlers from './tools/products.js'\n   - Add to ListToolsRequestSchema handler\n   - Add to CallToolRequestSchema handler with tool name routing",
+            "status": "pending",
+            "testStrategy": "E2E tests: 1) list_pending_requests returns paginated pending approvals for current user, 2) list_pending_requests with pagination params works correctly, 3) get_pending_request_count returns { count: number }, 4) Products CRUD: list_products with search, get_product by id, create_product creates new product, update_product modifies fields, delete_product removes product. Integration: verify all 10 PO tools + 5 product tools are registered and callable via MCP protocol",
+            "parentId": "undefined"
+          }
+        ],
+        "complexity": 7,
+        "recommendedSubtasks": 4,
+        "expansionPrompt": "Break down into: 1) Create PO listing and retrieval tools (list_purchase_orders with 6 filter params, get_purchase_order), 2) Create PO creation tool with complex lineItemSchema including nested object validation, 3) Create PO approval workflow tools (approve, reject, cancel, archive, override_and_approve) with token-based operations, 4) Create pending request tools (list_pending_requests, get_pending_request_count) and products.ts module.",
+        "updatedAt": "2026-02-16T06:00:19.738Z"
+      },
+      {
+        "id": "8",
+        "title": "Implement Invoice Management Tools",
+        "description": "Create MCP tools for invoice CRUD and approval workflow operations (list, get, create, update, accept, approve, reject, cancel, archive, dearchive).",
+        "details": "1. Create src/tools/invoices.ts:\n   ```typescript\n   import { z } from 'zod';\n   import { ApiClient } from '../api-client.js';\n\n   export const listInvoicesSchema = z.object({\n     page: z.number().optional(),\n     per_page: z.number().optional(),\n     status: z.enum(['draft', 'awaiting_review', 'pending', 'approved', 'rejected', 'cancelled']).optional(),\n     supplier_id: z.string().optional(),\n     purchase_order_id: z.string().optional(),\n     search: z.string().optional(),\n   });\n\n   export const createInvoiceSchema = z.object({\n     supplier_id: z.string(),\n     purchase_order_id: z.string().optional(),\n     invoice_number: z.string(),\n     amount: z.number().positive(),\n     currency: z.string(),\n     due_date: z.string().optional(),\n     line_items: z.array(z.object({\n       description: z.string(),\n       quantity: z.number(),\n       unit_price: z.number(),\n     })).optional(),\n   });\n\n   export const updateInvoiceSchema = createInvoiceSchema.partial().extend({\n     id: z.string(),\n   });\n\n   export const invoiceToolDefinitions = [\n     {\n       name: 'list_invoices',\n       description: 'List invoices with pagination and filters.',\n       inputSchema: {\n         type: 'object',\n         properties: {\n           page: { type: 'number' },\n           per_page: { type: 'number' },\n           status: { type: 'string', enum: ['draft', 'awaiting_review', 'pending', 'approved', 'rejected', 'cancelled'] },\n           supplier_id: { type: 'string' },\n           purchase_order_id: { type: 'string' },\n           search: { type: 'string' },\n         },\n       },\n     },\n     {\n       name: 'get_invoice',\n       description: 'Get invoice details.',\n       inputSchema: { type: 'object', properties: { id: { type: 'string' } }, required: ['id'] },\n     },\n     {\n       name: 'create_invoice',\n       description: 'Create a new invoice.',\n       inputSchema: {\n         type: 'object',\n         properties: {\n           supplier_id: { type: 'string' },\n           purchase_order_id: { type: 'string' },\n           invoice_number: { type: 'string' },\n           amount: { type: 'number' },\n           currency: { type: 'string' },\n           due_date: { type: 'string' },\n           line_items: { type: 'array' },\n         },\n         required: ['supplier_id', 'invoice_number', 'amount', 'currency'],\n       },\n     },\n     {\n       name: 'update_invoice',\n       description: 'Update an existing invoice.',\n       inputSchema: {\n         type: 'object',\n         properties: {\n           id: { type: 'string' },\n           invoice_number: { type: 'string' },\n           amount: { type: 'number' },\n           due_date: { type: 'string' },\n         },\n         required: ['id'],\n       },\n     },\n     {\n       name: 'accept_invoice',\n       description: 'Accept an invoice (move from awaiting_review to pending approval).',\n       inputSchema: { type: 'object', properties: { id: { type: 'string' } }, required: ['id'] },\n     },\n     {\n       name: 'approve_invoice',\n       description: 'Approve an invoice.',\n       inputSchema: { type: 'object', properties: { id: { type: 'string' }, accept_token: { type: 'string' } }, required: ['id', 'accept_token'] },\n     },\n     {\n       name: 'reject_invoice',\n       description: 'Reject an invoice.',\n       inputSchema: { type: 'object', properties: { id: { type: 'string' }, reject_token: { type: 'string' }, reason: { type: 'string' } }, required: ['id', 'reject_token'] },\n     },\n     {\n       name: 'cancel_invoice',\n       description: 'Cancel an invoice.',\n       inputSchema: { type: 'object', properties: { id: { type: 'string' } }, required: ['id'] },\n     },\n     {\n       name: 'archive_invoice',\n       description: 'Archive an invoice.',\n       inputSchema: { type: 'object', properties: { id: { type: 'string' } }, required: ['id'] },\n     },\n     {\n       name: 'dearchive_invoice',\n       description: 'Restore an archived invoice.',\n       inputSchema: { type: 'object', properties: { id: { type: 'string' } }, required: ['id'] },\n     },\n   ];\n\n   export function createInvoiceToolHandlers(apiClient: ApiClient) {\n     return {\n       list_invoices: async (args: unknown) => {\n         const parsed = listInvoicesSchema.parse(args);\n         const params = new URLSearchParams();\n         Object.entries(parsed).forEach(([k, v]) => v !== undefined && params.append(k, String(v)));\n         return apiClient.get(`/api/v1/invoices?${params}`);\n       },\n       get_invoice: async (args: unknown) => {\n         const { id } = z.object({ id: z.string() }).parse(args);\n         return apiClient.get(`/api/v1/invoices/${id}`);\n       },\n       create_invoice: async (args: unknown) => apiClient.post('/api/v1/invoices', createInvoiceSchema.parse(args)),\n       update_invoice: async (args: unknown) => {\n         const { id, ...data } = updateInvoiceSchema.parse(args);\n         return apiClient.put(`/api/v1/invoices/${id}`, data);\n       },\n       accept_invoice: async (args: unknown) => {\n         const { id } = z.object({ id: z.string() }).parse(args);\n         return apiClient.post(`/api/v1/invoices/${id}/accept`, {});\n       },\n       approve_invoice: async (args: unknown) => {\n         const { id, accept_token } = z.object({ id: z.string(), accept_token: z.string() }).parse(args);\n         return apiClient.post(`/api/v1/invoices/${id}/approve`, { accept_token });\n       },\n       reject_invoice: async (args: unknown) => {\n         const { id, reject_token, reason } = z.object({ id: z.string(), reject_token: z.string(), reason: z.string().optional() }).parse(args);\n         return apiClient.post(`/api/v1/invoices/${id}/reject`, { reject_token, reason });\n       },\n       cancel_invoice: async (args: unknown) => {\n         const { id } = z.object({ id: z.string() }).parse(args);\n         return apiClient.post(`/api/v1/invoices/${id}/cancel`, {});\n       },\n       archive_invoice: async (args: unknown) => {\n         const { id } = z.object({ id: z.string() }).parse(args);\n         return apiClient.post(`/api/v1/invoices/${id}/archive`, {});\n       },\n       dearchive_invoice: async (args: unknown) => {\n         const { id } = z.object({ id: z.string() }).parse(args);\n         return apiClient.post(`/api/v1/invoices/${id}/dearchive`, {});\n       },\n     };\n   }\n   ```\n\n2. Create src/tools/comments.ts for add_purchase_order_comment and add_invoice_comment.\n\n3. Create src/tools/payments.ts for create_payment and create_po_payment.\n\n4. Register all in src/index.ts.",
+        "testStrategy": "E2E tests: 1) list_invoices with filters, 2) get_invoice returns details, 3) create_invoice with/without PO link, 4) update_invoice modifies fields, 5) accept_invoice workflow transition, 6) approve/reject with tokens, 7) cancel/archive/dearchive operations. For comments: add comments to PO and invoice. For payments: create payments with feature flag handling.",
+        "priority": "high",
+        "dependencies": [
+          "7"
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create Invoice CRUD Tools with Zod Validation Schemas",
+            "description": "Implement the core invoice CRUD operations (list_invoices, get_invoice, create_invoice, update_invoice) with comprehensive Zod validation schemas in src/tools/invoices.ts.",
+            "dependencies": [],
+            "details": "Create src/tools/invoices.ts with:\n\n1. Import statements for zod and ApiClient\n\n2. Define Zod schemas:\n   - listInvoicesSchema with 6 optional filters: page (number), per_page (number), status (enum: draft, awaiting_review, pending, approved, rejected, cancelled), supplier_id (string), purchase_order_id (string), search (string)\n   - createInvoiceSchema with required fields: supplier_id, invoice_number, amount (positive number), currency; optional fields: purchase_order_id, due_date, line_items (array of objects with description, quantity, unit_price)\n   - updateInvoiceSchema as partial of createInvoiceSchema extended with required id field\n\n3. Define tool definitions array with JSON Schema inputSchema for:\n   - list_invoices: 'List invoices with pagination and filters'\n   - get_invoice: 'Get invoice details' (required: id)\n   - create_invoice: 'Create a new invoice' (required: supplier_id, invoice_number, amount, currency)\n   - update_invoice: 'Update an existing invoice' (required: id)\n\n4. Implement handler functions in createInvoiceToolHandlers(apiClient):\n   - list_invoices: Parse args with listInvoicesSchema, build URLSearchParams, call GET /api/v1/invoices\n   - get_invoice: Parse id, call GET /api/v1/invoices/{id}\n   - create_invoice: Parse and validate with createInvoiceSchema, call POST /api/v1/invoices\n   - update_invoice: Parse with updateInvoiceSchema, extract id from data, call PUT /api/v1/invoices/{id}",
+            "status": "pending",
+            "testStrategy": "E2E tests: 1) list_invoices returns paginated results, 2) list_invoices with status filter returns filtered invoices, 3) list_invoices with supplier_id filter works, 4) list_invoices with purchase_order_id filter links to PO, 5) list_invoices with search finds matches, 6) get_invoice returns full invoice details including line items, 7) create_invoice with required fields only succeeds, 8) create_invoice with optional PO link creates linked invoice, 9) create_invoice with line_items includes items, 10) update_invoice modifies specific fields, 11) Zod validation rejects invalid inputs (missing required fields, negative amounts, invalid status enum)",
+            "parentId": "undefined"
+          },
+          {
+            "id": 2,
+            "title": "Create Invoice Workflow Tools for Approval Operations",
+            "description": "Implement the invoice approval workflow tools (accept_invoice, approve_invoice, reject_invoice, cancel_invoice, archive_invoice, dearchive_invoice) in src/tools/invoices.ts.",
+            "dependencies": [
+              1
+            ],
+            "details": "Extend src/tools/invoices.ts with workflow tools:\n\n1. Add tool definitions to invoiceToolDefinitions array:\n   - accept_invoice: 'Accept an invoice (move from awaiting_review to pending approval)' - inputSchema with required id\n   - approve_invoice: 'Approve an invoice' - inputSchema with required id and accept_token\n   - reject_invoice: 'Reject an invoice' - inputSchema with required id and reject_token, optional reason\n   - cancel_invoice: 'Cancel an invoice' - inputSchema with required id\n   - archive_invoice: 'Archive an invoice' - inputSchema with required id\n   - dearchive_invoice: 'Restore an archived invoice' - inputSchema with required id\n\n2. Add handler functions to createInvoiceToolHandlers:\n   - accept_invoice: Parse id with z.object({ id: z.string() }), call POST /api/v1/invoices/{id}/accept with empty body\n   - approve_invoice: Parse id and accept_token, call POST /api/v1/invoices/{id}/approve with { accept_token }\n   - reject_invoice: Parse id, reject_token (required), and reason (optional), call POST /api/v1/invoices/{id}/reject with { reject_token, reason }\n   - cancel_invoice: Parse id, call POST /api/v1/invoices/{id}/cancel with empty body\n   - archive_invoice: Parse id, call POST /api/v1/invoices/{id}/archive with empty body\n   - dearchive_invoice: Parse id, call POST /api/v1/invoices/{id}/dearchive with empty body\n\n3. Unique workflow note: accept_invoice transitions invoice from awaiting_review status to pending - this is specific to invoices (POs don't have awaiting_review state)",
+            "status": "pending",
+            "testStrategy": "E2E tests: 1) accept_invoice transitions from awaiting_review to pending status, 2) approve_invoice with valid accept_token approves invoice, 3) approve_invoice with invalid token returns error, 4) reject_invoice with reject_token and reason rejects invoice, 5) reject_invoice without reason still works (reason optional), 6) cancel_invoice cancels draft/pending invoice, 7) archive_invoice archives approved/rejected invoice, 8) dearchive_invoice restores archived invoice to previous state, 9) Workflow validation: cannot approve already approved invoice, 10) Workflow validation: cannot accept non-awaiting_review invoice",
+            "parentId": "undefined"
+          },
+          {
+            "id": 3,
+            "title": "Create Comments Module for PO and Invoice Comments",
+            "description": "Create src/tools/comments.ts with add_purchase_order_comment and add_invoice_comment tools for adding comments to purchase orders and invoices.",
+            "dependencies": [],
+            "details": "Create src/tools/comments.ts:\n\n1. Import statements:\n   ```typescript\n   import { z } from 'zod';\n   import { ApiClient } from '../api-client.js';\n   ```\n\n2. Define Zod schemas:\n   - addPOCommentSchema: z.object({ purchase_order_id: z.string(), content: z.string().min(1), attachment_ids: z.array(z.string()).optional() })\n   - addInvoiceCommentSchema: z.object({ invoice_id: z.string(), content: z.string().min(1), attachment_ids: z.array(z.string()).optional() })\n\n3. Define commentToolDefinitions array:\n   - add_purchase_order_comment: 'Add a comment to a purchase order' with inputSchema requiring purchase_order_id and content\n   - add_invoice_comment: 'Add a comment to an invoice' with inputSchema requiring invoice_id and content\n\n4. Implement createCommentToolHandlers(apiClient):\n   - add_purchase_order_comment: Parse with addPOCommentSchema, call POST /api/v1/purchase_orders/{purchase_order_id}/comments with { content, attachment_ids }\n   - add_invoice_comment: Parse with addInvoiceCommentSchema, call POST /api/v1/invoices/{invoice_id}/comments with { content, attachment_ids }\n\n5. Export commentToolDefinitions and createCommentToolHandlers",
+            "status": "pending",
+            "testStrategy": "E2E tests: 1) add_purchase_order_comment creates comment on valid PO, 2) add_purchase_order_comment with attachment_ids links attachments, 3) add_invoice_comment creates comment on valid invoice, 4) add_invoice_comment with attachment_ids links attachments, 5) Zod validation rejects empty content string, 6) Error handling for non-existent purchase_order_id, 7) Error handling for non-existent invoice_id, 8) Verify comment appears in PO/invoice details after creation",
+            "parentId": "undefined"
+          },
+          {
+            "id": 4,
+            "title": "Create Payments Module and Register All Tools in Index",
+            "description": "Create src/tools/payments.ts with create_payment and create_po_payment tools, then register all invoice, comment, and payment tools in src/index.ts.",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "Part 1 - Create src/tools/payments.ts:\n\n1. Import statements for zod and ApiClient\n\n2. Define Zod schemas:\n   - createPaymentSchema: z.object({ invoice_id: z.string(), amount: z.number().positive(), payment_date: z.string(), payment_method: z.string().optional(), reference: z.string().optional() })\n   - createPOPaymentSchema: z.object({ purchase_order_id: z.string(), amount: z.number().positive(), payment_date: z.string(), payment_method: z.string().optional(), reference: z.string().optional() })\n\n3. Define paymentToolDefinitions:\n   - create_payment: 'Create a payment for an invoice' with required invoice_id, amount, payment_date\n   - create_po_payment: 'Create a payment for a purchase order' with required purchase_order_id, amount, payment_date (note: may require feature flag handling)\n\n4. Implement createPaymentToolHandlers(apiClient):\n   - create_payment: Parse with createPaymentSchema, call POST /api/v1/invoices/{invoice_id}/payments\n   - create_po_payment: Parse with createPOPaymentSchema, call POST /api/v1/purchase_orders/{purchase_order_id}/payments\n\nPart 2 - Register in src/index.ts:\n\n1. Add imports:\n   ```typescript\n   import { invoiceToolDefinitions, createInvoiceToolHandlers } from './tools/invoices.js';\n   import { commentToolDefinitions, createCommentToolHandlers } from './tools/comments.js';\n   import { paymentToolDefinitions, createPaymentToolHandlers } from './tools/payments.js';\n   ```\n\n2. In ListToolsRequestSchema handler, spread into tools array:\n   ```typescript\n   ...invoiceToolDefinitions,\n   ...commentToolDefinitions,\n   ...paymentToolDefinitions,\n   ```\n\n3. In CallToolRequestSchema handler, spread into handlers object:\n   ```typescript\n   ...createInvoiceToolHandlers(apiClient),\n   ...createCommentToolHandlers(apiClient),\n   ...createPaymentToolHandlers(apiClient),\n   ```",
+            "status": "pending",
+            "testStrategy": "E2E tests for payments: 1) create_payment with valid invoice_id creates payment record, 2) create_payment validates positive amount, 3) create_payment with payment_method and reference includes optional fields, 4) create_po_payment creates payment against PO, 5) Error handling for non-existent invoice_id/purchase_order_id, 6) Verify payment reflects in invoice/PO status/balance. Integration tests: 7) Verify all 10 invoice tools appear in ListTools response, 8) Verify 2 comment tools appear in ListTools, 9) Verify 2 payment tools appear in ListTools, 10) End-to-end flow: create invoice, add comment, accept, approve, create payment",
+            "parentId": "undefined"
+          }
+        ],
+        "complexity": 6,
+        "recommendedSubtasks": 4,
+        "expansionPrompt": "Break down into: 1) Create invoice CRUD tools (list with 6 filters, get, create with optional PO link, update), 2) Create invoice workflow tools (accept, approve, reject, cancel, archive, dearchive), 3) Create src/tools/comments.ts with add_purchase_order_comment and add_invoice_comment tools, 4) Create src/tools/payments.ts with create_payment and create_po_payment tools.",
+        "updatedAt": "2026-02-16T06:00:22.146Z"
+      },
+      {
+        "id": "9",
+        "title": "Implement Approval Flow, Tax Rate, and Webhook Management Tools",
+        "description": "Create MCP tools for approval flow CRUD with steps and conditions, tax rate CRUD, and webhook CRUD operations.",
+        "details": "1. Create src/tools/approval-flows.ts:\n   ```typescript\n   import { z } from 'zod';\n   import { ApiClient } from '../api-client.js';\n\n   const approvalStepSchema = z.object({\n     approver_id: z.string(),\n     order: z.number(),\n     condition: z.object({\n       field: z.string(),\n       operator: z.enum(['equals', 'greater_than', 'less_than', 'contains']),\n       value: z.union([z.string(), z.number()]),\n     }).optional(),\n   });\n\n   export const createApprovalFlowSchema = z.object({\n     name: z.string().min(1),\n     description: z.string().optional(),\n     department_id: z.string().optional(),\n     steps: z.array(approvalStepSchema).min(1),\n     conditions: z.array(z.object({\n       field: z.string(),\n       operator: z.string(),\n       value: z.union([z.string(), z.number()]),\n     })).optional(),\n   });\n\n   export const approvalFlowToolDefinitions = [\n     {\n       name: 'list_approval_flows',\n       description: 'List approval flows with search and pagination.',\n       inputSchema: { type: 'object', properties: { page: { type: 'number' }, per_page: { type: 'number' }, search: { type: 'string' } } },\n     },\n     {\n       name: 'get_approval_flow',\n       description: 'Get approval flow details with steps and conditions.',\n       inputSchema: { type: 'object', properties: { id: { type: 'string' } }, required: ['id'] },\n     },\n     {\n       name: 'create_approval_flow',\n       description: 'Create an approval flow with steps and conditions.',\n       inputSchema: { type: 'object', properties: { name: { type: 'string' }, description: { type: 'string' }, department_id: { type: 'string' }, steps: { type: 'array' }, conditions: { type: 'array' } }, required: ['name', 'steps'] },\n     },\n     {\n       name: 'update_approval_flow',\n       description: 'Update an approval flow.',\n       inputSchema: { type: 'object', properties: { id: { type: 'string' }, name: { type: 'string' }, steps: { type: 'array' } }, required: ['id'] },\n     },\n     {\n       name: 'delete_approval_flow',\n       description: 'Delete an approval flow.',\n       inputSchema: { type: 'object', properties: { id: { type: 'string' } }, required: ['id'] },\n     },\n     {\n       name: 'archive_approval_flow',\n       description: 'Archive an approval flow.',\n       inputSchema: { type: 'object', properties: { id: { type: 'string' } }, required: ['id'] },\n     },\n     {\n       name: 'list_approval_flow_runs',\n       description: 'List runs for a specific approval flow.',\n       inputSchema: { type: 'object', properties: { flow_id: { type: 'string' }, status: { type: 'string' }, page: { type: 'number' } }, required: ['flow_id'] },\n     },\n   ];\n\n   export function createApprovalFlowToolHandlers(apiClient: ApiClient) { /* implement handlers */ }\n   ```\n\n2. Create src/tools/tax-rates.ts:\n   ```typescript\n   export const taxRateToolDefinitions = [\n     { name: 'list_tax_rates', description: 'List all tax rates.', inputSchema: { type: 'object', properties: {} } },\n     { name: 'get_tax_rate', description: 'Get a specific tax rate.', inputSchema: { type: 'object', properties: { id: { type: 'string' } }, required: ['id'] } },\n     { name: 'create_tax_rate', description: 'Create a tax rate.', inputSchema: { type: 'object', properties: { name: { type: 'string' }, rate: { type: 'number' } }, required: ['name', 'rate'] } },\n     { name: 'update_tax_rate', description: 'Update a tax rate.', inputSchema: { type: 'object', properties: { id: { type: 'string' }, name: { type: 'string' }, rate: { type: 'number' } }, required: ['id'] } },\n   ];\n   ```\n\n3. Create src/tools/webhooks.ts:\n   ```typescript\n   export const webhookToolDefinitions = [\n     { name: 'list_webhooks', description: 'List webhooks.', inputSchema: { type: 'object', properties: {} } },\n     { name: 'get_webhook', description: 'Get webhook details.', inputSchema: { type: 'object', properties: { id: { type: 'string' } }, required: ['id'] } },\n     { name: 'create_webhook', description: 'Create a webhook.', inputSchema: { type: 'object', properties: { url: { type: 'string' }, events: { type: 'array', items: { type: 'string' } } }, required: ['url', 'events'] } },\n     { name: 'update_webhook', description: 'Update a webhook.', inputSchema: { type: 'object', properties: { id: { type: 'string' }, url: { type: 'string' }, events: { type: 'array' } }, required: ['id'] } },\n   ];\n   ```\n\n4. Register all in src/index.ts.",
+        "testStrategy": "E2E tests for approval flows: 1) list with search/pagination, 2) get returns full details with steps, 3) create with steps and conditions, 4) update modifies flow, 5) delete/archive operations, 6) list_approval_flow_runs returns runs. For tax rates: CRUD operations. For webhooks: CRUD with event types validation.",
+        "priority": "medium",
+        "dependencies": [
+          "6"
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create approval-flows.ts with 7 tools including complex step/condition schemas",
+            "description": "Implement src/tools/approval-flows.ts with 7 MCP tools for approval flow management: list_approval_flows, get_approval_flow, create_approval_flow, update_approval_flow, delete_approval_flow, archive_approval_flow, and list_approval_flow_runs. Includes nested approvalStepSchema with conditional logic.",
+            "dependencies": [],
+            "details": "Create src/tools/approval-flows.ts with: 1) approvalStepSchema using zod with nested condition object containing field, operator (equals, greater_than, less_than, contains), and value (string|number). 2) createApprovalFlowSchema with name (required), description, department_id, steps array (min 1), and conditions array. 3) Define approvalFlowToolDefinitions array with 7 tools including list (with pagination/search), get, create, update, delete, archive, and list_approval_flow_runs (filter by flow_id and status). 4) Implement createApprovalFlowToolHandlers(apiClient: ApiClient) function returning handlers for each tool that make API calls. 5) Handle the complexity of approval flow runs querying pattern for list_approval_flow_runs. 6) Register tool definitions and handlers with proper typing.",
+            "status": "pending",
+            "testStrategy": "E2E tests: 1) list_approval_flows with search/pagination returns filtered results, 2) get_approval_flow returns full details with steps and conditions, 3) create_approval_flow with steps containing nested conditions validates correctly, 4) update_approval_flow modifies flow and steps, 5) delete_approval_flow removes flow, 6) archive_approval_flow marks as archived, 7) list_approval_flow_runs filters by flow_id and status. Unit tests for zod schema validation with invalid nested conditions.",
+            "parentId": "undefined"
+          },
+          {
+            "id": 2,
+            "title": "Create tax-rates.ts with 4 simple CRUD tools",
+            "description": "Implement src/tools/tax-rates.ts with 4 MCP tools for tax rate management: list_tax_rates, get_tax_rate, create_tax_rate, and update_tax_rate. Simple CRUD operations with straightforward schemas.",
+            "dependencies": [
+              1
+            ],
+            "details": "Create src/tools/tax-rates.ts with: 1) Define taxRateToolDefinitions array with 4 tools: list_tax_rates (no required params), get_tax_rate (requires id), create_tax_rate (requires name and rate as number), update_tax_rate (requires id, optional name and rate). 2) Implement createTaxRateToolHandlers(apiClient: ApiClient) function with handlers for each CRUD operation. 3) Add zod schemas for input validation: getTaxRateSchema, createTaxRateSchema (name as string, rate as number), updateTaxRateSchema (id required, name/rate optional). 4) Handle API responses and error cases appropriately. 5) Export definitions and handlers for registration in index.ts.",
+            "status": "pending",
+            "testStrategy": "E2E tests: 1) list_tax_rates returns all tax rates, 2) get_tax_rate with valid id returns tax rate details, 3) get_tax_rate with invalid id returns error, 4) create_tax_rate with name and rate creates new tax rate, 5) create_tax_rate validates rate is a number, 6) update_tax_rate modifies existing rate. Unit tests for zod schema validation of rate field type.",
+            "parentId": "undefined"
+          },
+          {
+            "id": 3,
+            "title": "Create webhooks.ts with 4 CRUD tools and register all modules in index.ts",
+            "description": "Implement src/tools/webhooks.ts with 4 MCP tools for webhook management: list_webhooks, get_webhook, create_webhook, and update_webhook. Includes events array validation. Then register all three modules (approval-flows, tax-rates, webhooks) in src/index.ts.",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Create src/tools/webhooks.ts with: 1) Define webhookToolDefinitions array with 4 tools: list_webhooks (no required params), get_webhook (requires id), create_webhook (requires url as string and events as array of strings), update_webhook (requires id, optional url and events). 2) Implement createWebhookToolHandlers(apiClient: ApiClient) function with handlers for each operation. 3) Add zod schemas for validation: createWebhookSchema with url validation and events array of strings, updateWebhookSchema with id required. 4) Handle events array validation to ensure valid event types. 5) Export definitions and handlers. 6) Update src/index.ts to: import all three modules (approval-flows, tax-rates, webhooks), register tool definitions in the tools array, and register handlers in the tool handler dispatch. 7) Ensure proper error handling and response formatting consistent with existing tools.",
+            "status": "pending",
+            "testStrategy": "E2E tests for webhooks: 1) list_webhooks returns all webhooks, 2) get_webhook with valid id returns webhook details including events array, 3) create_webhook with url and events creates webhook, 4) create_webhook validates url format and events array, 5) update_webhook modifies url and/or events. Integration tests for index.ts registration: 6) verify all 15 tools (7 approval + 4 tax + 4 webhook) are registered, 7) verify handlers are correctly mapped. Unit tests for events array validation.",
+            "parentId": "undefined"
+          }
+        ],
+        "complexity": 5,
+        "recommendedSubtasks": 3,
+        "expansionPrompt": "Break down into: 1) Create src/tools/approval-flows.ts with 7 tools including complex step/condition schema (approvalStepSchema with nested condition object), 2) Create src/tools/tax-rates.ts with 4 simple CRUD tools, 3) Create src/tools/webhooks.ts with 4 CRUD tools including events array validation.",
+        "updatedAt": "2026-02-16T06:00:24.498Z"
+      },
+      {
+        "id": "10",
+        "title": "Implement Supplementary Tools",
+        "description": "Create MCP tools for chart of accounts, QuickBooks integration, email templates, and purchase order forwarding.",
+        "details": "1. Create src/tools/supplementary.ts:\n   ```typescript\n   import { z } from 'zod';\n   import { ApiClient } from '../api-client.js';\n\n   export const supplementaryToolDefinitions = [\n     {\n       name: 'list_chart_of_accounts',\n       description: 'List chart of accounts with search.',\n       inputSchema: {\n         type: 'object',\n         properties: {\n           search: { type: 'string' },\n           page: { type: 'number' },\n           per_page: { type: 'number' },\n         },\n       },\n     },\n     {\n       name: 'list_qbo_customers',\n       description: 'List QuickBooks Online customers with search.',\n       inputSchema: {\n         type: 'object',\n         properties: {\n           search: { type: 'string' },\n           page: { type: 'number' },\n         },\n       },\n     },\n     {\n       name: 'list_qbo_classes',\n       description: 'List QuickBooks Online classes with search.',\n       inputSchema: {\n         type: 'object',\n         properties: {\n           search: { type: 'string' },\n           page: { type: 'number' },\n         },\n       },\n     },\n     {\n       name: 'list_send_to_supplier_templates',\n       description: 'List email templates for sending to suppliers.',\n       inputSchema: { type: 'object', properties: {} },\n     },\n     {\n       name: 'forward_purchase_order',\n       description: 'Forward a purchase order to a supplier via email.',\n       inputSchema: {\n         type: 'object',\n         properties: {\n           purchase_order_id: { type: 'string' },\n           template_id: { type: 'string' },\n           recipient_email: { type: 'string' },\n           message: { type: 'string' },\n         },\n         required: ['purchase_order_id', 'recipient_email'],\n       },\n     },\n   ];\n\n   export function createSupplementaryToolHandlers(apiClient: ApiClient) {\n     return {\n       list_chart_of_accounts: async (args: unknown) => {\n         const parsed = z.object({\n           search: z.string().optional(),\n           page: z.number().optional(),\n           per_page: z.number().optional(),\n         }).parse(args);\n         const params = new URLSearchParams();\n         Object.entries(parsed).forEach(([k, v]) => v !== undefined && params.append(k, String(v)));\n         return apiClient.get(`/api/v1/chart_of_accounts?${params}`);\n       },\n       list_qbo_customers: async (args: unknown) => {\n         const parsed = z.object({ search: z.string().optional(), page: z.number().optional() }).parse(args);\n         const params = new URLSearchParams();\n         Object.entries(parsed).forEach(([k, v]) => v !== undefined && params.append(k, String(v)));\n         return apiClient.get(`/api/v1/qbo/customers?${params}`);\n       },\n       list_qbo_classes: async (args: unknown) => {\n         const parsed = z.object({ search: z.string().optional(), page: z.number().optional() }).parse(args);\n         const params = new URLSearchParams();\n         Object.entries(parsed).forEach(([k, v]) => v !== undefined && params.append(k, String(v)));\n         return apiClient.get(`/api/v1/qbo/classes?${params}`);\n       },\n       list_send_to_supplier_templates: async () => apiClient.get('/api/v1/email_templates'),\n       forward_purchase_order: async (args: unknown) => {\n         const parsed = z.object({\n           purchase_order_id: z.string(),\n           template_id: z.string().optional(),\n           recipient_email: z.string().email(),\n           message: z.string().optional(),\n         }).parse(args);\n         return apiClient.post(`/api/v1/purchase_orders/${parsed.purchase_order_id}/forward`, {\n           template_id: parsed.template_id,\n           recipient_email: parsed.recipient_email,\n           message: parsed.message,\n         });\n       },\n     };\n   }\n   ```\n\n2. Register in src/index.ts with the complete tool list.",
+        "testStrategy": "E2E tests: 1) list_chart_of_accounts with search returns filtered results, 2) list_qbo_customers returns QBO data (test handles QBO not connected gracefully), 3) list_qbo_classes similar, 4) list_send_to_supplier_templates returns templates, 5) forward_purchase_order sends email to valid recipient. Test error handling for QBO integration not configured.",
+        "priority": "low",
+        "dependencies": [
+          "6"
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create Chart of Accounts Tool with Search and Pagination",
+            "description": "Implement the list_chart_of_accounts tool in src/tools/supplementary.ts with Zod validation schema for search, page, and per_page parameters, following established MCP tool patterns.",
+            "dependencies": [],
+            "details": "Create src/tools/supplementary.ts file with initial structure:\n\n1. Import dependencies: z from 'zod', ApiClient from '../api-client.js'\n\n2. Define listChartOfAccountsSchema with zod:\n   - search: z.string().optional()\n   - page: z.number().optional()\n   - per_page: z.number().optional()\n\n3. Create supplementaryToolDefinitions array starting with list_chart_of_accounts:\n   - name: 'list_chart_of_accounts'\n   - description: 'List chart of accounts with search.'\n   - inputSchema: { type: 'object', properties: { search: { type: 'string' }, page: { type: 'number' }, per_page: { type: 'number' } } }\n\n4. Implement createSupplementaryToolHandlers(apiClient) factory function with list_chart_of_accounts handler:\n   - Parse args with listChartOfAccountsSchema\n   - Build URLSearchParams from non-undefined values using Object.entries().forEach()\n   - Call apiClient.get('/api/v1/chart_of_accounts?${params}')\n   - Return the API response\n\n5. Export supplementaryToolDefinitions and createSupplementaryToolHandlers",
+            "status": "pending",
+            "testStrategy": "E2E tests: 1) list_chart_of_accounts without params returns paginated chart of accounts, 2) list_chart_of_accounts with search param filters results by account name/code, 3) list_chart_of_accounts with page and per_page returns correct pagination, 4) Verify empty search returns all accounts, 5) Zod validation accepts partial params (all optional)",
+            "parentId": "undefined"
+          },
+          {
+            "id": 2,
+            "title": "Create QuickBooks Online Integration Tools",
+            "description": "Add list_qbo_customers and list_qbo_classes tools to src/tools/supplementary.ts for QuickBooks Online integration with graceful handling when QBO is not connected.",
+            "dependencies": [
+              1
+            ],
+            "details": "Extend src/tools/supplementary.ts with QuickBooks Online tools:\n\n1. Define Zod schemas for QBO tools:\n   - listQboCustomersSchema: z.object({ search: z.string().optional(), page: z.number().optional() })\n   - listQboClassesSchema: z.object({ search: z.string().optional(), page: z.number().optional() })\n\n2. Add tool definitions to supplementaryToolDefinitions array:\n   - list_qbo_customers: 'List QuickBooks Online customers with search.' with inputSchema { search: string, page: number }\n   - list_qbo_classes: 'List QuickBooks Online classes with search.' with inputSchema { search: string, page: number }\n\n3. Add handler functions to createSupplementaryToolHandlers:\n   - list_qbo_customers: Parse args, build URLSearchParams, call GET /api/v1/qbo/customers?${params}\n   - list_qbo_classes: Parse args, build URLSearchParams, call GET /api/v1/qbo/classes?${params}\n\n4. Note: These endpoints may return error if QBO is not connected to the company - the API error handling in ApiClient will propagate this appropriately (no special handling needed in tool)",
+            "status": "pending",
+            "testStrategy": "E2E tests: 1) list_qbo_customers returns customers when QBO connected, 2) list_qbo_customers with search filters results, 3) list_qbo_customers gracefully handles QBO not connected error (returns API error message), 4) list_qbo_classes returns classes when QBO connected, 5) list_qbo_classes with search filters results, 6) list_qbo_classes gracefully handles QBO not connected error, 7) Verify both tools accept optional search and page params",
+            "parentId": "undefined"
+          },
+          {
+            "id": 3,
+            "title": "Create Email Templates Tool for Supplier Communication",
+            "description": "Add list_send_to_supplier_templates tool to src/tools/supplementary.ts for retrieving available email templates that can be used when forwarding purchase orders to suppliers.",
+            "dependencies": [
+              1
+            ],
+            "details": "Extend src/tools/supplementary.ts with email templates tool:\n\n1. Add tool definition to supplementaryToolDefinitions array:\n   - name: 'list_send_to_supplier_templates'\n   - description: 'List email templates for sending to suppliers.'\n   - inputSchema: { type: 'object', properties: {} } (no input parameters needed)\n\n2. Add handler function to createSupplementaryToolHandlers:\n   - list_send_to_supplier_templates: async () => apiClient.get('/api/v1/email_templates')\n   - This is a simple GET request with no parameters\n   - Returns array of email template objects with id, name, subject, body fields\n\n3. No Zod schema needed since there are no input parameters\n\n4. This tool is designed to be called before forward_purchase_order to let users select which email template to use",
+            "status": "pending",
+            "testStrategy": "E2E tests: 1) list_send_to_supplier_templates returns array of email templates, 2) Verify each template has id, name, and content fields, 3) Verify tool works without any input parameters, 4) Verify empty array returned when no templates configured, 5) Integration: call list_send_to_supplier_templates then use template_id in forward_purchase_order",
+            "parentId": "undefined"
+          },
+          {
+            "id": 4,
+            "title": "Create Forward Purchase Order Tool with Email Validation",
+            "description": "Implement the forward_purchase_order tool in src/tools/supplementary.ts with Zod validation for purchase_order_id, template_id, recipient_email (with email format validation), and optional message.",
+            "dependencies": [
+              1,
+              3
+            ],
+            "details": "Extend src/tools/supplementary.ts with forward purchase order tool:\n\n1. Define forwardPOSchema with zod:\n   - purchase_order_id: z.string() (required)\n   - template_id: z.string().optional()\n   - recipient_email: z.string().email() (required, with email format validation)\n   - message: z.string().optional()\n\n2. Add tool definition to supplementaryToolDefinitions array:\n   - name: 'forward_purchase_order'\n   - description: 'Forward a purchase order to a supplier via email.'\n   - inputSchema with properties for all 4 fields and required: ['purchase_order_id', 'recipient_email']\n\n3. Add handler function to createSupplementaryToolHandlers:\n   - forward_purchase_order: async (args: unknown) => {\n       const parsed = forwardPOSchema.parse(args);\n       return apiClient.post(`/api/v1/purchase_orders/${parsed.purchase_order_id}/forward`, {\n         template_id: parsed.template_id,\n         recipient_email: parsed.recipient_email,\n         message: parsed.message,\n       });\n     }\n\n4. The API sends an email to the supplier with PO details using the specified template (or default if none specified)",
+            "status": "pending",
+            "testStrategy": "E2E tests: 1) forward_purchase_order with valid PO ID and email sends email, 2) forward_purchase_order with template_id uses specified template, 3) forward_purchase_order with custom message includes message in email, 4) forward_purchase_order without template_id uses default template, 5) Zod validation rejects invalid email format, 6) Zod validation rejects missing purchase_order_id, 7) Zod validation rejects missing recipient_email, 8) API error for non-existent purchase_order_id handled correctly",
+            "parentId": "undefined"
+          },
+          {
+            "id": 5,
+            "title": "Register Supplementary Tools in MCP Server Entry Point",
+            "description": "Import and register all supplementary tools in src/index.ts by adding to the consolidated tool definitions array and handler registry pattern established in Task 6.",
+            "dependencies": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "details": "Update src/index.ts to register supplementary tools:\n\n1. Add import statement:\n   ```typescript\n   import { supplementaryToolDefinitions, createSupplementaryToolHandlers } from './tools/supplementary.js';\n   ```\n\n2. Initialize supplementary handlers after apiClient is created:\n   ```typescript\n   const supplementaryHandlers = createSupplementaryToolHandlers(apiClient);\n   ```\n\n3. Update the consolidated toolDefinitions array to include supplementary tools:\n   ```typescript\n   const allToolDefinitions = [\n     ...authToolDefinitions,\n     ...userToolDefinitions,\n     ...budgetToolDefinitions,\n     ...companyToolDefinitions,\n     ...departmentToolDefinitions,\n     ...supplierToolDefinitions,\n     ...purchaseOrderToolDefinitions,\n     ...productToolDefinitions,\n     ...invoiceToolDefinitions,\n     ...commentToolDefinitions,\n     ...paymentToolDefinitions,\n     ...approvalFlowToolDefinitions,\n     ...taxRateToolDefinitions,\n     ...webhookToolDefinitions,\n     ...supplementaryToolDefinitions,  // Add this line\n   ];\n   ```\n\n4. Add supplementary handlers to the handler registry:\n   ```typescript\n   const handlerRegistry = {\n     ...authHandlers,\n     ...userHandlers,\n     // ... other handlers\n     ...supplementaryHandlers,  // Add this line\n   };\n   ```\n\n5. Verify ListToolsRequestSchema returns all tools including the 5 new supplementary tools\n\n6. Verify CallToolRequestSchema can route to supplementary tool handlers via the registry lookup pattern",
+            "status": "pending",
+            "testStrategy": "Integration tests: 1) ListToolsRequestSchema returns all 5 supplementary tools (list_chart_of_accounts, list_qbo_customers, list_qbo_classes, list_send_to_supplier_templates, forward_purchase_order), 2) Each supplementary tool is callable via CallToolRequestSchema, 3) Verify tool names don't conflict with existing tools, 4) Server starts without errors after adding supplementary imports, 5) Full workflow test: authenticate -> list_chart_of_accounts -> list_send_to_supplier_templates -> forward_purchase_order",
+            "parentId": "undefined"
+          }
+        ],
+        "complexity": 3,
+        "recommendedSubtasks": 0,
+        "expansionPrompt": "",
+        "updatedAt": "2026-02-16T06:00:26.873Z"
+      },
+      {
+        "id": "11",
+        "title": "Set Up E2E Test Infrastructure",
+        "description": "Create the E2E test infrastructure with mock HTTP server, MCP client setup, and test utilities for all tool groups.",
+        "details": "1. Create tests/e2e/setup.ts:\n   ```typescript\n   import { spawn, ChildProcess } from 'child_process';\n   import { Client } from '@modelcontextprotocol/sdk/client/index.js';\n   import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';\n   import http from 'http';\n\n   // Mock API server\n   export function createMockApiServer(handlers: Record<string, (req: http.IncomingMessage) => unknown>) {\n     return http.createServer((req, res) => {\n       const handler = handlers[`${req.method} ${req.url?.split('?')[0]}`];\n       if (handler) {\n         res.writeHead(200, { 'Content-Type': 'application/json' });\n         res.end(JSON.stringify(handler(req)));\n       } else {\n         res.writeHead(404);\n         res.end(JSON.stringify({ error: 'Not found' }));\n       }\n     });\n   }\n\n   // MCP client setup\n   export async function createTestClient(): Promise<{ client: Client; transport: StdioClientTransport }> {\n     const transport = new StdioClientTransport({\n       command: 'node',\n       args: ['dist/index.js'],\n       env: {\n         ...process.env,\n         PE_API_BASE_URL: 'http://localhost:3001',\n         PE_CLIENT_ID: 'test_client_id',\n         PE_CLIENT_SECRET: 'test_client_secret',\n       },\n     });\n\n     const client = new Client({ name: 'test-client', version: '1.0.0' }, { capabilities: {} });\n     await client.connect(transport);\n     return { client, transport };\n   }\n\n   // Test utilities\n   export async function callTool(client: Client, name: string, args: Record<string, unknown>) {\n     const result = await client.callTool({ name, arguments: args });\n     if (result.isError) {\n       throw new Error(JSON.parse((result.content[0] as { text: string }).text).error);\n     }\n     return JSON.parse((result.content[0] as { text: string }).text);\n   }\n\n   // Mock response factories\n   export const mockResponses = {\n     user: () => ({ id: 'user-1', email: 'test@example.com', name: 'Test User', company_memberships: [] }),\n     budget: (id: string) => ({ id, name: 'Test Budget', amount: 10000, remaining: 5000 }),\n     purchaseOrder: (id: string) => ({ id, status: 'pending', line_items: [], total: 1000 }),\n     // Add more mock factories\n   };\n   ```\n\n2. Create tests/e2e/auth.test.ts:\n   ```typescript\n   import { describe, it, expect, beforeAll, afterAll } from 'vitest';\n   import { createTestClient, createMockApiServer, callTool } from './setup.js';\n   import type { Client } from '@modelcontextprotocol/sdk/client/index.js';\n   import type { Server } from 'http';\n\n   describe('Authentication Tools', () => {\n     let client: Client;\n     let mockServer: Server;\n\n     beforeAll(async () => {\n       mockServer = createMockApiServer({\n         'POST /oauth/token': () => ({ access_token: 'test-token', token_type: 'Bearer', expires_in: 3600 }),\n         'GET /oauth/token/info': () => ({ active: true }),\n         'POST /oauth/revoke': () => ({}),\n       });\n       mockServer.listen(3001);\n       const { client: c } = await createTestClient();\n       client = c;\n     });\n\n     afterAll(() => {\n       mockServer.close();\n     });\n\n     it('should authenticate with valid credentials', async () => {\n       const result = await callTool(client, 'authenticate', {\n         email: 'test@example.com',\n         password: 'password123',\n       });\n       expect(result.success).toBe(true);\n     });\n\n     it('should validate token after authentication', async () => {\n       const result = await callTool(client, 'validate_token', {});\n       expect(result.valid).toBe(true);\n     });\n\n     it('should revoke token', async () => {\n       const result = await callTool(client, 'revoke_token', {});\n       expect(result.success).toBe(true);\n     });\n   });\n   ```\n\n3. Add vitest.config.ts:\n   ```typescript\n   import { defineConfig } from 'vitest/config';\n   export default defineConfig({\n     test: {\n       globals: true,\n       testTimeout: 30000,\n       hookTimeout: 30000,\n     },\n   });\n   ```",
+        "testStrategy": "Run test suite with npm test. Verify: 1) Mock server starts and handles requests, 2) MCP client connects to server via stdio, 3) Tool calls execute and return expected results, 4) Error handling works (invalid inputs, API errors). Test should pass in CI environment without external dependencies.",
+        "priority": "high",
+        "dependencies": [
+          "4"
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create tests/e2e/setup.ts with Mock API Server Function",
+            "description": "Implement the createMockApiServer function using Node.js http module that provides route-based mock responses for testing MCP tools against a controlled HTTP server.",
+            "dependencies": [],
+            "details": "Create the tests/e2e/setup.ts file with the createMockApiServer function. This function should: 1) Accept a handlers object mapping route patterns like 'GET /oauth/token/info' to handler functions, 2) Create an http.Server using http.createServer(), 3) Parse incoming request method and URL path (splitting on '?' to remove query strings), 4) Look up the matching handler using the pattern '${req.method} ${path}', 5) Return 200 with JSON response if handler exists, 6) Return 404 with error JSON if no handler matches. The handler functions receive the IncomingMessage and return data to be JSON-serialized. Import http from 'http' and export the function for use in test files.",
+            "status": "pending",
+            "testStrategy": "Create a simple test that starts the mock server on a test port, makes HTTP requests using fetch to test routes, verifies 200 responses for defined routes and 404 for undefined routes, then closes the server. Verify JSON content-type headers are set correctly.",
+            "parentId": "undefined"
+          },
+          {
+            "id": 2,
+            "title": "Create MCP Test Client Setup with StdioClientTransport",
+            "description": "Implement the createTestClient function that spawns the MCP server as a child process and establishes stdio-based communication using the MCP SDK client.",
+            "dependencies": [
+              1
+            ],
+            "details": "Add to tests/e2e/setup.ts the createTestClient async function that: 1) Creates a StdioClientTransport with command 'node', args ['dist/index.js'], and environment variables for PE_API_BASE_URL (pointing to localhost:3001 mock server), PE_CLIENT_ID, and PE_CLIENT_SECRET, 2) Creates an MCP Client instance with name 'test-client' and version '1.0.0', passing empty capabilities object, 3) Calls await client.connect(transport) to establish the connection, 4) Returns both client and transport for use in tests. Import Client from '@modelcontextprotocol/sdk/client/index.js' and StdioClientTransport from '@modelcontextprotocol/sdk/client/stdio.js'. The transport spawns a child process that communicates via stdin/stdout using the MCP protocol.",
+            "status": "pending",
+            "testStrategy": "Test that createTestClient successfully spawns the MCP server process, establishes connection, and can list available tools. Verify the client receives the expected tool names. Test cleanup by closing the transport after the test.",
+            "parentId": "undefined"
+          },
+          {
+            "id": 3,
+            "title": "Create Test Utilities and Mock Response Factories",
+            "description": "Implement the callTool helper function for invoking MCP tools with error handling, and create mockResponses factory object with functions that generate consistent test data.",
+            "dependencies": [
+              2
+            ],
+            "details": "Add to tests/e2e/setup.ts: 1) The callTool async function that takes a Client instance, tool name string, and args object, calls client.callTool() with name and arguments, checks result.isError flag, throws Error with parsed error message if failed, otherwise parses and returns the JSON content from result.content[0].text. 2) The mockResponses object containing factory functions: user() returning {id, email, name, company_memberships}, budget(id) returning {id, name, amount, remaining}, purchaseOrder(id) returning {id, status, line_items, total}, supplier(id) returning {id, name, email}, approvalWorkflow(id) returning {id, steps, status}, and costCode(id) returning {id, code, name}. These factories provide consistent test data that matches the ProcurementExpress API response structures.",
+            "status": "pending",
+            "testStrategy": "Test callTool by mocking client.callTool to return success and error responses, verify successful parsing and error throwing behavior. Verify each mockResponses factory returns objects with expected properties and types.",
+            "parentId": "undefined"
+          },
+          {
+            "id": 4,
+            "title": "Create Authentication E2E Tests and Vitest Configuration",
+            "description": "Create the first E2E test file for authentication tools (authenticate, validate_token, revoke_token) and configure vitest with appropriate timeouts for E2E testing.",
+            "dependencies": [
+              3
+            ],
+            "details": "Create tests/e2e/auth.test.ts with: 1) Imports for vitest (describe, it, expect, beforeAll, afterAll), the setup utilities, and MCP types, 2) describe block for 'Authentication Tools' with let declarations for client and mockServer, 3) beforeAll that creates mock server with handlers for POST /oauth/token (returns access_token), GET /oauth/token/info (returns active:true), POST /oauth/revoke (returns empty object), starts server on port 3001, then creates test client, 4) afterAll that closes mock server and transport, 5) Test cases: 'should authenticate with valid credentials' calling authenticate tool and asserting success:true, 'should validate token after authentication' calling validate_token and asserting valid:true, 'should revoke token' calling revoke_token and asserting success:true. Also create vitest.config.ts at project root with defineConfig setting globals:true, testTimeout:30000, hookTimeout:30000 for longer E2E timeouts.",
+            "status": "pending",
+            "testStrategy": "Run vitest with the auth.test.ts file. Verify all three authentication tests pass: authenticate returns success, validate_token returns valid state, revoke_token completes successfully. Confirm the 30-second timeout is sufficient for MCP server startup and tool calls. Test should pass in CI without external dependencies.",
+            "parentId": "undefined"
+          }
+        ],
+        "complexity": 6,
+        "recommendedSubtasks": 4,
+        "expansionPrompt": "Break down into: 1) Create tests/e2e/setup.ts with createMockApiServer function using Node.js http module for route-based mock responses, 2) Create createTestClient function that spawns the MCP server process and connects via StdioClientTransport, 3) Create callTool utility and mockResponses factory functions for common response patterns, 4) Create tests/e2e/auth.test.ts as first test file and vitest.config.ts.",
+        "updatedAt": "2026-02-16T06:02:53.022Z"
+      },
+      {
+        "id": "12",
+        "title": "Write Comprehensive E2E Tests for All Tool Groups",
+        "description": "Create E2E test files for all tool modules covering happy paths, error handling, input validation, and edge cases.",
+        "details": "1. Create test files for each tool module:\n   - tests/e2e/users.test.ts\n   - tests/e2e/budgets.test.ts\n   - tests/e2e/companies.test.ts\n   - tests/e2e/departments.test.ts\n   - tests/e2e/suppliers.test.ts\n   - tests/e2e/products.test.ts\n   - tests/e2e/purchase-orders.test.ts\n   - tests/e2e/invoices.test.ts\n   - tests/e2e/approval-flows.test.ts\n   - tests/e2e/payments.test.ts\n   - tests/e2e/tax-rates.test.ts\n   - tests/e2e/webhooks.test.ts\n   - tests/e2e/supplementary.test.ts\n\n2. Each test file should follow this pattern:\n   ```typescript\n   import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';\n   import { createTestClient, createMockApiServer, callTool, mockResponses } from './setup.js';\n\n   describe('Budget Tools', () => {\n     let client: Client;\n     let mockServer: Server;\n\n     beforeAll(async () => {\n       mockServer = createMockApiServer({\n         'GET /api/v1/budgets': () => ({ data: [mockResponses.budget('1')], meta: { current_page: 1, total_pages: 1 } }),\n         'GET /api/v1/budgets/1': () => mockResponses.budget('1'),\n         'POST /api/v1/budgets': (req) => ({ id: '2', ...req.body }),\n         'PUT /api/v1/budgets/1': (req) => ({ id: '1', ...req.body }),\n       });\n       mockServer.listen(3001);\n       const { client: c } = await createTestClient();\n       client = c;\n       await callTool(client, 'authenticate', { email: 'test@example.com', password: 'pass' });\n     });\n\n     afterAll(() => mockServer.close());\n\n     describe('list_budgets', () => {\n       it('returns paginated budgets', async () => {\n         const result = await callTool(client, 'list_budgets', {});\n         expect(result.data).toHaveLength(1);\n         expect(result.meta.current_page).toBe(1);\n       });\n\n       it('accepts filter parameters', async () => {\n         const result = await callTool(client, 'list_budgets', { department_id: 'dept-1', active: true });\n         expect(result).toBeDefined();\n       });\n     });\n\n     describe('create_budget', () => {\n       it('creates budget with valid data', async () => {\n         const result = await callTool(client, 'create_budget', {\n           name: 'Q1 Marketing',\n           amount: 50000,\n           currency: 'USD',\n         });\n         expect(result.id).toBeDefined();\n       });\n\n       it('rejects missing required fields', async () => {\n         await expect(callTool(client, 'create_budget', { name: 'Test' })).rejects.toThrow();\n       });\n     });\n   });\n   ```\n\n3. Test categories to cover for each module:\n   - Happy path: Valid inputs return expected results\n   - Input validation: Zod rejects invalid/missing required fields\n   - API error handling: 400, 401, 403, 404, 500 responses\n   - Pagination: Page, per_page, filters work correctly\n   - Edge cases: Empty results, large numbers, special characters",
+        "testStrategy": "Run full test suite: npm test. Verify 100% of tools have at least one happy-path test. Check code coverage with vitest --coverage. All tests should pass. Verify error messages are clear and actionable. Test in CI environment.",
+        "priority": "medium",
+        "dependencies": [
+          "11",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10"
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create E2E Tests for Core Tools: users.test.ts and budgets.test.ts",
+            "description": "Create comprehensive E2E test files for user management tools (get_current_user, update_current_user, list_currencies, list_all_currencies) and budget CRUD operations (list_budgets, get_budget, create_budget, update_budget).",
+            "dependencies": [],
+            "details": "1. Create tests/e2e/users.test.ts with mock server setup for:\n   - GET /api/v1/users/me (get_current_user)\n   - PUT /api/v1/users/me (update_current_user)\n   - GET /api/v1/currencies (list_currencies, list_all_currencies)\n   - Test happy paths: valid user profile retrieval, successful profile updates\n   - Test input validation: Zod rejects invalid email format, missing required fields\n   - Test API errors: 401 unauthorized, 404 not found responses\n   - Test edge cases: empty company_memberships array, special characters in name\n\n2. Create tests/e2e/budgets.test.ts with mock server setup for:\n   - GET /api/v1/budgets (list with pagination)\n   - GET /api/v1/budgets/:id (get single)\n   - POST /api/v1/budgets (create)\n   - PUT /api/v1/budgets/:id (update)\n   - Test pagination: page, per_page parameters work correctly\n   - Test filters: department_id, archived, active filters\n   - Test validation: missing name, invalid amount, negative currency values\n   - Test edge cases: empty budget list, budget with 0 remaining amount",
+            "status": "pending",
+            "testStrategy": "Run vitest tests/e2e/users.test.ts and tests/e2e/budgets.test.ts. Verify all 8 tools (4 user + 4 budget) have happy path coverage. Check that Zod validation errors are tested. Verify mock server handles all CRUD endpoints. Ensure test isolation with proper beforeEach/afterEach cleanup.",
+            "parentId": "undefined"
+          },
+          {
+            "id": 2,
+            "title": "Create E2E Tests for Organizational Tools: companies.test.ts, departments.test.ts, suppliers.test.ts",
+            "description": "Create E2E test files for company management (7 tools), department CRUD (4 tools), and supplier management (4 tools) covering organizational hierarchy and relationships.",
+            "dependencies": [
+              1
+            ],
+            "details": "1. Create tests/e2e/companies.test.ts for 7 tools:\n   - list_companies, get_company, create_company\n   - list_approvers, list_all_approvers, list_employees, invite_user\n   - Test company creation with valid data and required fields\n   - Test approver/employee listing with pagination\n   - Test invite_user with valid email, test duplicate invite handling\n   - Test 403 forbidden for non-admin users attempting invite\n\n2. Create tests/e2e/departments.test.ts for 4 tools:\n   - list_departments (with search, pagination, active filter)\n   - get_department, create_department, update_department\n   - Test search functionality returns matching results\n   - Test active filter works correctly\n   - Test department creation with parent_id relationship\n\n3. Create tests/e2e/suppliers.test.ts for 4 tools:\n   - list_suppliers, get_supplier, create_supplier, update_supplier\n   - Test supplier search and pagination\n   - Test supplier creation with contact details\n   - Test update with partial data (PATCH semantics)\n   - Test edge cases: suppliers with special characters in names",
+            "status": "pending",
+            "testStrategy": "Run vitest tests/e2e/companies.test.ts tests/e2e/departments.test.ts tests/e2e/suppliers.test.ts. Verify all 15 organizational tools have test coverage. Test inter-entity relationships (departments belong to companies). Verify pagination works across all list endpoints.",
+            "parentId": "undefined"
+          },
+          {
+            "id": 3,
+            "title": "Create E2E Tests for Workflow Tools: purchase-orders.test.ts and invoices.test.ts",
+            "description": "Create comprehensive E2E tests for purchase order lifecycle (10 tools) and invoice workflow (10 tools) including state transitions, approvals, rejections, and token-based actions.",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "1. Create tests/e2e/purchase-orders.test.ts for 10 tools:\n   - CRUD: list_purchase_orders, get_purchase_order, create_purchase_order\n   - Workflow: approve_purchase_order, reject_purchase_order, cancel_purchase_order, archive_purchase_order\n   - Approver queue: list_pending_requests, get_pending_request_count, override_and_approve_purchase_order\n   - Test nested lineItemSchema validation in create\n   - Test status transitions: draft → pending → approved/rejected\n   - Test token-based approval/rejection (accept_token, reject_token)\n   - Test filters: status enum, supplier_id, department_id, search\n   - Test error: approve already approved PO returns 400\n\n2. Create tests/e2e/invoices.test.ts for 10 tools:\n   - CRUD: list_invoices, get_invoice, create_invoice, update_invoice\n   - Workflow: accept_invoice, approve_invoice, reject_invoice, cancel_invoice\n   - Archive: archive_invoice, dearchive_invoice\n   - Test invoice creation with line_items array\n   - Test unique accept_invoice flow: awaiting_review → pending\n   - Test token-based approval/rejection\n   - Test filters: status (with awaiting_review), supplier_id, purchase_order_id\n   - Test edge case: invoice linked to cancelled PO",
+            "status": "pending",
+            "testStrategy": "Run vitest tests/e2e/purchase-orders.test.ts tests/e2e/invoices.test.ts. Verify all 20 workflow tools have coverage. Test complete state machine transitions for both PO and invoice lifecycle. Verify token-based approval flow works. Test that invalid state transitions return appropriate errors.",
+            "parentId": "undefined"
+          },
+          {
+            "id": 4,
+            "title": "Create E2E Tests for Configuration Tools: approval-flows.test.ts, tax-rates.test.ts, webhooks.test.ts, payments.test.ts",
+            "description": "Create E2E test files for approval flow configuration (7 tools), tax rate management (4 tools), webhook configuration (4 tools), and payment processing (2 tools).",
+            "dependencies": [
+              1
+            ],
+            "details": "1. Create tests/e2e/approval-flows.test.ts for 7 tools:\n   - CRUD: list_approval_flows, get_approval_flow, create_approval_flow, update_approval_flow, delete_approval_flow\n   - Actions: archive_approval_flow, list_approval_flow_runs\n   - Test complex nested schema validation (steps and conditions)\n   - Test approval flow with multiple steps\n   - Test list_approval_flow_runs with flow_id and status filters\n   - Test delete flow that is in use returns error\n\n2. Create tests/e2e/tax-rates.test.ts for 4 tools:\n   - list_tax_rates, get_tax_rate, create_tax_rate, update_tax_rate\n   - Test tax rate creation with percentage validation\n   - Test duplicate tax rate name handling\n   - Test edge case: tax rate with 0% and 100%\n\n3. Create tests/e2e/webhooks.test.ts for 4 tools:\n   - list_webhooks, get_webhook, create_webhook, update_webhook\n   - Test webhook creation with events array validation\n   - Test URL validation (must be valid HTTPS URL)\n   - Test update with modified events list\n\n4. Create tests/e2e/payments.test.ts for 2 tools:\n   - create_payment (for invoices)\n   - create_po_payment (for purchase orders)\n   - Test payment creation with valid amounts\n   - Test payment on already paid invoice returns error\n   - Test partial payment tracking",
+            "status": "pending",
+            "testStrategy": "Run vitest tests/e2e/approval-flows.test.ts tests/e2e/tax-rates.test.ts tests/e2e/webhooks.test.ts tests/e2e/payments.test.ts. Verify all 17 configuration tools have coverage. Test nested schema validation for approval flows. Verify webhook URL validation. Test payment state handling.",
+            "parentId": "undefined"
+          },
+          {
+            "id": 5,
+            "title": "Create E2E Tests for Product and Supplementary Tools: products.test.ts and supplementary.test.ts",
+            "description": "Create E2E test files for product catalog management (5 tools) and supplementary integrations (5 tools including QuickBooks Online and email templates) with comprehensive edge case coverage.",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "1. Create tests/e2e/products.test.ts for 5 tools:\n   - CRUD: list_products, get_product, create_product, update_product, delete_product\n   - Test product listing with pagination and search\n   - Test product creation with all required fields\n   - Test product deletion and verify cascading behavior\n   - Test edge cases: product with very long description, special characters in SKU\n   - Test 404 for non-existent product ID\n\n2. Create tests/e2e/supplementary.test.ts for 5 tools:\n   - list_chart_of_accounts (with search/pagination)\n   - list_qbo_customers (QuickBooks Online integration)\n   - list_qbo_classes (QuickBooks Online integration)\n   - list_send_to_supplier_templates (email templates)\n   - forward_purchase_order (email supplier with PO)\n   - Test chart of accounts search functionality\n   - Test QBO integration tools when QBO is not connected (graceful error)\n   - Test forward_purchase_order with valid PO ID\n   - Test edge cases: empty template list, special characters in search\n   - Test large result sets with pagination\n   - Test error handling for external service failures (QBO timeout)",
+            "status": "pending",
+            "testStrategy": "Run vitest tests/e2e/products.test.ts tests/e2e/supplementary.test.ts. Verify all 10 product and supplementary tools have coverage. Test QuickBooks integration error scenarios. Verify edge cases for special characters and large datasets. Test external service failure handling returns appropriate errors.",
+            "parentId": "undefined"
+          }
+        ],
+        "complexity": 7,
+        "recommendedSubtasks": 5,
+        "expansionPrompt": "Break down into: 1) Create test files for core tools: users.test.ts, budgets.test.ts, 2) Create test files for organizational tools: companies.test.ts, departments.test.ts, suppliers.test.ts, 3) Create test files for workflow tools: purchase-orders.test.ts, invoices.test.ts, 4) Create test files for configuration tools: approval-flows.test.ts, tax-rates.test.ts, webhooks.test.ts, payments.test.ts, 5) Create products.test.ts and supplementary.test.ts with edge case coverage.",
+        "updatedAt": "2026-02-16T06:02:55.279Z"
+      },
+      {
+        "id": "13",
+        "title": "Security Audit and Build Verification",
+        "description": "Perform security audit including dependency checks, input validation review, and verify clean build with documentation.",
+        "details": "1. Dependency security audit:\n   ```bash\n   npm audit\n   npm audit fix  # Apply safe fixes\n   ```\n\n2. Code security review checklist:\n   - [ ] No tokens/secrets in tool responses (search for 'token', 'secret', 'password' in return values)\n   - [ ] All user inputs validated with zod schemas before use\n   - [ ] No eval(), Function(), or dynamic code execution\n   - [ ] No console.log() (use console.error() for logging, as stdout is for stdio transport)\n   - [ ] Environment variables used for all secrets\n   - [ ] No hardcoded URLs or credentials\n   - [ ] Error messages don't expose sensitive information\n   - [ ] API client doesn't log request/response bodies containing auth\n\n3. Input validation review:\n   ```typescript\n   // Ensure all tools validate inputs before processing\n   // Check each tool handler follows this pattern:\n   export async function handler(args: unknown) {\n     const parsed = schema.parse(args);  // Must be first line\n     // ... rest of implementation\n   }\n   ```\n\n4. Build verification:\n   ```bash\n   rm -rf dist/\n   npm run build\n   # Verify no TypeScript errors\n   # Check dist/ contains all expected files\n   ```\n\n5. Create README.md:\n   ```markdown\n   # ProcurementExpress MCP Server\n\n   An MCP server that exposes ProcurementExpress API functionality to LLMs.\n\n   ## Installation\n   ```bash\n   npm install\n   npm run build\n   ```\n\n   ## Configuration\n   Set environment variables:\n   - PE_API_BASE_URL: API base URL (default: https://api.procurementexpress.com)\n   - PE_CLIENT_ID: OAuth2 client ID\n   - PE_CLIENT_SECRET: OAuth2 client secret\n\n   ## Usage\n   ```bash\n   npm start\n   ```\n\n   ## Available Tools\n   [List all tools with brief descriptions]\n\n   ## Development\n   ```bash\n   npm run dev    # Watch mode\n   npm test       # Run tests\n   ```\n   ```\n\n6. Final verification:\n   ```bash\n   npm run build && npm start\n   # In another terminal, verify server responds to MCP handshake\n   ```",
+        "testStrategy": "1) npm audit shows no high/critical vulnerabilities, 2) Manual code review confirms security checklist items, 3) npm run build completes with zero errors, 4) Server starts and responds to MCP protocol, 5) All tests pass (npm test), 6) README is accurate and complete. Document any known issues or limitations.",
+        "priority": "high",
+        "dependencies": [
+          "12"
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Run npm audit and search for security vulnerabilities",
+            "description": "Execute npm audit to identify dependency vulnerabilities, apply safe fixes, and search codebase for hardcoded secrets, tokens, or passwords in tool responses.",
+            "dependencies": [],
+            "details": "Run 'npm audit' to generate vulnerability report. Apply safe fixes with 'npm audit fix'. Use grep/ripgrep to search for 'token', 'secret', 'password' patterns in src/ directory, specifically in tool response objects and return values. Document any findings that need manual review. Verify no hardcoded credentials exist in the codebase.",
+            "status": "pending",
+            "testStrategy": "npm audit shows 0 high/critical vulnerabilities after fixes. Code search for 'token', 'secret', 'password' returns no matches in tool response handling code. All secrets are properly loaded from environment variables.",
+            "parentId": "undefined"
+          },
+          {
+            "id": 2,
+            "title": "Review tool handlers for input validation and code safety",
+            "description": "Verify all tool handlers have zod schema validation as first line, check for console.log usage, eval/Function calls, and ensure error messages don't expose sensitive data.",
+            "dependencies": [
+              1
+            ],
+            "details": "Review each tool handler in src/tools/ to ensure schema.parse(args) is the first line. Search for console.log() usage (should use console.error() instead). Search for eval(), Function(), or new Function() calls. Verify error messages in catch blocks don't expose tokens, secrets, or internal system details. Check API client doesn't log request/response bodies containing authentication data.",
+            "status": "pending",
+            "testStrategy": "Manual code review confirms: 1) All tool handlers start with zod validation, 2) No console.log() found (only console.error()), 3) No eval/Function/dynamic code execution, 4) Error messages are generic and safe, 5) API client logs exclude sensitive fields.",
+            "parentId": "undefined"
+          },
+          {
+            "id": 3,
+            "title": "Verify clean build and create README documentation",
+            "description": "Perform clean build verification by removing dist directory and rebuilding, then create comprehensive README.md with installation, configuration, usage, and development instructions.",
+            "dependencies": [
+              2
+            ],
+            "details": "Execute 'rm -rf dist/ && npm run build' to ensure clean build with zero TypeScript errors. Verify dist/ contains all expected compiled files. Create README.md with sections: project description, installation steps (npm install, npm run build), configuration (environment variables PE_API_BASE_URL, PE_CLIENT_ID, PE_CLIENT_SECRET), usage (npm start), available tools list with brief descriptions, and development commands (npm run dev, npm test). Test server starts successfully with 'npm start'.",
+            "status": "pending",
+            "testStrategy": "Build completes with exit code 0 and no TypeScript errors. dist/ directory contains index.js and all tool modules. 'npm start' launches server successfully and responds to MCP handshake. README.md is complete, accurate, and follows markdown best practices.",
+            "parentId": "undefined"
+          }
+        ],
+        "complexity": 4,
+        "recommendedSubtasks": 3,
+        "expansionPrompt": "Break down into: 1) Run npm audit and fix vulnerabilities, perform code search for 'token', 'secret', 'password' in tool responses, 2) Review all tool handlers to verify zod validation is first line, check for console.log usage and eval/Function calls, 3) Verify clean build (rm -rf dist && npm run build), create README.md with installation/usage documentation.",
+        "updatedAt": "2026-02-16T06:02:57.509Z"
+      }
+    ],
+    "metadata": {
+      "version": "1.0.0",
+      "lastModified": "2026-02-16T06:02:57.510Z",
+      "taskCount": 13,
+      "completedCount": 13,
+      "tags": [
+        "master"
+      ]
+    }
+  }
+}

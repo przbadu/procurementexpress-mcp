@@ -1,0 +1,117 @@
+{
+	"meta": {
+		"generatedAt": "2026-02-16T05:38:02.290Z",
+		"tasksAnalyzed": 13,
+		"totalTasks": 13,
+		"analysisCount": 13,
+		"thresholdScore": 5,
+		"projectName": "Taskmaster",
+		"usedResearch": true
+	},
+	"complexityAnalysis": [
+		{
+			"taskId": 1,
+			"taskTitle": "Initialize Project Structure and Dependencies",
+			"complexityScore": 2,
+			"recommendedSubtasks": 0,
+			"expansionPrompt": "",
+			"reasoning": "Greenfield setup task with clear, prescriptive steps. Creating package.json, tsconfig.json, installing dependencies, and creating directories is straightforward boilerplate. The task details provide exact configurations to use. No existing code to integrate with, no complex decisions to make. Can be completed in a single session following the provided instructions."
+		},
+		{
+			"taskId": 2,
+			"taskTitle": "Implement Core Types and API Client",
+			"complexityScore": 4,
+			"recommendedSubtasks": 3,
+			"expansionPrompt": "Break down into: 1) Create types.ts with all interface definitions (User, Budget, Company, Department, Supplier, Product, PurchaseOrder, Invoice, ApprovalFlow, TaxRate, Webhook, pagination, error types), 2) Implement ApiClient class with request method, header injection, and HTTP verb convenience methods, 3) Implement ApiClientError class and unit tests for error handling scenarios (400, 401, 403, 404, 500).",
+			"reasoning": "This task involves creating two foundational files (types.ts and api-client.ts). The types file requires defining ~15+ interfaces based on the PRD capabilities. The ApiClient needs careful implementation of header injection (auth token, company ID), error handling, and generic type support. Task details provide code snippets but many types are listed as 'Add interfaces for...' requiring extrapolation from PRD."
+		},
+		{
+			"taskId": 3,
+			"taskTitle": "Implement Authentication Manager and MCP Server Skeleton",
+			"complexityScore": 5,
+			"recommendedSubtasks": 3,
+			"expansionPrompt": "Break down into: 1) Create AuthManager class with authenticate, validateToken, revokeToken methods and token lifecycle management, 2) Create MCP server skeleton in index.ts with Server initialization, StdioServerTransport setup, and environment variable handling, 3) Wire AuthManager with ApiClient and verify server starts correctly via stdio.",
+			"reasoning": "This combines two distinct components: OAuth2 authentication management and MCP server setup. The AuthManager requires understanding OAuth2 password grant flow. The MCP server skeleton requires familiarity with @modelcontextprotocol/sdk patterns. Both components must integrate correctly with the ApiClient from task 2. The task is well-documented but involves multiple moving parts that need to work together."
+		},
+		{
+			"taskId": 4,
+			"taskTitle": "Implement Authentication Tools",
+			"complexityScore": 4,
+			"recommendedSubtasks": 2,
+			"expansionPrompt": "Break down into: 1) Create src/tools/auth.ts with zod schemas, tool definitions array, and handler factory function for authenticate/validate_token/revoke_token, 2) Integrate auth tools into src/index.ts by registering ListToolsRequestSchema and CallToolRequestSchema handlers with proper error handling and JSON response formatting.",
+			"reasoning": "First tool implementation task that establishes the pattern for all subsequent tools. Requires creating zod validation schemas, MCP tool definitions (JSON Schema format), and handler functions. The integration into index.ts with request handlers is the trickiest part - must correctly handle the MCP protocol's request/response format. Sets architectural precedent for remaining 8 tool modules."
+		},
+		{
+			"taskId": 5,
+			"taskTitle": "Implement User and Budget Management Tools",
+			"complexityScore": 5,
+			"recommendedSubtasks": 3,
+			"expansionPrompt": "Break down into: 1) Create src/tools/users.ts with 4 tools (get_current_user, update_current_user, list_currencies, list_all_currencies) including zod schemas and handlers, 2) Create src/tools/budgets.ts with 4 CRUD tools (list with pagination/filters, get, create, update) including complex zod schemas, 3) Register both tool modules in src/index.ts, expanding the tool handler switch statement.",
+			"reasoning": "Two tool modules (users.ts and budgets.ts) with 8 total tools. Budget tools have more complex schemas (pagination, filters, create/update with required fields). The list_budgets tool requires building URLSearchParams from parsed inputs. Must follow patterns established in task 4 while adding new tool modules to the index.ts registration. Growing complexity in the main switch statement."
+		},
+		{
+			"taskId": 6,
+			"taskTitle": "Implement Company, Department, and Supplier Management Tools",
+			"complexityScore": 6,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Break down into: 1) Create src/tools/companies.ts with 7 tools including list_companies, get_company, create_company, list_approvers, list_all_approvers, list_employees, invite_user, 2) Create src/tools/departments.ts with 4 CRUD tools following established patterns, 3) Create src/tools/suppliers.ts with 4 CRUD tools including pagination support, 4) Register all three modules in index.ts and refactor handler organization if needed.",
+			"reasoning": "Three tool modules with ~15 total tools. Companies module has the most variety (7 tools with different input/output patterns). The invite_user tool involves a role enum validation. As more tool modules are added, the index.ts switch statement becomes unwieldy - may need refactoring to a handler registry pattern. Task details only provide companies.ts code; departments.ts and suppliers.ts must be extrapolated."
+		},
+		{
+			"taskId": 7,
+			"taskTitle": "Implement Purchase Order Management Tools",
+			"complexityScore": 7,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Break down into: 1) Create PO listing and retrieval tools (list_purchase_orders with 6 filter params, get_purchase_order), 2) Create PO creation tool with complex lineItemSchema including nested object validation, 3) Create PO approval workflow tools (approve, reject, cancel, archive, override_and_approve) with token-based operations, 4) Create pending request tools (list_pending_requests, get_pending_request_count) and products.ts module.",
+			"reasoning": "Most complex tool module with 10 PO tools plus products module. The create_purchase_order tool has nested line_items array with complex validation. Approval workflow tools (approve/reject) require understanding token-based operations. Multiple statuses to handle (draft, pending, approved, rejected, cancelled). Also includes creating products.ts module mentioned but not detailed. Heavy business logic around procurement workflows."
+		},
+		{
+			"taskId": 8,
+			"taskTitle": "Implement Invoice Management Tools",
+			"complexityScore": 6,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Break down into: 1) Create invoice CRUD tools (list with 6 filters, get, create with optional PO link, update), 2) Create invoice workflow tools (accept, approve, reject, cancel, archive, dearchive), 3) Create src/tools/comments.ts with add_purchase_order_comment and add_invoice_comment tools, 4) Create src/tools/payments.ts with create_payment and create_po_payment tools.",
+			"reasoning": "10 invoice tools similar in complexity to PO tools, plus 2 additional modules (comments, payments). Invoice workflow has one extra state (awaiting_review) and additional operations (accept, dearchive). The accept_invoice tool transitions from awaiting_review to pending - unique workflow. Payments module involves feature flag handling mentioned in test strategy but not detailed in implementation."
+		},
+		{
+			"taskId": 9,
+			"taskTitle": "Implement Approval Flow, Tax Rate, and Webhook Management Tools",
+			"complexityScore": 5,
+			"recommendedSubtasks": 3,
+			"expansionPrompt": "Break down into: 1) Create src/tools/approval-flows.ts with 7 tools including complex step/condition schema (approvalStepSchema with nested condition object), 2) Create src/tools/tax-rates.ts with 4 simple CRUD tools, 3) Create src/tools/webhooks.ts with 4 CRUD tools including events array validation.",
+			"reasoning": "Three modules with ~15 tools total. Approval flows have the most complexity with nested approvalStepSchema and conditions. The task details only show schema definitions, not full handler implementations for approval flows. Tax rates and webhooks are simpler CRUD operations. The list_approval_flow_runs tool adds a query pattern not seen in other modules (querying runs by flow_id)."
+		},
+		{
+			"taskId": 10,
+			"taskTitle": "Implement Supplementary Tools",
+			"complexityScore": 3,
+			"recommendedSubtasks": 0,
+			"expansionPrompt": "",
+			"reasoning": "Single module with 5 tools of moderate complexity. Chart of accounts and QBO tools are simple list operations with optional search/pagination. Email templates is a simple list. forward_purchase_order is slightly more complex but still straightforward API call. All implementations are fully detailed in task description. Low priority task with limited scope."
+		},
+		{
+			"taskId": 11,
+			"taskTitle": "Set Up E2E Test Infrastructure",
+			"complexityScore": 6,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Break down into: 1) Create tests/e2e/setup.ts with createMockApiServer function using Node.js http module for route-based mock responses, 2) Create createTestClient function that spawns the MCP server process and connects via StdioClientTransport, 3) Create callTool utility and mockResponses factory functions for common response patterns, 4) Create tests/e2e/auth.test.ts as first test file and vitest.config.ts.",
+			"reasoning": "Requires building a test infrastructure from scratch: mock HTTP server, MCP client setup, and test utilities. The createTestClient function must correctly spawn a child process, set environment variables, and establish stdio communication. Understanding MCP Client SDK is required. vitest configuration for longer timeouts (30s) is important. This infrastructure must work reliably for all subsequent E2E tests."
+		},
+		{
+			"taskId": 12,
+			"taskTitle": "Write Comprehensive E2E Tests for All Tool Groups",
+			"complexityScore": 7,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Break down into: 1) Create test files for core tools: users.test.ts, budgets.test.ts, 2) Create test files for organizational tools: companies.test.ts, departments.test.ts, suppliers.test.ts, 3) Create test files for workflow tools: purchase-orders.test.ts, invoices.test.ts, 4) Create test files for configuration tools: approval-flows.test.ts, tax-rates.test.ts, webhooks.test.ts, payments.test.ts, 5) Create products.test.ts and supplementary.test.ts with edge case coverage.",
+			"reasoning": "13 test files covering ~50+ tools. Each test file requires: mock server setup with appropriate route handlers, test client initialization, authentication setup, and multiple test cases (happy path, validation errors, API errors, edge cases). Heavy dependency on task 11's infrastructure. Must test pagination, filters, CRUD operations, and workflow state transitions. Task has 7 dependencies (11, 5, 6, 7, 8, 9, 10) reflecting its integration nature."
+		},
+		{
+			"taskId": 13,
+			"taskTitle": "Security Audit and Build Verification",
+			"complexityScore": 4,
+			"recommendedSubtasks": 3,
+			"expansionPrompt": "Break down into: 1) Run npm audit and fix vulnerabilities, perform code search for 'token', 'secret', 'password' in tool responses, 2) Review all tool handlers to verify zod validation is first line, check for console.log usage and eval/Function calls, 3) Verify clean build (rm -rf dist && npm run build), create README.md with installation/usage documentation.",
+			"reasoning": "Final verification task combining automated checks (npm audit, build) with manual code review. Security checklist has 8 items requiring code inspection. README creation is straightforward documentation. The task is procedural rather than technically complex - following a checklist. Depends on all previous tasks being complete, making it naturally positioned last."
+		}
+	]
+}
