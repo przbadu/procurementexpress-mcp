@@ -84,7 +84,7 @@ describe("ApiClient E2E", () => {
     expect(result.name).toBe("Test");
   });
 
-  it("should set and include authorization headers", async () => {
+  it("should send V1 authentication_token header by default", async () => {
     const client = new ApiClient(`http://localhost:${port}`);
     client.setToken("test_token");
     client.setCompanyId("42");
@@ -93,9 +93,20 @@ describe("ApiClient E2E", () => {
     await client.get("/api/test/success");
 
     const requests = mock.getRequests();
-    expect(requests[0].headers.authorization).toBe("Bearer test_token");
+    expect(requests[0].headers.authentication_token).toBe("test_token");
     expect(requests[0].headers.app_company_id).toBe("42");
     expect(requests[0].headers["content-type"]).toBe("application/json");
+  });
+
+  it("should send V3 Bearer authorization header", async () => {
+    const client = new ApiClient(`http://localhost:${port}`, "v3");
+    client.setToken("test_token");
+
+    mock.clearRequests();
+    await client.get("/api/test/success");
+
+    const requests = mock.getRequests();
+    expect(requests[0].headers.authorization).toBe("Bearer test_token");
   });
 
   it("should clear token", async () => {
@@ -106,9 +117,18 @@ describe("ApiClient E2E", () => {
     expect(client.getToken()).toBeNull();
   });
 
-  it("should default to correct base URL", () => {
+  it("should build versioned paths correctly", () => {
+    const v1Client = new ApiClient("http://example.com", "v1");
+    expect(v1Client.buildPath("/budgets")).toBe("/api/v1/budgets");
+    expect(v1Client.buildPath("/oauth/token")).toBe("/oauth/token");
+    expect(v1Client.buildPath("/api/v3/test")).toBe("/api/v3/test");
+
+    const v3Client = new ApiClient("http://example.com", "v3");
+    expect(v3Client.buildPath("/budgets")).toBe("/api/v3/budgets");
+  });
+
+  it("should default to v1 API version", () => {
     const client = new ApiClient();
-    // Just verify it doesn't throw - actual URL tested via env var
-    expect(client).toBeDefined();
+    expect(client.getApiVersion()).toBe("v1");
   });
 });

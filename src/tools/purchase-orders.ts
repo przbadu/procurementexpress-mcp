@@ -36,7 +36,7 @@ export function registerPurchaseOrderTools(server: Server, apiClient: ApiClient)
       if (args.sort) params.set("sort", args.sort);
       if (args.direction) params.set("direction", args.direction);
       const query = params.toString();
-      const path = `/api/v3/purchase_orders${query ? `?${query}` : ""}`;
+      const path = `${apiClient.buildPath("/purchase_orders")}${query ? `?${query}` : ""}`;
       const result = await apiClient.get<{
         purchase_orders: PurchaseOrder[];
         meta: PaginationMeta;
@@ -54,7 +54,7 @@ export function registerPurchaseOrderTools(server: Server, apiClient: ApiClient)
       },
     },
     withErrorHandling(async (args) => {
-      const po = await apiClient.get<PurchaseOrder>(`/api/v3/purchase_orders/${args.id}`);
+      const po = await apiClient.get<PurchaseOrder>(apiClient.buildPath(`/purchase_orders/${args.id}`));
       return jsonResponse(po);
     }),
   );
@@ -85,7 +85,7 @@ export function registerPurchaseOrderTools(server: Server, apiClient: ApiClient)
           ...(approver_list ? { approver_list } : {}),
         },
       };
-      const po = await apiClient.post<PurchaseOrder>("/api/v3/purchase_orders", body);
+      const po = await apiClient.post<PurchaseOrder>(apiClient.buildPath("/purchase_orders"), body);
       return jsonResponse(po);
     }),
   );
@@ -100,7 +100,7 @@ export function registerPurchaseOrderTools(server: Server, apiClient: ApiClient)
       },
     },
     withErrorHandling(async (args) => {
-      const result = await apiClient.get(`/api/v3/purchase_orders/${args.id}/approve?token=${args.token}`);
+      const result = await apiClient.get(`${apiClient.buildPath(`/purchase_orders/${args.id}/approve`)}?token=${args.token}`);
       return jsonResponse(result);
     }),
   );
@@ -115,7 +115,7 @@ export function registerPurchaseOrderTools(server: Server, apiClient: ApiClient)
       },
     },
     withErrorHandling(async (args) => {
-      const result = await apiClient.get(`/api/v3/purchase_orders/${args.id}/reject?token=${args.token}`);
+      const result = await apiClient.get(`${apiClient.buildPath(`/purchase_orders/${args.id}/reject`)}?token=${args.token}`);
       return jsonResponse(result);
     }),
   );
@@ -129,7 +129,7 @@ export function registerPurchaseOrderTools(server: Server, apiClient: ApiClient)
       },
     },
     withErrorHandling(async (args) => {
-      const result = await apiClient.get(`/api/v3/purchase_orders/${args.id}/override_and_approve`);
+      const result = await apiClient.get(apiClient.buildPath(`/purchase_orders/${args.id}/override_and_approve`));
       return jsonResponse(result);
     }),
   );
@@ -143,7 +143,7 @@ export function registerPurchaseOrderTools(server: Server, apiClient: ApiClient)
       },
     },
     withErrorHandling(async (args) => {
-      const result = await apiClient.post(`/api/v3/purchase_orders/${args.id}/cancel`);
+      const result = await apiClient.post(apiClient.buildPath(`/purchase_orders/${args.id}/cancel`));
       return jsonResponse(result);
     }),
   );
@@ -157,7 +157,7 @@ export function registerPurchaseOrderTools(server: Server, apiClient: ApiClient)
       },
     },
     withErrorHandling(async (args) => {
-      const result = await apiClient.post(`/api/v3/purchase_orders/${args.id}/archive`);
+      const result = await apiClient.post(apiClient.buildPath(`/purchase_orders/${args.id}/archive`));
       return jsonResponse(result);
     }),
   );
@@ -170,7 +170,7 @@ export function registerPurchaseOrderTools(server: Server, apiClient: ApiClient)
     },
     withErrorHandling(async () => {
       const result = await apiClient.get<{ total_pending_request: number }>(
-        "/api/v3/purchase_orders/pending_request_count",
+        apiClient.buildPath("/purchase_orders/pending_request_count"),
       );
       return textResponse(`Pending requests: ${result.total_pending_request}`);
     }),
@@ -195,7 +195,7 @@ export function registerPurchaseOrderTools(server: Server, apiClient: ApiClient)
       },
     },
     withErrorHandling(async (args) => {
-      const result = await apiClient.post(`/api/v3/purchase_orders/${args.id}/receiving_items`, {
+      const result = await apiClient.post(apiClient.buildPath(`/purchase_orders/${args.id}/receiving_items`), {
         purchase_order: {
           items: args.items,
           delivered_on: args.delivered_on,

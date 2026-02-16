@@ -16,7 +16,7 @@ export function registerCommentTools(server: Server, apiClient: ApiClient): void
     },
     withErrorHandling(async (args) => {
       const result = await apiClient.post<PurchaseOrderComment>(
-        `/api/v3/purchase_order/${args.purchase_order_id}/comments`,
+        apiClient.buildPath(`/purchase_order/${args.purchase_order_id}/comments`),
         { comment: args.comment },
       );
       return jsonResponse(result);
@@ -34,7 +34,7 @@ export function registerCommentTools(server: Server, apiClient: ApiClient): void
     },
     withErrorHandling(async (args) => {
       const result = await apiClient.post(
-        `/api/v3/invoices/${args.invoice_id}/create_comment`,
+        apiClient.buildPath(`/invoices/${args.invoice_id}/create_comment`),
         { comment: args.comment },
       );
       return jsonResponse(result);

@@ -23,7 +23,7 @@ export function registerBudgetTools(server: Server, apiClient: ApiClient): void 
       if (args.only_active) params.set("only_active", "true");
       if (args.department_id) params.set("department_id", String(args.department_id));
       const query = params.toString();
-      const path = `/api/v3/budgets${query ? `?${query}` : ""}`;
+      const path = `${apiClient.buildPath("/budgets")}${query ? `?${query}` : ""}`;
       const result = await apiClient.get<{ budgets: Budget[]; meta: PaginationMeta }>(path);
       return jsonResponse(result);
     }),
@@ -38,7 +38,7 @@ export function registerBudgetTools(server: Server, apiClient: ApiClient): void 
       },
     },
     withErrorHandling(async (args) => {
-      const budget = await apiClient.get<Budget>(`/api/v3/budgets/${args.id}`);
+      const budget = await apiClient.get<Budget>(apiClient.buildPath(`/budgets/${args.id}`));
       return jsonResponse(budget);
     }),
   );
@@ -62,7 +62,7 @@ export function registerBudgetTools(server: Server, apiClient: ApiClient): void 
       },
     },
     withErrorHandling(async (args) => {
-      const budget = await apiClient.post<Budget>("/api/v3/budgets", { budget: args });
+      const budget = await apiClient.post<Budget>(apiClient.buildPath("/budgets"), { budget: args });
       return jsonResponse(budget);
     }),
   );
@@ -85,7 +85,7 @@ export function registerBudgetTools(server: Server, apiClient: ApiClient): void 
     },
     withErrorHandling(async (args) => {
       const { id, ...data } = args;
-      const budget = await apiClient.put<Budget>(`/api/v3/budgets/${id}`, { budget: data });
+      const budget = await apiClient.put<Budget>(apiClient.buildPath(`/budgets/${id}`), { budget: data });
       return jsonResponse(budget);
     }),
   );

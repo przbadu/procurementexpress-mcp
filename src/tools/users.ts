@@ -12,7 +12,7 @@ export function registerUserTools(server: Server, apiClient: ApiClient): void {
       inputSchema: {},
     },
     withErrorHandling(async () => {
-      const user = await apiClient.get<User>("/api/v1/currentuser");
+      const user = await apiClient.get<User>(apiClient.buildPath("/currentuser"));
       return jsonResponse(user);
     }),
   );
@@ -29,7 +29,7 @@ export function registerUserTools(server: Server, apiClient: ApiClient): void {
       },
     },
     withErrorHandling(async (args) => {
-      const user = await apiClient.put<User>("/api/v1/currentuser", args);
+      const user = await apiClient.put<User>(apiClient.buildPath("/currentuser"), args);
       return jsonResponse(user);
     }),
   );
@@ -41,7 +41,7 @@ export function registerUserTools(server: Server, apiClient: ApiClient): void {
       inputSchema: {},
     },
     withErrorHandling(async () => {
-      const currencies = await apiClient.get<Currency[]>("/api/v3/currencies");
+      const currencies = await apiClient.get<Currency[]>(apiClient.buildPath("/currencies"));
       return jsonResponse(currencies);
     }),
   );
@@ -53,7 +53,7 @@ export function registerUserTools(server: Server, apiClient: ApiClient): void {
       inputSchema: {},
     },
     withErrorHandling(async () => {
-      const currencies = await apiClient.get<Currency[]>("/api/v3/all_currencies");
+      const currencies = await apiClient.get<Currency[]>(apiClient.buildPath("/all_currencies"));
       return jsonResponse(currencies);
     }),
   );

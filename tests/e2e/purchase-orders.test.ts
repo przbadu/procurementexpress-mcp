@@ -11,10 +11,9 @@ describe("Purchase Orders E2E", () => {
     mock = new MockApiServer();
     registerStandardRoutes(mock);
     const port = await mock.start();
-    apiClient = new ApiClient(`http://localhost:${port}`);
-    const auth = new AuthManager(apiClient, "test_client_id", "test_client_secret");
-    await auth.authenticate("test@example.com", "password123");
-    apiClient.setCompanyId("100");
+    apiClient = new ApiClient(`http://localhost:${port}`, "v1");
+    const auth = new AuthManager(apiClient);
+    auth.authenticateV1("mock_token", "100");
   });
 
   afterAll(async () => {
@@ -22,13 +21,13 @@ describe("Purchase Orders E2E", () => {
   });
 
   it("should list purchase orders", async () => {
-    const result = await apiClient.get<any>("/api/v3/purchase_orders");
+    const result = await apiClient.get<any>(apiClient.buildPath("/purchase_orders"));
     expect(result.purchase_orders).toHaveLength(1);
     expect(result.purchase_orders[0].status).toBe("Pending");
   });
 
   it("should get purchase order details", async () => {
-    const po = await apiClient.get<any>("/api/v3/purchase_orders/1");
+    const po = await apiClient.get<any>(apiClient.buildPath("/purchase_orders/1"));
     expect(po.id).toBe(1);
     expect(po.purchase_order_items).toHaveLength(1);
     expect(po.approver_requests).toHaveLength(1);
@@ -37,7 +36,7 @@ describe("Purchase Orders E2E", () => {
   });
 
   it("should create a purchase order", async () => {
-    const po = await apiClient.post<any>("/api/v3/purchase_orders", {
+    const po = await apiClient.post<any>(apiClient.buildPath("/purchase_orders"), {
       commit: "Send",
       purchase_order: {
         creator_id: 1,
@@ -53,7 +52,7 @@ describe("Purchase Orders E2E", () => {
   });
 
   it("should create a draft purchase order", async () => {
-    const po = await apiClient.post<any>("/api/v3/purchase_orders", {
+    const po = await apiClient.post<any>(apiClient.buildPath("/purchase_orders"), {
       commit: "Draft",
       purchase_order: {
         creator_id: 1,
@@ -67,12 +66,12 @@ describe("Purchase Orders E2E", () => {
   });
 
   it("should get pending request count", async () => {
-    const result = await apiClient.get<any>("/api/v3/purchase_orders/pending_request_count");
+    const result = await apiClient.get<any>(apiClient.buildPath("/purchase_orders/pending_request_count"));
     expect(result.total_pending_request).toBe(3);
   });
 
   it("should cancel a purchase order", async () => {
-    const result = await apiClient.post<any>("/api/v3/purchase_orders/1/cancel");
+    const result = await apiClient.post<any>(apiClient.buildPath("/purchase_orders/1/cancel"));
     expect(result.status).toBe("Cancelled");
   });
 });

@@ -17,7 +17,7 @@ export function registerWebhookTools(server: Server, apiClient: ApiClient): void
       const params = new URLSearchParams();
       if (args.archived !== undefined) params.set("archived", String(args.archived));
       const query = params.toString();
-      const path = `/api/v3/webhooks${query ? `?${query}` : ""}`;
+      const path = `${apiClient.buildPath("/webhooks")}${query ? `?${query}` : ""}`;
       const webhooks = await apiClient.get<Webhook[]>(path);
       return jsonResponse(webhooks);
     }),
@@ -32,7 +32,7 @@ export function registerWebhookTools(server: Server, apiClient: ApiClient): void
       },
     },
     withErrorHandling(async (args) => {
-      const webhook = await apiClient.get<Webhook>(`/api/v3/webhooks/${args.id}`);
+      const webhook = await apiClient.get<Webhook>(apiClient.buildPath(`/webhooks/${args.id}`));
       return jsonResponse(webhook);
     }),
   );
@@ -55,7 +55,7 @@ export function registerWebhookTools(server: Server, apiClient: ApiClient): void
       },
     },
     withErrorHandling(async (args) => {
-      const webhook = await apiClient.post<Webhook>("/api/v3/webhooks", { webhook: args });
+      const webhook = await apiClient.post<Webhook>(apiClient.buildPath("/webhooks"), { webhook: args });
       return jsonResponse(webhook);
     }),
   );
@@ -77,7 +77,7 @@ export function registerWebhookTools(server: Server, apiClient: ApiClient): void
     },
     withErrorHandling(async (args) => {
       const { id, ...data } = args;
-      const webhook = await apiClient.put<Webhook>(`/api/v3/webhooks/${id}`, { webhook: data });
+      const webhook = await apiClient.put<Webhook>(apiClient.buildPath(`/webhooks/${id}`), { webhook: data });
       return jsonResponse(webhook);
     }),
   );

@@ -37,7 +37,7 @@ export function registerInvoiceTools(server: Server, apiClient: ApiClient): void
       if (args.supplier_id) params.set("supplier_id", String(args.supplier_id));
       if (args.invoice_date_filter) params.set("invoice_date_filter", args.invoice_date_filter);
       const query = params.toString();
-      const path = `/api/v3/invoices${query ? `?${query}` : ""}`;
+      const path = `${apiClient.buildPath("/invoices")}${query ? `?${query}` : ""}`;
       const result = await apiClient.get<{ invoices: Invoice[]; meta: PaginationMeta }>(path);
       return jsonResponse(result);
     }),
@@ -52,7 +52,7 @@ export function registerInvoiceTools(server: Server, apiClient: ApiClient): void
       },
     },
     withErrorHandling(async (args) => {
-      const invoice = await apiClient.get<Invoice>(`/api/v3/invoices/${args.id}`);
+      const invoice = await apiClient.get<Invoice>(apiClient.buildPath(`/invoices/${args.id}`));
       return jsonResponse(invoice);
     }),
   );
@@ -81,7 +81,7 @@ export function registerInvoiceTools(server: Server, apiClient: ApiClient): void
           ...(line_items ? { invoice_line_items_attributes: line_items } : {}),
         },
       };
-      const invoice = await apiClient.post<Invoice>("/api/v3/invoices", body);
+      const invoice = await apiClient.post<Invoice>(apiClient.buildPath("/invoices"), body);
       return jsonResponse(invoice);
     }),
   );
@@ -101,7 +101,7 @@ export function registerInvoiceTools(server: Server, apiClient: ApiClient): void
     },
     withErrorHandling(async (args) => {
       const { id, ...data } = args;
-      const invoice = await apiClient.put<Invoice>(`/api/v3/invoices/${id}`, { invoice: data });
+      const invoice = await apiClient.put<Invoice>(apiClient.buildPath(`/invoices/${id}`), { invoice: data });
       return jsonResponse(invoice);
     }),
   );
@@ -113,7 +113,7 @@ export function registerInvoiceTools(server: Server, apiClient: ApiClient): void
       inputSchema: { id: z.number().int().positive().describe("Invoice ID") },
     },
     withErrorHandling(async (args) => {
-      const result = await apiClient.put(`/api/v3/invoices/${args.id}/accept`);
+      const result = await apiClient.put(apiClient.buildPath(`/invoices/${args.id}/accept`));
       return jsonResponse(result);
     }),
   );
@@ -125,7 +125,7 @@ export function registerInvoiceTools(server: Server, apiClient: ApiClient): void
       inputSchema: { id: z.number().int().positive().describe("Invoice ID") },
     },
     withErrorHandling(async (args) => {
-      const result = await apiClient.put(`/api/v3/invoices/${args.id}/approve`);
+      const result = await apiClient.put(apiClient.buildPath(`/invoices/${args.id}/approve`));
       return jsonResponse(result);
     }),
   );
@@ -137,7 +137,7 @@ export function registerInvoiceTools(server: Server, apiClient: ApiClient): void
       inputSchema: { id: z.number().int().positive().describe("Invoice ID") },
     },
     withErrorHandling(async (args) => {
-      const result = await apiClient.put(`/api/v3/invoices/${args.id}/reject`);
+      const result = await apiClient.put(apiClient.buildPath(`/invoices/${args.id}/reject`));
       return jsonResponse(result);
     }),
   );
@@ -149,7 +149,7 @@ export function registerInvoiceTools(server: Server, apiClient: ApiClient): void
       inputSchema: { id: z.number().int().positive().describe("Invoice ID") },
     },
     withErrorHandling(async (args) => {
-      const result = await apiClient.put(`/api/v3/invoices/${args.id}/cancel`);
+      const result = await apiClient.put(apiClient.buildPath(`/invoices/${args.id}/cancel`));
       return jsonResponse(result);
     }),
   );
@@ -161,7 +161,7 @@ export function registerInvoiceTools(server: Server, apiClient: ApiClient): void
       inputSchema: { id: z.number().int().positive().describe("Invoice ID") },
     },
     withErrorHandling(async (args) => {
-      const result = await apiClient.put(`/api/v3/invoices/${args.id}/archive`);
+      const result = await apiClient.put(apiClient.buildPath(`/invoices/${args.id}/archive`));
       return jsonResponse(result);
     }),
   );
@@ -173,7 +173,7 @@ export function registerInvoiceTools(server: Server, apiClient: ApiClient): void
       inputSchema: { id: z.number().int().positive().describe("Invoice ID") },
     },
     withErrorHandling(async (args) => {
-      const result = await apiClient.put(`/api/v3/invoices/${args.id}/dearchive`);
+      const result = await apiClient.put(apiClient.buildPath(`/invoices/${args.id}/dearchive`));
       return jsonResponse(result);
     }),
   );

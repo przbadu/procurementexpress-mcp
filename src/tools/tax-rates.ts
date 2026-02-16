@@ -12,7 +12,7 @@ export function registerTaxRateTools(server: Server, apiClient: ApiClient): void
       inputSchema: {},
     },
     withErrorHandling(async () => {
-      const taxRates = await apiClient.get<TaxRate[]>("/api/v3/tax_rates");
+      const taxRates = await apiClient.get<TaxRate[]>(apiClient.buildPath("/tax_rates"));
       return jsonResponse(taxRates);
     }),
   );
@@ -26,7 +26,7 @@ export function registerTaxRateTools(server: Server, apiClient: ApiClient): void
       },
     },
     withErrorHandling(async (args) => {
-      const taxRate = await apiClient.get<TaxRate>(`/api/v3/tax_rates/${args.id}`);
+      const taxRate = await apiClient.get<TaxRate>(apiClient.buildPath(`/tax_rates/${args.id}`));
       return jsonResponse(taxRate);
     }),
   );
@@ -42,7 +42,7 @@ export function registerTaxRateTools(server: Server, apiClient: ApiClient): void
       },
     },
     withErrorHandling(async (args) => {
-      const taxRate = await apiClient.post<TaxRate>("/api/v3/tax_rates", { tax_rate: args });
+      const taxRate = await apiClient.post<TaxRate>(apiClient.buildPath("/tax_rates"), { tax_rate: args });
       return jsonResponse(taxRate);
     }),
   );
@@ -60,7 +60,7 @@ export function registerTaxRateTools(server: Server, apiClient: ApiClient): void
     },
     withErrorHandling(async (args) => {
       const { id, ...data } = args;
-      const taxRate = await apiClient.put<TaxRate>(`/api/v3/tax_rates/${id}`, { tax_rate: data });
+      const taxRate = await apiClient.put<TaxRate>(apiClient.buildPath(`/tax_rates/${id}`), { tax_rate: data });
       return jsonResponse(taxRate);
     }),
   );

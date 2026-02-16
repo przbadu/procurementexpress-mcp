@@ -19,7 +19,7 @@ export function registerProductTools(server: Server, apiClient: ApiClient): void
       if (args.supplier_id) params.set("supplier_id", String(args.supplier_id));
       if (args.archived !== undefined) params.set("archived", String(args.archived));
       const query = params.toString();
-      const path = `/api/v3/products${query ? `?${query}` : ""}`;
+      const path = `${apiClient.buildPath("/products")}${query ? `?${query}` : ""}`;
       const products = await apiClient.get<Product[]>(path);
       return jsonResponse(products);
     }),
@@ -34,7 +34,7 @@ export function registerProductTools(server: Server, apiClient: ApiClient): void
       },
     },
     withErrorHandling(async (args) => {
-      const product = await apiClient.get<Product>(`/api/v3/products/${args.id}`);
+      const product = await apiClient.get<Product>(apiClient.buildPath(`/products/${args.id}`));
       return jsonResponse(product);
     }),
   );
@@ -51,7 +51,7 @@ export function registerProductTools(server: Server, apiClient: ApiClient): void
       },
     },
     withErrorHandling(async (args) => {
-      const product = await apiClient.post<Product>("/api/v3/products", { product: args });
+      const product = await apiClient.post<Product>(apiClient.buildPath("/products"), { product: args });
       return jsonResponse(product);
     }),
   );
@@ -71,7 +71,7 @@ export function registerProductTools(server: Server, apiClient: ApiClient): void
     },
     withErrorHandling(async (args) => {
       const { id, ...data } = args;
-      const product = await apiClient.put<Product>(`/api/v3/products/${id}`, { product: data });
+      const product = await apiClient.put<Product>(apiClient.buildPath(`/products/${id}`), { product: data });
       return jsonResponse(product);
     }),
   );

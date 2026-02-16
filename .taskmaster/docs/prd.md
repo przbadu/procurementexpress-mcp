@@ -194,7 +194,7 @@ tests/
 - **Build**: TypeScript compiler (tsc)
 
 ### Authentication Flow
-1. Server reads `PE_API_BASE_URL`, `PE_CLIENT_ID`, `PE_CLIENT_SECRET` from environment
+1. Server reads `PROCUREMENTEXPRESS_API_BASE_URL`, `PROCUREMENTEXPRESS_CLIENT_ID`, `PROCUREMENTEXPRESS_CLIENT_SECRET` from environment
 2. User provides email/password via the `authenticate` tool
 3. Server stores bearer token in memory
 4. All subsequent API calls include `Authorization: Bearer <token>` and `app_company_id` headers

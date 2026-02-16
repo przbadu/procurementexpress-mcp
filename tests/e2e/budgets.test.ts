@@ -11,10 +11,9 @@ describe("Budgets E2E", () => {
     mock = new MockApiServer();
     registerStandardRoutes(mock);
     const port = await mock.start();
-    apiClient = new ApiClient(`http://localhost:${port}`);
-    const auth = new AuthManager(apiClient, "test_client_id", "test_client_secret");
-    await auth.authenticate("test@example.com", "password123");
-    apiClient.setCompanyId("100");
+    apiClient = new ApiClient(`http://localhost:${port}`, "v1");
+    const auth = new AuthManager(apiClient);
+    auth.authenticateV1("mock_token", "100");
   });
 
   afterAll(async () => {
@@ -22,20 +21,20 @@ describe("Budgets E2E", () => {
   });
 
   it("should list budgets", async () => {
-    const result = await apiClient.get<any>("/api/v3/budgets");
+    const result = await apiClient.get<any>(apiClient.buildPath("/budgets"));
     expect(result.budgets).toHaveLength(2);
     expect(result.meta.total_count).toBe(2);
     expect(result.budgets[0].name).toBe("Q1 Budget");
   });
 
   it("should get a specific budget", async () => {
-    const budget = await apiClient.get<any>("/api/v3/budgets/1");
+    const budget = await apiClient.get<any>(apiClient.buildPath("/budgets/1"));
     expect(budget.id).toBe(1);
     expect(budget.remaining_amount).toBe(30000);
   });
 
   it("should create a budget", async () => {
-    const budget = await apiClient.post<any>("/api/v3/budgets", {
+    const budget = await apiClient.post<any>(apiClient.buildPath("/budgets"), {
       budget: { name: "New Budget", amount: 10000, currency_id: 1, creator_id: 1 },
     });
     expect(budget.id).toBe(3);

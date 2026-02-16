@@ -24,8 +24,8 @@ export function registerSupplierTools(server: Server, apiClient: ApiClient): voi
       if (args.top) params.set("top", String(args.top));
       const query = params.toString();
       const path = args.top
-        ? `/api/v3/suppliers/top?${query}`
-        : `/api/v3/suppliers${query ? `?${query}` : ""}`;
+        ? `${apiClient.buildPath("/suppliers/top")}?${query}`
+        : `${apiClient.buildPath("/suppliers")}${query ? `?${query}` : ""}`;
       const result = await apiClient.get<{ suppliers: Supplier[]; meta: PaginationMeta }>(path);
       return jsonResponse(result);
     }),
@@ -40,7 +40,7 @@ export function registerSupplierTools(server: Server, apiClient: ApiClient): voi
       },
     },
     withErrorHandling(async (args) => {
-      const supplier = await apiClient.get<Supplier>(`/api/v3/suppliers/${args.id}`);
+      const supplier = await apiClient.get<Supplier>(apiClient.buildPath(`/suppliers/${args.id}`));
       return jsonResponse(supplier);
     }),
   );
@@ -65,7 +65,7 @@ export function registerSupplierTools(server: Server, apiClient: ApiClient): voi
       const { department_ids, ...supplierData } = args;
       const body: Record<string, unknown> = { supplier: supplierData };
       if (department_ids) body.department_ids = department_ids;
-      const supplier = await apiClient.post<Supplier>("/api/v3/suppliers", body);
+      const supplier = await apiClient.post<Supplier>(apiClient.buildPath("/suppliers"), body);
       return jsonResponse(supplier);
     }),
   );
@@ -89,7 +89,7 @@ export function registerSupplierTools(server: Server, apiClient: ApiClient): voi
     },
     withErrorHandling(async (args) => {
       const { id, ...data } = args;
-      const supplier = await apiClient.put<Supplier>(`/api/v3/suppliers/${id}`, {
+      const supplier = await apiClient.put<Supplier>(apiClient.buildPath(`/suppliers/${id}`), {
         supplier: data,
       });
       return jsonResponse(supplier);

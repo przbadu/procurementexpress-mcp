@@ -39,7 +39,7 @@ export function registerApprovalFlowTools(server: Server, apiClient: ApiClient):
       if (args.sort) params.set("sort", args.sort);
       if (args.direction) params.set("direction", args.direction);
       const query = params.toString();
-      const path = `/api/v1/approval_flows${query ? `?${query}` : ""}`;
+      const path = `${apiClient.buildPath("/approval_flows")}${query ? `?${query}` : ""}`;
       const result = await apiClient.get<{
         approval_flows: ApprovalFlow[];
         meta: PaginationMeta;
@@ -57,7 +57,7 @@ export function registerApprovalFlowTools(server: Server, apiClient: ApiClient):
       },
     },
     withErrorHandling(async (args) => {
-      const flow = await apiClient.get<ApprovalFlow>(`/api/v1/approval_flows/${args.id}`);
+      const flow = await apiClient.get<ApprovalFlow>(apiClient.buildPath(`/approval_flows/${args.id}`));
       return jsonResponse(flow);
     }),
   );
@@ -95,7 +95,7 @@ export function registerApprovalFlowTools(server: Server, apiClient: ApiClient):
             : {}),
         },
       };
-      const flow = await apiClient.post<ApprovalFlow>("/api/v1/approval_flows", body);
+      const flow = await apiClient.post<ApprovalFlow>(apiClient.buildPath("/approval_flows"), body);
       return jsonResponse(flow);
     }),
   );
@@ -107,7 +107,7 @@ export function registerApprovalFlowTools(server: Server, apiClient: ApiClient):
       inputSchema: { id: z.number().int().positive().describe("Approval Flow ID") },
     },
     withErrorHandling(async (args) => {
-      const result = await apiClient.delete(`/api/v1/approval_flows/${args.id}`);
+      const result = await apiClient.delete(apiClient.buildPath(`/approval_flows/${args.id}`));
       return jsonResponse(result);
     }),
   );
@@ -119,7 +119,7 @@ export function registerApprovalFlowTools(server: Server, apiClient: ApiClient):
       inputSchema: { id: z.number().int().positive().describe("Approval Flow ID") },
     },
     withErrorHandling(async (args) => {
-      const result = await apiClient.put(`/api/v1/approval_flows/${args.id}/archive`);
+      const result = await apiClient.put(apiClient.buildPath(`/approval_flows/${args.id}/archive`));
       return jsonResponse(result);
     }),
   );
@@ -145,7 +145,7 @@ export function registerApprovalFlowTools(server: Server, apiClient: ApiClient):
         if (value !== undefined) params.set(key, String(value));
       }
       const query = params.toString();
-      const path = `/api/v1/approval_flows/${id}/runs${query ? `?${query}` : ""}`;
+      const path = `${apiClient.buildPath(`/approval_flows/${id}/runs`)}${query ? `?${query}` : ""}`;
       const result = await apiClient.get(path);
       return jsonResponse(result);
     }),

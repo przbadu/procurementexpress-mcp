@@ -11,10 +11,9 @@ describe("Companies E2E", () => {
     mock = new MockApiServer();
     registerStandardRoutes(mock);
     const port = await mock.start();
-    apiClient = new ApiClient(`http://localhost:${port}`);
-    const auth = new AuthManager(apiClient, "test_client_id", "test_client_secret");
-    await auth.authenticate("test@example.com", "password123");
-    apiClient.setCompanyId("100");
+    apiClient = new ApiClient(`http://localhost:${port}`, "v1");
+    const auth = new AuthManager(apiClient);
+    auth.authenticateV1("mock_token", "100");
   });
 
   afterAll(async () => {
@@ -22,26 +21,26 @@ describe("Companies E2E", () => {
   });
 
   it("should list companies", async () => {
-    const companies = await apiClient.get<any[]>("/api/v3/companies");
+    const companies = await apiClient.get<any[]>(apiClient.buildPath("/companies"));
     expect(companies).toHaveLength(1);
     expect(companies[0].name).toBe("Test Company");
   });
 
   it("should get company details", async () => {
-    const company = await apiClient.get<any>("/api/v3/companies/100");
+    const company = await apiClient.get<any>(apiClient.buildPath("/companies/100"));
     expect(company.id).toBe(100);
     expect(company.company_setting).toBeDefined();
     expect(company.supported_currencies).toHaveLength(1);
   });
 
   it("should list employees", async () => {
-    const employees = await apiClient.get<any[]>("/api/v3/companies/employees");
+    const employees = await apiClient.get<any[]>(apiClient.buildPath("/companies/employees"));
     expect(employees).toHaveLength(1);
     expect(employees[0].roles).toContain("companyadmin");
   });
 
   it("should list all approvers", async () => {
-    const approvers = await apiClient.get<any[]>("/api/v3/companies/all_approvers");
+    const approvers = await apiClient.get<any[]>(apiClient.buildPath("/companies/all_approvers"));
     expect(approvers).toHaveLength(1);
     expect(approvers[0].approval_limit).toBe(10000);
   });

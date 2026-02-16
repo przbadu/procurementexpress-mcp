@@ -23,7 +23,7 @@ export function registerSupplementaryTools(server: Server, apiClient: ApiClient)
       const params = new URLSearchParams();
       if (args.search) params.set("search", args.search);
       const query = params.toString();
-      const path = `/api/v3/chart_of_accounts${query ? `?${query}` : ""}`;
+      const path = `${apiClient.buildPath("/chart_of_accounts")}${query ? `?${query}` : ""}`;
       const result = await apiClient.get<{
         chart_of_accounts: ChartOfAccount[];
         meta: PaginationMeta;
@@ -44,7 +44,7 @@ export function registerSupplementaryTools(server: Server, apiClient: ApiClient)
       const params = new URLSearchParams();
       if (args.search) params.set("search", args.search);
       const query = params.toString();
-      const path = `/api/v3/qbo_customers${query ? `?${query}` : ""}`;
+      const path = `${apiClient.buildPath("/qbo_customers")}${query ? `?${query}` : ""}`;
       const result = await apiClient.get<{
         qbo_customers: QboCustomer[];
         meta: PaginationMeta;
@@ -65,7 +65,7 @@ export function registerSupplementaryTools(server: Server, apiClient: ApiClient)
       const params = new URLSearchParams();
       if (args.search) params.set("search", args.search);
       const query = params.toString();
-      const path = `/api/v3/qbo_classes${query ? `?${query}` : ""}`;
+      const path = `${apiClient.buildPath("/qbo_classes")}${query ? `?${query}` : ""}`;
       const result = await apiClient.get<{
         quickbooks_classes: QboClass[];
         meta: PaginationMeta;
@@ -82,7 +82,7 @@ export function registerSupplementaryTools(server: Server, apiClient: ApiClient)
     },
     withErrorHandling(async () => {
       const templates = await apiClient.get<SendToSupplierTemplate[]>(
-        "/api/v3/send_to_supplier_templates",
+        apiClient.buildPath("/send_to_supplier_templates"),
       );
       return jsonResponse(templates);
     }),
@@ -106,7 +106,7 @@ export function registerSupplementaryTools(server: Server, apiClient: ApiClient)
     withErrorHandling(async (args) => {
       const { purchase_order_id, ...data } = args;
       const result = await apiClient.post(
-        `/api/v3/purchase_orders/${purchase_order_id}/forward`,
+        apiClient.buildPath(`/purchase_orders/${purchase_order_id}/forward`),
         data,
       );
       return jsonResponse(result);

@@ -47,7 +47,7 @@ export function registerPaymentTools(server: Server, apiClient: ApiClient): void
           npayment_invoices_attributes: invoices,
         },
       };
-      const payment = await apiClient.post<Payment>("/api/v3/npayments", body);
+      const payment = await apiClient.post<Payment>(apiClient.buildPath("/npayments"), body);
       return jsonResponse(payment);
     }),
   );
@@ -77,7 +77,7 @@ export function registerPaymentTools(server: Server, apiClient: ApiClient): void
         },
       };
       const result = await apiClient.post(
-        `/api/v3/purchase_orders/${args.purchase_order_id}/payments`,
+        apiClient.buildPath(`/purchase_orders/${args.purchase_order_id}/payments`),
         body,
       );
       return jsonResponse(result);

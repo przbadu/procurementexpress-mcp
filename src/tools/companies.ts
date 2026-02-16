@@ -12,7 +12,7 @@ export function registerCompanyTools(server: Server, apiClient: ApiClient): void
       inputSchema: {},
     },
     withErrorHandling(async () => {
-      const companies = await apiClient.get<CompanyDetail[]>("/api/v3/companies");
+      const companies = await apiClient.get<CompanyDetail[]>(apiClient.buildPath("/companies"));
       return jsonResponse(companies);
     }),
   );
@@ -26,7 +26,7 @@ export function registerCompanyTools(server: Server, apiClient: ApiClient): void
       },
     },
     withErrorHandling(async (args) => {
-      const company = await apiClient.get<CompanyDetail>(`/api/v3/companies/${args.id}`);
+      const company = await apiClient.get<CompanyDetail>(apiClient.buildPath(`/companies/${args.id}`));
       return jsonResponse(company);
     }),
   );
@@ -55,7 +55,7 @@ export function registerCompanyTools(server: Server, apiClient: ApiClient): void
     },
     withErrorHandling(async (args) => {
       const approvers = await apiClient.get<Approver[]>(
-        `/api/v3/companies/approvers?department_id=${args.department_id}`,
+        `${apiClient.buildPath("/companies/approvers")}?department_id=${args.department_id}`,
       );
       return jsonResponse(approvers);
     }),
@@ -68,7 +68,7 @@ export function registerCompanyTools(server: Server, apiClient: ApiClient): void
       inputSchema: {},
     },
     withErrorHandling(async () => {
-      const approvers = await apiClient.get<Approver[]>("/api/v3/companies/all_approvers");
+      const approvers = await apiClient.get<Approver[]>(apiClient.buildPath("/companies/all_approvers"));
       return jsonResponse(approvers);
     }),
   );
@@ -80,7 +80,7 @@ export function registerCompanyTools(server: Server, apiClient: ApiClient): void
       inputSchema: {},
     },
     withErrorHandling(async () => {
-      const employees = await apiClient.get<Employee[]>("/api/v3/companies/employees");
+      const employees = await apiClient.get<Employee[]>(apiClient.buildPath("/companies/employees"));
       return jsonResponse(employees);
     }),
   );
@@ -99,7 +99,7 @@ export function registerCompanyTools(server: Server, apiClient: ApiClient): void
       },
     },
     withErrorHandling(async (args) => {
-      const result = await apiClient.post("/api/v3/companies/send_user_invite", {
+      const result = await apiClient.post(apiClient.buildPath("/companies/send_user_invite"), {
         invite_user: args,
       });
       return jsonResponse(result);

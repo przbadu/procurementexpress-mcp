@@ -1,5 +1,7 @@
 import type { ApiError } from "./types.js";
 
+export type ApiVersion = "v1" | "v3";
+
 export class ApiClientError extends Error {
   constructor(
     public status: number,
@@ -14,11 +16,21 @@ export class ApiClient {
   private baseUrl: string;
   private token: string | null = null;
   private companyId: string | null = null;
+  private apiVersion: ApiVersion;
+  private authMode: "v1" | "v3";
 
-  constructor(baseUrl?: string) {
+  constructor(baseUrl?: string, apiVersion?: ApiVersion) {
     this.baseUrl = (
-      baseUrl || process.env.PE_API_BASE_URL || "https://app.procurementexpress.com"
+      baseUrl ||
+      process.env.PROCUREMENTEXPRESS_API_BASE_URL ||
+      "https://app.procurementexpress.com"
     ).replace(/\/$/, "");
+    this.apiVersion = apiVersion || (process.env.PROCUREMENTEXPRESS_API_VERSION as ApiVersion) || "v1";
+    this.authMode = this.apiVersion;
+  }
+
+  getApiVersion(): ApiVersion {
+    return this.apiVersion;
   }
 
   setToken(token: string): void {
@@ -41,13 +53,29 @@ export class ApiClient {
     return this.companyId;
   }
 
+  /**
+   * Build the full API path with the configured version prefix.
+   * Paths starting with /oauth or /api/ are used as-is.
+   * Paths like /budgets become /api/{version}/budgets.
+   */
+  buildPath(path: string): string {
+    if (path.startsWith("/oauth") || path.startsWith("/api/")) {
+      return path;
+    }
+    return `/api/${this.apiVersion}${path}`;
+  }
+
   private buildHeaders(extraHeaders?: Record<string, string>): Record<string, string> {
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
     };
 
     if (this.token) {
-      headers["Authorization"] = `Bearer ${this.token}`;
+      if (this.authMode === "v1") {
+        headers["authentication_token"] = this.token;
+      } else {
+        headers["Authorization"] = `Bearer ${this.token}`;
+      }
     }
 
     if (this.companyId) {

@@ -87,11 +87,29 @@ export class MockApiServer {
   }
 }
 
+/** Helper: version-agnostic path regex that matches both /api/v1/ and /api/v3/ */
+function vPath(resource: string): RegExp {
+  return new RegExp(`^/api/v[13]/${resource}$`);
+}
+
+function vPathWithId(resource: string): RegExp {
+  return new RegExp(`^/api/v[13]/${resource}/\\d+$`);
+}
+
+function vPathSuffix(resource: string, suffix: string): RegExp {
+  return new RegExp(`^/api/v[13]/${resource}/${suffix}$`);
+}
+
+function vPathIdSuffix(resource: string, suffix: string): RegExp {
+  return new RegExp(`^/api/v[13]/${resource}/\\d+/${suffix}$`);
+}
+
 /**
  * Registers standard mock routes for common API endpoints.
+ * All resource routes match both V1 and V3 paths.
  */
 export function registerStandardRoutes(mock: MockApiServer): void {
-  // OAuth2 authenticate
+  // OAuth2 authenticate (V3 only - always at /oauth/token)
   mock.registerRoute({
     method: "POST",
     path: "/oauth/token",
@@ -114,7 +132,7 @@ export function registerStandardRoutes(mock: MockApiServer): void {
     },
   });
 
-  // Token validation
+  // Token validation (V3 only - always at /oauth/token/info)
   mock.registerRoute({
     method: "GET",
     path: "/oauth/token/info",
@@ -130,17 +148,17 @@ export function registerStandardRoutes(mock: MockApiServer): void {
     }),
   });
 
-  // Token revocation
+  // Token revocation (V3 only - always at /oauth/revoke)
   mock.registerRoute({
     method: "POST",
     path: "/oauth/revoke",
     handler: () => ({ status: 200, body: {} }),
   });
 
-  // Current user
+  // Current user (V1/V3)
   mock.registerRoute({
     method: "GET",
-    path: "/api/v1/currentuser",
+    path: vPath("currentuser"),
     handler: () => ({
       status: 200,
       body: {
@@ -171,10 +189,10 @@ export function registerStandardRoutes(mock: MockApiServer): void {
     }),
   });
 
-  // Budgets
+  // Budgets (V1/V3)
   mock.registerRoute({
     method: "GET",
-    path: "/api/v3/budgets",
+    path: vPath("budgets"),
     handler: () => ({
       status: 200,
       body: {
@@ -189,8 +207,8 @@ export function registerStandardRoutes(mock: MockApiServer): void {
 
   mock.registerRoute({
     method: "GET",
-    path: /^\/api\/v3\/budgets\/\d+$/,
-    handler: (_req) => ({
+    path: vPathWithId("budgets"),
+    handler: () => ({
       status: 200,
       body: { id: 1, name: "Q1 Budget", amount: 50000, currency_id: 1, remaining_amount: 30000 },
     }),
@@ -198,7 +216,7 @@ export function registerStandardRoutes(mock: MockApiServer): void {
 
   mock.registerRoute({
     method: "POST",
-    path: "/api/v3/budgets",
+    path: vPath("budgets"),
     handler: (_req, body) => {
       const parsed = JSON.parse(body);
       return {
@@ -208,10 +226,10 @@ export function registerStandardRoutes(mock: MockApiServer): void {
     },
   });
 
-  // Companies
+  // Companies (V1/V3)
   mock.registerRoute({
     method: "GET",
-    path: "/api/v3/companies",
+    path: vPath("companies"),
     handler: () => ({
       status: 200,
       body: [{ id: 100, name: "Test Company" }],
@@ -220,7 +238,7 @@ export function registerStandardRoutes(mock: MockApiServer): void {
 
   mock.registerRoute({
     method: "GET",
-    path: /^\/api\/v3\/companies\/\d+$/,
+    path: vPathWithId("companies"),
     handler: () => ({
       status: 200,
       body: {
@@ -235,7 +253,7 @@ export function registerStandardRoutes(mock: MockApiServer): void {
 
   mock.registerRoute({
     method: "GET",
-    path: "/api/v3/companies/employees",
+    path: vPathSuffix("companies", "employees"),
     handler: () => ({
       status: 200,
       body: [{ id: 1, email: "test@example.com", name: "Test User", roles: ["companyadmin"] }],
@@ -244,17 +262,17 @@ export function registerStandardRoutes(mock: MockApiServer): void {
 
   mock.registerRoute({
     method: "GET",
-    path: "/api/v3/companies/all_approvers",
+    path: vPathSuffix("companies", "all_approvers"),
     handler: () => ({
       status: 200,
       body: [{ id: 2, email: "approver@example.com", name: "Approver", approval_limit: 10000 }],
     }),
   });
 
-  // Departments
+  // Departments (V1/V3)
   mock.registerRoute({
     method: "GET",
-    path: "/api/v3/departments",
+    path: vPath("departments"),
     handler: () => ({
       status: 200,
       body: [{ id: 1, name: "Engineering", archived: false }],
@@ -263,17 +281,17 @@ export function registerStandardRoutes(mock: MockApiServer): void {
 
   mock.registerRoute({
     method: "POST",
-    path: "/api/v3/departments",
+    path: vPath("departments"),
     handler: (_req, body) => {
       const parsed = JSON.parse(body);
       return { status: 201, body: { id: 2, ...parsed.department } };
     },
   });
 
-  // Suppliers
+  // Suppliers (V1/V3)
   mock.registerRoute({
     method: "GET",
-    path: "/api/v3/suppliers",
+    path: vPath("suppliers"),
     handler: () => ({
       status: 200,
       body: {
@@ -285,27 +303,27 @@ export function registerStandardRoutes(mock: MockApiServer): void {
 
   mock.registerRoute({
     method: "POST",
-    path: "/api/v3/suppliers",
+    path: vPath("suppliers"),
     handler: (_req, body) => {
       const parsed = JSON.parse(body);
       return { status: 201, body: { id: 2, ...parsed.supplier } };
     },
   });
 
-  // Products
+  // Products (V1/V3)
   mock.registerRoute({
     method: "GET",
-    path: "/api/v3/products",
+    path: vPath("products"),
     handler: () => ({
       status: 200,
       body: [{ id: 1, description: "Widget", sku: "WDG-001", unit_price: 9.99 }],
     }),
   });
 
-  // Purchase Orders
+  // Purchase Orders (V1/V3)
   mock.registerRoute({
     method: "GET",
-    path: "/api/v3/purchase_orders",
+    path: vPath("purchase_orders"),
     handler: () => ({
       status: 200,
       body: {
@@ -327,7 +345,7 @@ export function registerStandardRoutes(mock: MockApiServer): void {
 
   mock.registerRoute({
     method: "GET",
-    path: /^\/api\/v3\/purchase_orders\/\d+$/,
+    path: vPathWithId("purchase_orders"),
     handler: () => ({
       status: 200,
       body: {
@@ -352,7 +370,7 @@ export function registerStandardRoutes(mock: MockApiServer): void {
 
   mock.registerRoute({
     method: "POST",
-    path: "/api/v3/purchase_orders",
+    path: vPath("purchase_orders"),
     handler: (_req, body) => {
       const parsed = JSON.parse(body);
       return {
@@ -364,7 +382,7 @@ export function registerStandardRoutes(mock: MockApiServer): void {
 
   mock.registerRoute({
     method: "GET",
-    path: "/api/v3/purchase_orders/pending_request_count",
+    path: vPathSuffix("purchase_orders", "pending_request_count"),
     handler: () => ({
       status: 200,
       body: { total_pending_request: 3 },
@@ -373,14 +391,14 @@ export function registerStandardRoutes(mock: MockApiServer): void {
 
   mock.registerRoute({
     method: "POST",
-    path: /^\/api\/v3\/purchase_orders\/\d+\/cancel$/,
+    path: vPathIdSuffix("purchase_orders", "cancel"),
     handler: () => ({ status: 200, body: { id: 1, status: "Cancelled" } }),
   });
 
-  // Invoices
+  // Invoices (V1/V3)
   mock.registerRoute({
     method: "GET",
-    path: "/api/v3/invoices",
+    path: vPath("invoices"),
     handler: () => ({
       status: 200,
       body: {
@@ -394,7 +412,7 @@ export function registerStandardRoutes(mock: MockApiServer): void {
 
   mock.registerRoute({
     method: "GET",
-    path: /^\/api\/v3\/invoices\/\d+$/,
+    path: vPathWithId("invoices"),
     handler: () => ({
       status: 200,
       body: {
@@ -411,7 +429,7 @@ export function registerStandardRoutes(mock: MockApiServer): void {
 
   mock.registerRoute({
     method: "POST",
-    path: "/api/v3/invoices",
+    path: vPath("invoices"),
     handler: (_req, body) => {
       const parsed = JSON.parse(body);
       return { status: 201, body: { id: 2, ...parsed.invoice } };
@@ -420,44 +438,44 @@ export function registerStandardRoutes(mock: MockApiServer): void {
 
   mock.registerRoute({
     method: "PUT",
-    path: /^\/api\/v3\/invoices\/\d+\/approve$/,
+    path: vPathIdSuffix("invoices", "approve"),
     handler: () => ({ status: 200, body: { id: 1, status: "Approved" } }),
   });
 
-  // Tax Rates
+  // Tax Rates (V1/V3)
   mock.registerRoute({
     method: "GET",
-    path: "/api/v3/tax_rates",
+    path: vPath("tax_rates"),
     handler: () => ({
       status: 200,
       body: [{ id: 1, name: "Standard VAT", value: 20, archived: false }],
     }),
   });
 
-  // Webhooks
+  // Webhooks (V1/V3)
   mock.registerRoute({
     method: "GET",
-    path: "/api/v3/webhooks",
+    path: vPath("webhooks"),
     handler: () => ({
       status: 200,
       body: [{ id: 1, name: "My Webhook", url: "https://example.com/hook", event_type: ["new_po"] }],
     }),
   });
 
-  // Currencies
+  // Currencies (V1/V3)
   mock.registerRoute({
     method: "GET",
-    path: "/api/v3/currencies",
+    path: vPath("currencies"),
     handler: () => ({
       status: 200,
       body: [{ id: 1, iso_code: "USD", name: "US Dollar", symbol: "$" }],
     }),
   });
 
-  // Approval Flows
+  // Approval Flows (V1/V3)
   mock.registerRoute({
     method: "GET",
-    path: "/api/v1/approval_flows",
+    path: vPath("approval_flows"),
     handler: () => ({
       status: 200,
       body: {
@@ -469,10 +487,10 @@ export function registerStandardRoutes(mock: MockApiServer): void {
     }),
   });
 
-  // Chart of Accounts
+  // Chart of Accounts (V1/V3)
   mock.registerRoute({
     method: "GET",
-    path: "/api/v3/chart_of_accounts",
+    path: vPath("chart_of_accounts"),
     handler: () => ({
       status: 200,
       body: {
@@ -482,10 +500,10 @@ export function registerStandardRoutes(mock: MockApiServer): void {
     }),
   });
 
-  // Comments
+  // Comments (V1/V3)
   mock.registerRoute({
     method: "POST",
-    path: /^\/api\/v3\/purchase_order\/\d+\/comments$/,
+    path: /^\/api\/v[13]\/purchase_order\/\d+\/comments$/,
     handler: (_req, body) => {
       const parsed = JSON.parse(body);
       return {

@@ -11,10 +11,9 @@ describe("Comments E2E", () => {
     mock = new MockApiServer();
     registerStandardRoutes(mock);
     const port = await mock.start();
-    apiClient = new ApiClient(`http://localhost:${port}`);
-    const auth = new AuthManager(apiClient, "test_client_id", "test_client_secret");
-    await auth.authenticate("test@example.com", "password123");
-    apiClient.setCompanyId("100");
+    apiClient = new ApiClient(`http://localhost:${port}`, "v1");
+    const auth = new AuthManager(apiClient);
+    auth.authenticateV1("mock_token", "100");
   });
 
   afterAll(async () => {
@@ -22,7 +21,7 @@ describe("Comments E2E", () => {
   });
 
   it("should add a comment to a purchase order", async () => {
-    const result = await apiClient.post<any>("/api/v3/purchase_order/1/comments", {
+    const result = await apiClient.post<any>(apiClient.buildPath("/purchase_order/1/comments"), {
       comment: "This looks good!",
     });
     expect(result.id).toBe(1);

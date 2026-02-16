@@ -12,9 +12,12 @@
       "command": "node",
       "args": ["dist/index.js"],
       "env": {
-        "PE_API_BASE_URL": "https://app.procurementexpress.com",
-        "PE_CLIENT_ID": "",
-        "PE_CLIENT_SECRET": ""
+        "PROCUREMENTEXPRESS_API_BASE_URL": "https://staging.procurementexpress.com",
+        "PROCUREMENTEXPRESS_API_VERSION": "v1",
+        "PROCUREMENTEXPRESS_AUTH_TOKEN": "",
+        "PROCUREMENTEXPRESS_COMPANY_ID": "",
+        "PROCUREMENTEXPRESS_CLIENT_ID": "",
+        "PROCUREMENTEXPRESS_CLIENT_SECRET": ""
       }
     }
   }

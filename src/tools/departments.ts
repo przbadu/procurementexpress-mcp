@@ -19,7 +19,7 @@ export function registerDepartmentTools(server: Server, apiClient: ApiClient): v
       if (args.archived !== undefined) params.set("archived", String(args.archived));
       if (args.company_specific !== undefined) params.set("company_specific", String(args.company_specific));
       const query = params.toString();
-      const path = `/api/v3/departments${query ? `?${query}` : ""}`;
+      const path = `${apiClient.buildPath("/departments")}${query ? `?${query}` : ""}`;
       const departments = await apiClient.get<Department[]>(path);
       return jsonResponse(departments);
     }),
@@ -34,7 +34,7 @@ export function registerDepartmentTools(server: Server, apiClient: ApiClient): v
       },
     },
     withErrorHandling(async (args) => {
-      const department = await apiClient.get<Department>(`/api/v3/departments/${args.id}`);
+      const department = await apiClient.get<Department>(apiClient.buildPath(`/departments/${args.id}`));
       return jsonResponse(department);
     }),
   );
@@ -55,7 +55,7 @@ export function registerDepartmentTools(server: Server, apiClient: ApiClient): v
       },
     },
     withErrorHandling(async (args) => {
-      const department = await apiClient.post<Department>("/api/v3/departments", {
+      const department = await apiClient.post<Department>(apiClient.buildPath("/departments"), {
         department: args,
       });
       return jsonResponse(department);
@@ -81,7 +81,7 @@ export function registerDepartmentTools(server: Server, apiClient: ApiClient): v
     },
     withErrorHandling(async (args) => {
       const { id, ...data } = args;
-      const department = await apiClient.put<Department>(`/api/v3/departments/${id}`, {
+      const department = await apiClient.put<Department>(apiClient.buildPath(`/departments/${id}`), {
         department: data,
       });
       return jsonResponse(department);

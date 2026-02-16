@@ -11,10 +11,9 @@ describe("Departments E2E", () => {
     mock = new MockApiServer();
     registerStandardRoutes(mock);
     const port = await mock.start();
-    apiClient = new ApiClient(`http://localhost:${port}`);
-    const auth = new AuthManager(apiClient, "test_client_id", "test_client_secret");
-    await auth.authenticate("test@example.com", "password123");
-    apiClient.setCompanyId("100");
+    apiClient = new ApiClient(`http://localhost:${port}`, "v1");
+    const auth = new AuthManager(apiClient);
+    auth.authenticateV1("mock_token", "100");
   });
 
   afterAll(async () => {
@@ -22,13 +21,13 @@ describe("Departments E2E", () => {
   });
 
   it("should list departments", async () => {
-    const departments = await apiClient.get<any[]>("/api/v3/departments");
+    const departments = await apiClient.get<any[]>(apiClient.buildPath("/departments"));
     expect(departments).toHaveLength(1);
     expect(departments[0].name).toBe("Engineering");
   });
 
   it("should create a department", async () => {
-    const department = await apiClient.post<any>("/api/v3/departments", {
+    const department = await apiClient.post<any>(apiClient.buildPath("/departments"), {
       department: { name: "Marketing" },
     });
     expect(department.id).toBe(2);

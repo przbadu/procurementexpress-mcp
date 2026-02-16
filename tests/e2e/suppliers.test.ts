@@ -11,10 +11,9 @@ describe("Suppliers E2E", () => {
     mock = new MockApiServer();
     registerStandardRoutes(mock);
     const port = await mock.start();
-    apiClient = new ApiClient(`http://localhost:${port}`);
-    const auth = new AuthManager(apiClient, "test_client_id", "test_client_secret");
-    await auth.authenticate("test@example.com", "password123");
-    apiClient.setCompanyId("100");
+    apiClient = new ApiClient(`http://localhost:${port}`, "v1");
+    const auth = new AuthManager(apiClient);
+    auth.authenticateV1("mock_token", "100");
   });
 
   afterAll(async () => {
@@ -22,13 +21,13 @@ describe("Suppliers E2E", () => {
   });
 
   it("should list suppliers", async () => {
-    const result = await apiClient.get<any>("/api/v3/suppliers");
+    const result = await apiClient.get<any>(apiClient.buildPath("/suppliers"));
     expect(result.suppliers).toHaveLength(1);
     expect(result.suppliers[0].name).toBe("Acme Corp");
   });
 
   it("should create a supplier", async () => {
-    const supplier = await apiClient.post<any>("/api/v3/suppliers", {
+    const supplier = await apiClient.post<any>(apiClient.buildPath("/suppliers"), {
       supplier: { name: "New Supplier", email: "new@supplier.com" },
     });
     expect(supplier.id).toBe(2);

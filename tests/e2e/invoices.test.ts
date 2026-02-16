@@ -11,10 +11,9 @@ describe("Invoices E2E", () => {
     mock = new MockApiServer();
     registerStandardRoutes(mock);
     const port = await mock.start();
-    apiClient = new ApiClient(`http://localhost:${port}`);
-    const auth = new AuthManager(apiClient, "test_client_id", "test_client_secret");
-    await auth.authenticate("test@example.com", "password123");
-    apiClient.setCompanyId("100");
+    apiClient = new ApiClient(`http://localhost:${port}`, "v1");
+    const auth = new AuthManager(apiClient);
+    auth.authenticateV1("mock_token", "100");
   });
 
   afterAll(async () => {
@@ -22,19 +21,19 @@ describe("Invoices E2E", () => {
   });
 
   it("should list invoices", async () => {
-    const result = await apiClient.get<any>("/api/v3/invoices");
+    const result = await apiClient.get<any>(apiClient.buildPath("/invoices"));
     expect(result.invoices).toHaveLength(1);
     expect(result.invoices[0].invoice_number).toBe("INV-001");
   });
 
   it("should get invoice details", async () => {
-    const invoice = await apiClient.get<any>("/api/v3/invoices/1");
+    const invoice = await apiClient.get<any>(apiClient.buildPath("/invoices/1"));
     expect(invoice.id).toBe(1);
     expect(invoice.can_approve).toBe(true);
   });
 
   it("should create an invoice", async () => {
-    const invoice = await apiClient.post<any>("/api/v3/invoices", {
+    const invoice = await apiClient.post<any>(apiClient.buildPath("/invoices"), {
       invoice: {
         invoice_number: "INV-002",
         gross_amount: 2500,
@@ -47,7 +46,7 @@ describe("Invoices E2E", () => {
   });
 
   it("should approve an invoice", async () => {
-    const result = await apiClient.put<any>("/api/v3/invoices/1/approve");
+    const result = await apiClient.put<any>(apiClient.buildPath("/invoices/1/approve"));
     expect(result.status).toBe("Approved");
   });
 });
