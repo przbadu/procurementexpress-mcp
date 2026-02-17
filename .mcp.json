@@ -10,7 +10,7 @@
     },
     "procurementexpress": {
       "command": "npx",
-      "args": ["-y", "@procurementexpress/mcp"],
+      "args": ["-y", "@procurementexpress.com/mcp"],
       "env": {
         "PROCUREMENTEXPRESS_API_BASE_URL": "https://staging.procurementexpress.com",
         "PROCUREMENTEXPRESS_API_VERSION": "v1",

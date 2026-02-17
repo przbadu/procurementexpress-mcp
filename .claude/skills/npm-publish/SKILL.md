@@ -5,7 +5,7 @@ description: Bump package version, create a git tag, and publish to npm. Use whe
 
 # npm Publish
 
-Bump the version in package.json, create a git tag, and publish `@procurementexpress/mcp` to npm.
+Bump the version in package.json, create a git tag, and publish `@procurementexpress.com/mcp` to npm.
 
 ## Workflow
 
@@ -50,7 +50,7 @@ npm publish
 After publishing, confirm success:
 
 ```bash
-npm view @procurementexpress/mcp version
+npm view @procurementexpress.com/mcp version
 ```
 
-Report the published version and the npm package URL: https://www.npmjs.com/package/@procurementexpress/mcp
+Report the published version and the npm package URL: https://www.npmjs.com/package/@procurementexpress.com/mcp

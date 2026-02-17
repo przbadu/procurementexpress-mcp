@@ -22,7 +22,7 @@ A [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) server that p
 No installation required — run directly with `npx`:
 
 ```bash
-npx -y @procurementexpress/mcp
+npx -y @procurementexpress.com/mcp
 ```
 
 ### Usage with Claude Desktop
@@ -34,7 +34,7 @@ Add this to your Claude Desktop configuration (`~/Library/Application Support/Cl
   "mcpServers": {
     "procurementexpress": {
       "command": "npx",
-      "args": ["-y", "@procurementexpress/mcp"],
+      "args": ["-y", "@procurementexpress.com/mcp"],
       "env": {
         "PROCUREMENTEXPRESS_API_VERSION": "v1",
         "PROCUREMENTEXPRESS_AUTH_TOKEN": "your_token",
@@ -54,7 +54,7 @@ Add to your project's `.mcp.json`:
   "mcpServers": {
     "procurementexpress": {
       "command": "npx",
-      "args": ["-y", "@procurementexpress/mcp"],
+      "args": ["-y", "@procurementexpress.com/mcp"],
       "env": {
         "PROCUREMENTEXPRESS_API_VERSION": "v1",
         "PROCUREMENTEXPRESS_AUTH_TOKEN": "your_token",
