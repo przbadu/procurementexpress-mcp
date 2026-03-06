@@ -4,6 +4,11 @@ import type { Server } from "../tool-helpers.js";
 import { jsonResponse, textResponse, withErrorHandling } from "../tool-helpers.js";
 import type { PaginationMeta, PurchaseOrder } from "../types.js";
 
+const customFieldValueSchema = z.object({
+  custom_field_id: z.number().int().describe("Custom field ID"),
+  value: z.string().describe("Custom field value"),
+});
+
 const lineItemSchema = z.object({
   description: z.string().describe("Item description"),
   quantity: z.number().describe("Quantity"),
@@ -13,6 +18,7 @@ const lineItemSchema = z.object({
   item_number: z.string().optional().describe("Item number"),
   sequence_no: z.number().int().optional().describe("Sequence number"),
   tax_rate_id: z.number().int().optional().describe("Tax rate ID"),
+  custom_field_values: z.array(customFieldValueSchema).optional().describe("Custom field values for this line item (for fields where on_line_item is true)"),
 });
 
 export function registerPurchaseOrderTools(server: Server, apiClient: ApiClient): void {
@@ -73,16 +79,25 @@ export function registerPurchaseOrderTools(server: Server, apiClient: ApiClient)
         notes: z.string().optional().describe("PO notes"),
         line_items: z.array(lineItemSchema).min(1).describe("Line items (at least one required)"),
         approver_list: z.array(z.number().int()).optional().describe("Approver IDs"),
+        custom_field_values: z.array(customFieldValueSchema).optional().describe("PO-level custom field values (for fields where on_line_item is false). Use get_company to discover available custom fields."),
       },
     },
     withErrorHandling(async (args) => {
-      const { commit, line_items, approver_list, ...poData } = args;
+      const { commit, line_items, approver_list, custom_field_values, ...poData } = args;
+      const lineItemsWithCfv = line_items.map((item) => {
+        const { custom_field_values: itemCfv, ...itemData } = item;
+        return {
+          ...itemData,
+          ...(itemCfv ? { custom_field_values_attributes: itemCfv } : {}),
+        };
+      });
       const body: Record<string, unknown> = {
         commit,
         purchase_order: {
           ...poData,
-          purchase_order_items_attributes: line_items,
+          purchase_order_items_attributes: lineItemsWithCfv,
           ...(approver_list ? { approver_list } : {}),
+          ...(custom_field_values ? { custom_field_values_attributes: custom_field_values } : {}),
         },
       };
       const po = await apiClient.post<PurchaseOrder>(apiClient.buildPath("/purchase_orders"), body);
