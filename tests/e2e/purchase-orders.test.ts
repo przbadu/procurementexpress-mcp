@@ -65,6 +65,39 @@ describe("Purchase Orders E2E", () => {
     expect(po.status).toBe("Draft");
   });
 
+  it("should create a purchase order with custom field values", async () => {
+    const po = await apiClient.post<any>(apiClient.buildPath("/purchase_orders"), {
+      commit: "Send",
+      purchase_order: {
+        creator_id: 1,
+        currency_id: 1,
+        department_id: 1,
+        supplier_id: 1,
+        purchase_order_items_attributes: [
+          {
+            description: "Nails",
+            quantity: 1,
+            unit_price: 5,
+            budget_id: 1,
+            custom_field_values_attributes: [
+              { custom_field_id: 10, value: "2026-03-06" },
+            ],
+          },
+        ],
+        custom_field_values_attributes: [
+          { custom_field_id: 1, value: "James' Credit Card" },
+          { custom_field_id: 2, value: "None" },
+        ],
+      },
+    });
+    expect(po.id).toBe(2);
+    expect(po.status).toBe("Pending");
+    expect(po.custom_field_values_attributes).toEqual([
+      { custom_field_id: 1, value: "James' Credit Card" },
+      { custom_field_id: 2, value: "None" },
+    ]);
+  });
+
   it("should get pending request count", async () => {
     const result = await apiClient.get<any>(apiClient.buildPath("/purchase_orders/pending_request_count"));
     expect(result.total_pending_request).toBe(3);
