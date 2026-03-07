@@ -5,7 +5,7 @@
   "type": "module",
   "main": "dist/index.js",
   "bin": {
-    "procurementexpress-mcp": "./dist/index.js"
+    "procurementexpress-mcp": "dist/index.js"
   },
   "scripts": {
     "build": "tsc",
@@ -33,7 +33,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/procurementexpress/mcp.git"
+    "url": "git+https://github.com/procurementexpress/mcp.git"
   },
   "homepage": "https://github.com/procurementexpress/mcp#readme",
   "bugs": {
