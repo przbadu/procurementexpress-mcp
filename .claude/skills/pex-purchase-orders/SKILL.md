@@ -1,5 +1,5 @@
 ---
-name: pex-purchase-orders
+name: pex:purchase-orders
 description: >
   ProcurementExpress purchase order (PO) management — the core procurement workflow. Covers
   creating, updating, approving, rejecting, cancelling, archiving, and deleting POs. Also

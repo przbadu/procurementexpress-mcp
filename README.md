@@ -4,7 +4,7 @@ A [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) server that p
 
 ## Features
 
-- **70+ tools** covering the full ProcurementExpress API surface
+- **88 tools** covering the full ProcurementExpress API surface
 - **Dual API version support** — V1 (token-based) and V3 (OAuth2) authentication
 - **Version-agnostic tool layer** — all tools work identically across API versions
 - **Type-safe** — comprehensive TypeScript interfaces for all API entities
@@ -128,17 +128,22 @@ Set `PROCUREMENTEXPRESS_API_VERSION=v3`. Requires `PROCUREMENTEXPRESS_CLIENT_ID`
 | `list_currencies` | List enabled currencies for the current company |
 | `list_all_currencies` | List all available currencies globally |
 
-### Companies (7 tools)
+### Companies (12 tools)
 
 | Tool | Description |
 |------|-------------|
 | `list_companies` | List all companies the current user belongs to |
-| `get_company` | Get company details including settings and currencies |
+| `get_company` | Get company details by ID including settings and currencies |
+| `get_company_details` | Get details for the currently active company |
 | `set_active_company` | Set active company ID for subsequent API calls |
 | `list_approvers` | List approvers filtered by department |
 | `list_all_approvers` | List all approvers regardless of routing |
-| `list_employees` | List all employees with roles |
+| `list_employees` | List all active employees with roles |
 | `invite_user` | Invite a user (roles: companyadmin, approver, finance, teammember) |
+| `get_invite_limit` | Get remaining invite slots for the company |
+| `list_pending_invites` | List pending user invitations |
+| `cancel_invite` | Cancel a pending user invitation |
+| `resend_invite` | Resend a pending user invitation email |
 
 ### Budgets (4 tools)
 
@@ -158,11 +163,12 @@ Set `PROCUREMENTEXPRESS_API_VERSION=v3`. Requires `PROCUREMENTEXPRESS_CLIENT_ID`
 | `create_department` | Create a new department |
 | `update_department` | Update a department |
 
-### Suppliers (4 tools)
+### Suppliers (5 tools)
 
 | Tool | Description |
 |------|-------------|
 | `list_suppliers` | List suppliers with pagination and filters |
+| `get_top_suppliers` | Get top suppliers by spend |
 | `get_supplier` | Get a specific supplier |
 | `create_supplier` | Create a supplier (name must be unique) |
 | `update_supplier` | Update a supplier |
@@ -176,26 +182,31 @@ Set `PROCUREMENTEXPRESS_API_VERSION=v3`. Requires `PROCUREMENTEXPRESS_CLIENT_ID`
 | `create_product` | Create a new product |
 | `update_product` | Update a product |
 
-### Purchase Orders (10 tools)
+### Purchase Orders (15 tools)
 
 | Tool | Description |
 |------|-------------|
-| `list_purchase_orders` | List POs with pagination and search |
+| `list_purchase_orders` | List POs with pagination, search, and filters |
 | `get_purchase_order` | Get PO details with line items, comments, approvals |
 | `create_purchase_order` | Create a PO (commit='Send' to submit, 'Draft' to save) |
+| `update_purchase_order` | Update an existing PO |
 | `approve_purchase_order` | Approve using the accept token from approver request |
 | `reject_purchase_order` | Reject using the reject token from approver request |
 | `override_and_approve_purchase_order` | Finance override approval (no token required) |
 | `cancel_purchase_order` | Cancel a purchase order |
-| `archive_purchase_order` | Archive a purchase order |
+| `archive_purchase_order` | Toggle archive status of a purchase order |
+| `delete_purchase_order` | Permanently delete a purchase order |
+| `generate_purchase_order_pdf` | Generate a PDF and return a download link |
 | `get_pending_request_count` | Get count of pending approval requests |
-| `receive_purchase_order_items` | Mark items as received |
+| `receive_purchase_order_items` | Mark line items as received (partial or full delivery) |
+| `cancel_receiving_items` | Cancel all received deliveries for a PO |
+| `complete_purchase_order_delivery` | Mark a PO as fully delivered |
 
-### Invoices (10 tools)
+### Invoices (11 tools)
 
 | Tool | Description |
 |------|-------------|
-| `list_invoices` | List invoices with pagination and filters (100 per page) |
+| `list_invoices` | List invoices with pagination and filters |
 | `get_invoice` | Get invoice details |
 | `create_invoice` | Create a new invoice |
 | `update_invoice` | Update an existing invoice |
@@ -205,22 +216,31 @@ Set `PROCUREMENTEXPRESS_API_VERSION=v3`. Requires `PROCUREMENTEXPRESS_CLIENT_ID`
 | `cancel_invoice` | Cancel an invoice |
 | `archive_invoice` | Archive an invoice |
 | `dearchive_invoice` | Restore an archived invoice |
+| `rerun_invoice_approval_flow` | Rerun approval flow for a specific invoice |
 
-### Approval Flows (6 tools)
+### Approval Flows (13 tools)
 
 | Tool | Description |
 |------|-------------|
 | `list_approval_flows` | List approval flows with search and pagination |
 | `get_approval_flow` | Get flow details with steps, approvers, conditions |
 | `create_approval_flow` | Create a flow (document_type: 0=PO, 1=invoice) |
-| `delete_approval_flow` | Delete an approval flow |
-| `archive_approval_flow` | Archive an approval flow |
+| `update_approval_flow` | Update an existing approval flow |
+| `delete_approval_flow` | Delete an approval flow permanently |
+| `archive_approval_flow` | Archive an approval flow (soft delete) |
+| `publish_approval_flow` | Publish an approval flow to make it active |
+| `unpublish_approval_flow` | Unpublish an approval flow to deactivate it |
 | `list_approval_flow_runs` | List runs with status and date filters |
+| `get_approval_flow_entity` | Get details about an entity that went through a flow |
+| `list_approval_flow_versions` | List all version history of an approval flow |
+| `get_approval_flow_version_details` | Get full details of a specific version |
+| `rerun_approval_flows` | Rerun approval flows for specific POs and/or invoices |
 
-### Payments (2 tools)
+### Payments (3 tools)
 
 | Tool | Description |
 |------|-------------|
+| `get_payment` | Get a specific payment by ID |
 | `create_payment` | Create a payment (types: bank_transfer, card, check, cash, etc.) |
 | `create_po_payment` | Create item-level payments for a purchase order |
 
@@ -233,7 +253,7 @@ Set `PROCUREMENTEXPRESS_API_VERSION=v3`. Requires `PROCUREMENTEXPRESS_CLIENT_ID`
 | `create_tax_rate` | Create a new tax rate |
 | `update_tax_rate` | Update a tax rate |
 
-### Webhooks (4 tools)
+### Webhooks (5 tools)
 
 | Tool | Description |
 |------|-------------|
@@ -241,6 +261,7 @@ Set `PROCUREMENTEXPRESS_API_VERSION=v3`. Requires `PROCUREMENTEXPRESS_CLIENT_ID`
 | `get_webhook` | Get a specific webhook |
 | `create_webhook` | Create a webhook (events: new_po, po_approved, po_delivered, po_paid, po_cancelled, po_update) |
 | `update_webhook` | Update a webhook |
+| `delete_webhook` | Delete a webhook |
 
 ### Comments (2 tools)
 
@@ -249,13 +270,16 @@ Set `PROCUREMENTEXPRESS_API_VERSION=v3`. Requires `PROCUREMENTEXPRESS_CLIENT_ID`
 | `add_purchase_order_comment` | Add a comment to a purchase order |
 | `add_invoice_comment` | Add a comment to an invoice |
 
-### Supplementary (5 tools)
+### Supplementary (8 tools)
 
 | Tool | Description |
 |------|-------------|
-| `list_chart_of_accounts` | List chart of accounts with search |
+| `list_chart_of_accounts` | List chart of accounts (GL codes) with search |
+| `get_chart_of_account` | Get a specific chart of account |
 | `list_qbo_customers` | List QuickBooks customers with search |
+| `get_qbo_customer` | Get a specific QuickBooks customer |
 | `list_qbo_classes` | List QuickBooks classes with search |
+| `get_qbo_class` | Get a specific QuickBooks class |
 | `list_send_to_supplier_templates` | List email templates for sending POs |
 | `forward_purchase_order` | Email a PO to supplier(s) |
 
@@ -269,24 +293,24 @@ src/
   tool-helpers.ts       # Shared response helpers and error handling wrapper
   types.ts              # TypeScript interfaces for all API entities
   tools/
-    approval-flows.ts   # Approval flow CRUD and run listing
+    approval-flows.ts   # Approval flow CRUD, publish/unpublish, runs, versions
     budgets.ts          # Budget CRUD
     comments.ts         # PO and invoice comments
     companies.ts        # Company details, employees, approvers, invitations
     departments.ts      # Department CRUD
-    invoices.ts         # Invoice CRUD, approve/reject/cancel/archive
-    payments.ts         # Payment creation (standalone and PO-linked)
+    invoices.ts         # Invoice CRUD, approve/reject/cancel/archive, rerun approval
+    payments.ts         # Payment creation (standalone and PO-linked) and get
     products.ts         # Product CRUD
-    purchase-orders.ts  # PO CRUD, approve/reject/cancel/archive, receiving
+    purchase-orders.ts  # PO CRUD, approve/reject/cancel/archive/delete, delivery, PDF
     supplementary.ts    # Chart of accounts, QBO integration, email forwarding
-    suppliers.ts        # Supplier CRUD
+    suppliers.ts        # Supplier CRUD + top suppliers
     tax-rates.ts        # Tax rate CRUD
     users.ts            # Current user profile and currency listing
-    webhooks.ts         # Webhook CRUD
+    webhooks.ts         # Webhook CRUD + delete
 tests/
   e2e/
     setup.ts            # MockApiServer with version-agnostic route registration
-    *.test.ts           # E2E tests for each tool group (49 tests, 11 files)
+    *.test.ts           # E2E tests for each tool group
 ```
 
 ## Development
@@ -359,6 +383,34 @@ registerMyTools(server, apiClient);
 - Wrap every handler with `withErrorHandling()`
 - Use `jsonResponse()` for data and `textResponse()` for messages
 - All imports must use `.js` extension (ES modules)
+
+## Releasing a New Version
+
+To publish a new version to npm:
+
+1. Ensure your working tree is clean and all tests pass:
+   ```bash
+   npm test
+   ```
+
+2. Bump the version, create a git tag, and publish:
+   ```bash
+   # Choose one: patch (bug fixes), minor (new features), major (breaking changes)
+   npm version patch -m "v%s"   # or minor / major
+
+   # Push the commit and tag
+   git push && git push --tags
+
+   # Publish to npm (auto-builds via prepublishOnly)
+   npm publish
+   ```
+
+3. Verify the published version:
+   ```bash
+   npm view @procurementexpress.com/mcp version
+   ```
+
+The package is published as [`@procurementexpress.com/mcp`](https://www.npmjs.com/package/@procurementexpress.com/mcp) on npm.
 
 ## Environment Variables Reference
 

@@ -1,5 +1,5 @@
 ---
-name: pex-suppliers
+name: pex:suppliers
 description: >
   ProcurementExpress supplier and product management. Use when listing, viewing, creating, or
   updating suppliers (vendors) and their products (catalog items). Routes to MCP tools:

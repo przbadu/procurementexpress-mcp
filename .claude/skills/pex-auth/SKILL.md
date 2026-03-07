@@ -1,5 +1,5 @@
 ---
-name: pex-auth
+name: pex:auth
 description: >
   ProcurementExpress authentication and user profile management. Use when authenticating
   to the ProcurementExpress API (V1 static token or V3 OAuth2 login), validating or revoking

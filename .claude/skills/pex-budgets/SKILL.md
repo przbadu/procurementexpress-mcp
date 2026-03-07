@@ -1,5 +1,5 @@
 ---
-name: pex-budgets
+name: pex:budgets
 description: >
   ProcurementExpress budget management. Use when listing, viewing, creating, or updating
   budgets (cost centers). Routes to MCP tools: list_budgets, get_budget, create_budget,
