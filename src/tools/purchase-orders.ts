@@ -5,11 +5,13 @@ import { jsonResponse, textResponse, withErrorHandling } from "../tool-helpers.j
 import type { PaginationMeta, PurchaseOrder } from "../types.js";
 
 const customFieldValueSchema = z.object({
-  custom_field_id: z.number().int().describe("Custom field ID"),
+  id: z.number().int().optional().describe("Custom field value ID (for updates)"),
   value: z.string().describe("Custom field value"),
+  custom_field_id: z.number().int().describe("Custom field ID"),
 });
 
 const lineItemSchema = z.object({
+  id: z.number().int().optional().describe("Line item ID (for updates)"),
   description: z.string().describe("Item description"),
   quantity: z.number().describe("Quantity"),
   unit_price: z.number().describe("Unit price"),
@@ -172,16 +174,18 @@ export function registerPurchaseOrderTools(server: Server, apiClient: ApiClient)
         submitted_on: z.string().optional().describe("Submission date"),
         line_items: z.array(lineItemSchema).optional().describe("Line items (include id to update existing, _destroy to remove)"),
         approver_list: z.array(z.number().int()).optional().describe("Approver user IDs"),
+        custom_field_values_attributes: z.array(customFieldValueSchema).optional().describe("PO-level custom field values"),
       },
     },
     withErrorHandling(async (args) => {
-      const { id, commit, line_items, approver_list, ...poData } = args;
+      const { id, commit, line_items, approver_list, custom_field_values_attributes, ...poData } = args;
       const body: Record<string, unknown> = {
         ...(commit ? { commit } : {}),
         purchase_order: {
           ...poData,
           ...(line_items ? { purchase_order_items_attributes: line_items } : {}),
           ...(approver_list ? { approver_list } : {}),
+          ...(custom_field_values_attributes ? { custom_field_values_attributes } : {}),
         },
       };
       const po = await apiClient.put<PurchaseOrder>(apiClient.buildPath(`/purchase_orders/${id}`), body);

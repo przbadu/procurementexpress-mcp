@@ -7,7 +7,7 @@ import type { ApprovalFlow, PaginationMeta } from "../types.js";
 const approvalConditionSchema = z.object({
   id: z.number().int().optional().describe("Condition ID (for updates)"),
   property: z.string().describe("Condition property: budget, department, supplier, requester, gross_amount, net_amount, or custom_field_<id>"),
-  operator: z.string().describe("Operator: equals(0), not_equals(1), greater_than(2), less_than(3), contains(4), not_contains(5)"),
+  operator: z.enum(["equals", "not_equals", "greater_than", "less_than", "is_any_of", "is_none_of", "exists", "not_exists", "contains", "not_contains"]).describe("Condition operator"),
   value: z.string().describe("Condition value (single ID or comma-separated IDs for contains/not_contains)"),
   custom_field_id: z.number().int().optional().describe("Custom field ID (when property is custom_field_<id>)"),
   _destroy: z.boolean().optional().describe("Set true to remove this condition on update"),
@@ -224,6 +224,70 @@ export function registerApprovalFlowTools(server: Server, apiClient: ApiClient):
       const query = params.toString();
       const path = `${apiClient.buildPath(`/approval_flows/${id}/runs`)}${query ? `?${query}` : ""}`;
       const result = await apiClient.get(path);
+      return jsonResponse(result);
+    }),
+  );
+
+  server.registerTool(
+    "get_approval_flow_entity",
+    {
+      description: "Get details about a specific entity (purchase order or invoice) that went through an approval flow",
+      inputSchema: {
+        id: z.number().int().positive().describe("Approval Flow ID"),
+        entity_id: z.number().int().positive().describe("Entity ID (purchase order or invoice ID)"),
+      },
+    },
+    withErrorHandling(async (args) => {
+      const path = `${apiClient.buildPath(`/approval_flows/${args.id}/show_entity`)}?entity_id=${args.entity_id}`;
+      const result = await apiClient.get(path);
+      return jsonResponse(result);
+    }),
+  );
+
+  server.registerTool(
+    "list_approval_flow_versions",
+    {
+      description: "List all version history of an approval flow",
+      inputSchema: {
+        id: z.number().int().positive().describe("Approval Flow ID"),
+      },
+    },
+    withErrorHandling(async (args) => {
+      const result = await apiClient.get(apiClient.buildPath(`/approval_flows/${args.id}/versions`));
+      return jsonResponse(result);
+    }),
+  );
+
+  server.registerTool(
+    "get_approval_flow_version_details",
+    {
+      description: "Get full details of a specific version of an approval flow",
+      inputSchema: {
+        id: z.number().int().positive().describe("Approval Flow ID"),
+        version_id: z.number().int().positive().describe("Version ID"),
+      },
+    },
+    withErrorHandling(async (args) => {
+      const path = `${apiClient.buildPath(`/approval_flows/${args.id}/version_details`)}?version_id=${args.version_id}`;
+      const result = await apiClient.get(path);
+      return jsonResponse(result);
+    }),
+  );
+
+  server.registerTool(
+    "rerun_approval_flows",
+    {
+      description: "Rerun approval flows for specific purchase orders and/or invoices. Useful when approval flow rules have changed and need to be reapplied.",
+      inputSchema: {
+        order_ids: z.array(z.number().int()).optional().describe("Purchase order IDs to rerun approval flows for"),
+        invoice_ids: z.array(z.number().int()).optional().describe("Invoice IDs to rerun approval flows for"),
+      },
+    },
+    withErrorHandling(async (args) => {
+      const body: Record<string, unknown> = {};
+      if (args.order_ids) body.order_ids = args.order_ids;
+      if (args.invoice_ids) body.invoice_ids = args.invoice_ids;
+      const result = await apiClient.post(apiClient.buildPath("/approval_flows/rerun_approval_flows"), body);
       return jsonResponse(result);
     }),
   );

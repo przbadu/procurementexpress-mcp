@@ -4,6 +4,12 @@ import type { Server } from "../tool-helpers.js";
 import { jsonResponse, withErrorHandling } from "../tool-helpers.js";
 import type { Invoice, PaginationMeta } from "../types.js";
 
+const customFieldValueSchema = z.object({
+  id: z.number().int().optional().describe("Custom field value ID (for updates)"),
+  value: z.string().describe("Custom field value"),
+  custom_field_id: z.number().int().describe("Custom field ID"),
+});
+
 const invoiceLineItemSchema = z.object({
   id: z.number().int().optional().describe("Line item ID (for updates)"),
   description: z.string().optional().describe("Line item description"),
@@ -21,6 +27,7 @@ const invoiceLineItemSchema = z.object({
   purchase_order_item_id: z.number().int().optional().describe("Related PO line item ID"),
   billable_status: z.string().optional().describe("Billable status for QuickBooks"),
   _destroy: z.boolean().optional().describe("Set true to remove this line item on update"),
+  custom_field_values_attributes: z.array(customFieldValueSchema).optional().describe("Custom field values for this line item"),
 });
 
 export function registerInvoiceTools(server: Server, apiClient: ApiClient): void {
@@ -42,7 +49,10 @@ export function registerInvoiceTools(server: Server, apiClient: ApiClient): void
         requester_id: z.number().int().optional().describe("Filter by requester/creator user ID"),
         approver_id: z.number().int().optional().describe("Filter by approver user ID"),
         department_id: z.number().int().optional().describe("Filter by department ID (via linked POs)"),
-        invoice_date_filter: z.string().optional().describe("Date filter (e.g. 'last 7days', 'last 30days', 'current_month', 'last_month')"),
+        invoice_date_filter: z
+          .enum(["last 7days", "last 30days", "last 60days", "last 90days", "last 180days", "last 1year", "current_month", "current_year", "last_month", "last_year"])
+          .optional()
+          .describe("Predefined date range filter"),
         sage_exported: z.boolean().optional().describe("Filter by Sage export status"),
         sort: z.string().optional().describe("Sort column (e.g. 'invoices.created_at', 'invoices.issue_date')"),
         direction: z.enum(["asc", "desc"]).optional().describe("Sort direction (default: desc)"),
@@ -102,14 +112,16 @@ export function registerInvoiceTools(server: Server, apiClient: ApiClient): void
         payment_term_id: z.number().int().optional().describe("Payment term ID"),
         selected_purchase_order_ids: z.array(z.number().int()).optional().describe("PO IDs to link this invoice to"),
         line_items: z.array(invoiceLineItemSchema).optional().describe("Invoice line items"),
+        custom_field_values_attributes: z.array(customFieldValueSchema).optional().describe("Invoice-level custom field values"),
       },
     },
     withErrorHandling(async (args) => {
-      const { line_items, ...invoiceData } = args;
+      const { line_items, custom_field_values_attributes, ...invoiceData } = args;
       const body: Record<string, unknown> = {
         invoice: {
           ...invoiceData,
           ...(line_items ? { invoice_line_items_attributes: line_items } : {}),
+          ...(custom_field_values_attributes ? { custom_field_values_attributes } : {}),
         },
       };
       const invoice = await apiClient.post<Invoice>(apiClient.buildPath("/invoices"), body);
@@ -135,14 +147,16 @@ export function registerInvoiceTools(server: Server, apiClient: ApiClient): void
         payment_term_id: z.number().int().optional().describe("Payment term ID"),
         selected_purchase_order_ids: z.array(z.number().int()).optional().describe("PO IDs to link"),
         line_items: z.array(invoiceLineItemSchema).optional().describe("Invoice line items (include id to update, _destroy to remove)"),
+        custom_field_values_attributes: z.array(customFieldValueSchema).optional().describe("Invoice-level custom field values"),
       },
     },
     withErrorHandling(async (args) => {
-      const { id, line_items, ...data } = args;
+      const { id, line_items, custom_field_values_attributes, ...data } = args;
       const body: Record<string, unknown> = {
         invoice: {
           ...data,
           ...(line_items ? { invoice_line_items_attributes: line_items } : {}),
+          ...(custom_field_values_attributes ? { custom_field_values_attributes } : {}),
         },
       };
       const invoice = await apiClient.put<Invoice>(apiClient.buildPath(`/invoices/${id}`), body);

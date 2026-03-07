@@ -4,6 +4,12 @@ import type { Server } from "../tool-helpers.js";
 import { jsonResponse, withErrorHandling } from "../tool-helpers.js";
 import type { Budget } from "../types.js";
 
+const customFieldValueSchema = z.object({
+  id: z.number().int().optional().describe("Custom field value ID (for updates)"),
+  value: z.string().describe("Custom field value"),
+  custom_field_id: z.number().int().describe("Custom field ID"),
+});
+
 export function registerBudgetTools(server: Server, apiClient: ApiClient): void {
   server.registerTool(
     "list_budgets",
@@ -61,6 +67,7 @@ export function registerBudgetTools(server: Server, apiClient: ApiClient): void 
         qbo_class: z.string().optional().describe("QuickBooks class"),
         approver_ids: z.array(z.number().int()).optional().describe("Approver user IDs"),
         department_ids: z.array(z.number().int()).optional().describe("Department IDs to associate"),
+        custom_field_values_attributes: z.array(customFieldValueSchema).optional().describe("Budget-level custom field values"),
       },
     },
     withErrorHandling(async (args) => {
@@ -87,6 +94,7 @@ export function registerBudgetTools(server: Server, apiClient: ApiClient): void 
         qbo_class: z.string().optional().describe("QuickBooks class"),
         approver_ids: z.array(z.number().int()).optional().describe("Approver user IDs"),
         department_ids: z.array(z.number().int()).optional().describe("Department IDs"),
+        custom_field_values_attributes: z.array(customFieldValueSchema).optional().describe("Budget-level custom field values"),
       },
     },
     withErrorHandling(async (args) => {
