@@ -1,5 +1,5 @@
 ---
-name: pex-departments
+name: pex:departments
 description: >
   ProcurementExpress department management. Use when listing, viewing, creating, or updating
   departments (organizational units). Routes to MCP tools: list_departments, get_department,

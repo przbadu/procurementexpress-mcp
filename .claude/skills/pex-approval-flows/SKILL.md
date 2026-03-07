@@ -1,5 +1,5 @@
 ---
-name: pex-approval-flows
+name: pex:approval-flows
 description: >
   ProcurementExpress approval flow configuration. Use when creating, updating, publishing,
   or managing approval flows and their steps, conditions, and runs. Approval flows automate

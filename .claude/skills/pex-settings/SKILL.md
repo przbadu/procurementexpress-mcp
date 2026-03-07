@@ -1,5 +1,5 @@
 ---
-name: pex-settings
+name: pex:settings
 description: >
   ProcurementExpress settings, reference data, and integrations. Covers tax rates, webhooks,
   currencies, chart of accounts (GL codes), and QuickBooks (QBO) customers/classes. Use when

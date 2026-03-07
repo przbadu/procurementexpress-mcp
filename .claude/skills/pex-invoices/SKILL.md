@@ -1,5 +1,5 @@
 ---
-name: pex-invoices
+name: pex:invoices
 description: >
   ProcurementExpress invoice management. Covers creating, updating, accepting, approving,
   rejecting, cancelling, archiving invoices, and adding comments. Handles the full invoice

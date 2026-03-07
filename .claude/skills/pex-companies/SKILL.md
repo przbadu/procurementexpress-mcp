@@ -1,5 +1,5 @@
 ---
-name: pex-companies
+name: pex:companies
 description: >
   ProcurementExpress company management, employee listing, user invitations, and approver
   queries. Use when listing companies, switching the active company, viewing company details

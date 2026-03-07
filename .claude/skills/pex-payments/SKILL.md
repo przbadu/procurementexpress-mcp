@@ -1,5 +1,5 @@
 ---
-name: pex-payments
+name: pex:payments
 description: >
   ProcurementExpress payment management. Use when creating or viewing payments to settle
   invoices and purchase orders. Routes to MCP tools: get_payment, create_payment,
