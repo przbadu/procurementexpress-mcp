@@ -14,7 +14,6 @@ Bump the version in package.json, create a git tag, and publish `@procurementexp
 Run these in parallel:
 - `git status` — working tree must be clean (no uncommitted changes)
 - `git branch --show-current` — must be on `main` branch
-- `npm whoami` — must be logged in to npm
 - `npm test` — all tests must pass
 
 If any check fails, stop and tell the user what to fix.
@@ -27,32 +26,32 @@ npm view @procurementexpress.com/mcp version
 
 If the versions match (not yet bumped), stop and tell the user to run `/bump-version` first to bump the version, commit, and merge a PR to `main` before publishing.
 
-### 2. Determine version bump
+### 2. Get npm token
 
-Ask the user which bump type they want:
+Ask the user for their npm auth token. They can find or generate one at: https://www.npmjs.com/settings/~/tokens
 
-| Type | When to use |
-|------|-------------|
-| `patch` (1.0.0 → 1.0.1) | Bug fixes, documentation changes |
-| `minor` (1.0.0 → 1.1.0) | New tools, features, backwards-compatible changes |
-| `major` (1.0.0 → 2.0.0) | Breaking changes to existing tools |
+Store it for use in the publish step. **Never commit or log the token.**
 
-Show the current version from package.json and what the new version will be.
-
-### 3. Bump, tag, and publish
+### 3. Tag and publish
 
 Run these commands sequentially:
 
 ```bash
-# Bump version in package.json and create git tag
-npm version <patch|minor|major> -m "v%s"
+# Create git tag for current version
+git tag -a "v$(node -p "require('./package.json').version")" -m "v$(node -p "require('./package.json').version")"
 
-# Push the commit and tag to remote
-git push && git push --tags
+# Push the tag to remote
+git push origin --tags
 
-# Publish to npm (prepublishOnly will auto-build)
-npm publish
+# Build and publish with auth token
+npm publish --//registry.npmjs.org/:_authToken=<npm_token>
 ```
+
+**If publish fails with 404 or auth error:**
+1. Ask the user to verify their token is valid and has publish permissions
+2. Suggest regenerating the token at https://www.npmjs.com/settings/~/tokens
+3. Ensure the token has the correct scope for `@procurementexpress.com`
+4. Retry with the new token
 
 ### 4. Verify
 
