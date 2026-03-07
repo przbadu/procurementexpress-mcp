@@ -283,6 +283,47 @@ Set `PROCUREMENTEXPRESS_API_VERSION=v3`. Requires `PROCUREMENTEXPRESS_CLIENT_ID`
 | `list_send_to_supplier_templates` | List email templates for sending POs |
 | `forward_purchase_order` | Email a PO to supplier(s) |
 
+## AI Agent Skills
+
+The server ships with 10 module-specific [Claude Code skills](https://docs.anthropic.com/en/docs/claude-code) in `.claude/skills/` that route AI agents to the correct MCP tool calls without reading entire source files. Skills use the `pex:` namespace:
+
+| Skill | Tools | Description |
+|-------|-------|-------------|
+| `pex:auth` | 5 | Authentication (V1/V3), token management, user profile |
+| `pex:companies` | 12 | Company details, employees, invitations, approvers |
+| `pex:budgets` | 4 | Budget CRUD with custom field support |
+| `pex:departments` | 4 | Department CRUD |
+| `pex:suppliers` | 9 | Supplier and product management |
+| `pex:purchase-orders` | 18 | PO lifecycle, delivery, PDF, forwarding, comments |
+| `pex:invoices` | 12 | Invoice lifecycle, approval, comments |
+| `pex:payments` | 3 | Payment creation and retrieval |
+| `pex:approval-flows` | 13 | Approval flow configuration, runs, versions |
+| `pex:settings` | 17 | Tax rates, webhooks, currencies, chart of accounts, QBO |
+
+Skills with complex schemas include `references/` subdirectories for progressive disclosure (e.g., line item schemas, approval conditions, workflows).
+
+### Installing Skills in Your Project
+
+To use these skills in your own project alongside the MCP server, copy the `.claude/skills/pex-*` directories into your project:
+
+```bash
+# From your project root
+mkdir -p .claude/skills
+
+# Copy all PEX skills from the package
+cp -r node_modules/@procurementexpress.com/mcp/.claude/skills/pex-* .claude/skills/
+```
+
+Or cherry-pick only the skills you need:
+
+```bash
+# Example: only purchase orders and invoices
+cp -r node_modules/@procurementexpress.com/mcp/.claude/skills/pex-purchase-orders .claude/skills/
+cp -r node_modules/@procurementexpress.com/mcp/.claude/skills/pex-invoices .claude/skills/
+```
+
+Once installed, Claude Code will automatically discover the skills and use them to route to the correct MCP tool calls (e.g., `/pex:purchase-orders`, `/pex:invoices`).
+
 ## Project Structure
 
 ```
