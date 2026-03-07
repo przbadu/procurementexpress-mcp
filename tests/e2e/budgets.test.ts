@@ -21,10 +21,9 @@ describe("Budgets E2E", () => {
   });
 
   it("should list budgets", async () => {
-    const result = await apiClient.get<any>(apiClient.buildPath("/budgets"));
-    expect(result.budgets).toHaveLength(2);
-    expect(result.meta.total_count).toBe(2);
-    expect(result.budgets[0].name).toBe("Q1 Budget");
+    const result = await apiClient.get<any[]>(apiClient.buildPath("/budgets"));
+    expect(result).toHaveLength(2);
+    expect(result[0].name).toBe("Q1 Budget");
   });
 
   it("should get a specific budget", async () => {

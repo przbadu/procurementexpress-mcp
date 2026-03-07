@@ -21,7 +21,7 @@ describe("Comments E2E", () => {
   });
 
   it("should add a comment to a purchase order", async () => {
-    const result = await apiClient.post<any>(apiClient.buildPath("/purchase_order/1/comments"), {
+    const result = await apiClient.post<any>(apiClient.buildPath("/purchase_orders/1/comments"), {
       comment: "This looks good!",
     });
     expect(result.id).toBe(1);

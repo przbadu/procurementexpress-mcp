@@ -144,6 +144,14 @@ export class ApiClient {
     return this.request<T>("PUT", path, body, extraHeaders);
   }
 
+  async patch<T>(
+    path: string,
+    body?: Record<string, unknown>,
+    extraHeaders?: Record<string, string>,
+  ): Promise<T> {
+    return this.request<T>("PATCH", path, body, extraHeaders);
+  }
+
   async delete<T>(path: string, extraHeaders?: Record<string, string>): Promise<T> {
     return this.request<T>("DELETE", path, undefined, extraHeaders);
   }

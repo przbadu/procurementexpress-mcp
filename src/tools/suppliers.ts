@@ -8,25 +8,46 @@ export function registerSupplierTools(server: Server, apiClient: ApiClient): voi
   server.registerTool(
     "list_suppliers",
     {
-      description: "List suppliers with pagination and filters",
+      description:
+        "List suppliers. When page param is provided, returns paginated response with meta (20 per page). Without page param, returns all suppliers as an array. Supports search by name and filtering by department/archived status.",
       inputSchema: {
-        page: z.number().int().positive().optional().describe("Page number"),
-        department_id: z.number().int().optional().describe("Filter by department ID"),
-        archived: z.boolean().optional().describe("Filter by archived status"),
-        top: z.number().int().positive().optional().describe("Limit to top N suppliers"),
+        page: z.number().int().positive().optional().describe("Page number — enables pagination (20 per page)"),
+        search: z.string().optional().describe("Search suppliers by name"),
+        department_id: z.number().int().optional().describe("Filter by department ID (includes suppliers without departments)"),
+        archived: z.boolean().optional().describe("Filter by archived status (default: false)"),
+        show_mappings: z.boolean().optional().describe("Include third-party ID mappings in response"),
       },
     },
     withErrorHandling(async (args) => {
       const params = new URLSearchParams();
       if (args.page) params.set("page", String(args.page));
+      if (args.search) params.set("search", args.search);
       if (args.department_id) params.set("department_id", String(args.department_id));
       if (args.archived !== undefined) params.set("archived", String(args.archived));
-      if (args.top) params.set("top", String(args.top));
+      if (args.show_mappings) params.set("show_mappings", "true");
       const query = params.toString();
-      const path = args.top
-        ? `${apiClient.buildPath("/suppliers/top")}?${query}`
-        : `${apiClient.buildPath("/suppliers")}${query ? `?${query}` : ""}`;
-      const result = await apiClient.get<{ suppliers: Supplier[]; meta: PaginationMeta }>(path);
+      const path = `${apiClient.buildPath("/suppliers")}${query ? `?${query}` : ""}`;
+      const result = await apiClient.get<Supplier[] | { suppliers: Supplier[]; meta: PaginationMeta }>(path);
+      return jsonResponse(result);
+    }),
+  );
+
+  server.registerTool(
+    "get_top_suppliers",
+    {
+      description: "Get the user's most frequently used suppliers",
+      inputSchema: {
+        top: z.number().int().positive().optional().describe("Number of top suppliers to return (default: 5)"),
+        archived: z.boolean().optional().describe("Include archived suppliers"),
+      },
+    },
+    withErrorHandling(async (args) => {
+      const params = new URLSearchParams();
+      if (args.top) params.set("top", String(args.top));
+      if (args.archived !== undefined) params.set("archived", String(args.archived));
+      const query = params.toString();
+      const path = `${apiClient.buildPath("/suppliers/top")}${query ? `?${query}` : ""}`;
+      const result = await apiClient.get<Supplier[]>(path);
       return jsonResponse(result);
     }),
   );
@@ -48,24 +69,24 @@ export function registerSupplierTools(server: Server, apiClient: ApiClient): voi
   server.registerTool(
     "create_supplier",
     {
-      description: "Create a new supplier (name must be unique)",
+      description:
+        "Create a new supplier (name must be unique within the company). If company has supplier approval enabled, creates a pending approval request instead.",
       inputSchema: {
         name: z.string().describe("Supplier name (must be unique)"),
-        email: z.string().email().optional().describe("Supplier email"),
+        email: z.string().optional().describe("Supplier email"),
         address: z.string().optional().describe("Address"),
         notes: z.string().optional().describe("Notes"),
-        payment_details: z.string().optional().describe("Payment details"),
+        payment_details: z.string().optional().describe("Payment details/bank info"),
         phone_number: z.string().optional().describe("Phone number"),
         tax_number: z.string().optional().describe("Tax number"),
-        contact_person: z.string().optional().describe("Contact person"),
-        department_ids: z.array(z.number().int()).optional().describe("Department IDs"),
+        contact_person: z.string().optional().describe("Contact person name"),
+        uei: z.string().optional().describe("Unique Entity Identifier (UEI) for SAM.gov"),
+        cage_code: z.string().optional().describe("CAGE code for government contracting"),
+        department_ids: z.array(z.number().int()).optional().describe("Department IDs to restrict supplier to"),
       },
     },
     withErrorHandling(async (args) => {
-      const { department_ids, ...supplierData } = args;
-      const body: Record<string, unknown> = { supplier: supplierData };
-      if (department_ids) body.department_ids = department_ids;
-      const supplier = await apiClient.post<Supplier>(apiClient.buildPath("/suppliers"), body);
+      const supplier = await apiClient.post<Supplier>(apiClient.buildPath("/suppliers"), { supplier: args });
       return jsonResponse(supplier);
     }),
   );
@@ -77,7 +98,7 @@ export function registerSupplierTools(server: Server, apiClient: ApiClient): voi
       inputSchema: {
         id: z.number().int().positive().describe("Supplier ID"),
         name: z.string().optional().describe("Supplier name"),
-        email: z.string().email().optional().describe("Email"),
+        email: z.string().optional().describe("Email"),
         address: z.string().optional().describe("Address"),
         notes: z.string().optional().describe("Notes"),
         payment_details: z.string().optional().describe("Payment details"),
@@ -85,6 +106,9 @@ export function registerSupplierTools(server: Server, apiClient: ApiClient): voi
         archived: z.boolean().optional().describe("Archive status"),
         tax_number: z.string().optional().describe("Tax number"),
         contact_person: z.string().optional().describe("Contact person"),
+        uei: z.string().optional().describe("Unique Entity Identifier (UEI)"),
+        cage_code: z.string().optional().describe("CAGE code"),
+        department_ids: z.array(z.number().int()).optional().describe("Department IDs"),
       },
     },
     withErrorHandling(async (args) => {
