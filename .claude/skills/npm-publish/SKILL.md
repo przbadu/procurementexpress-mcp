@@ -13,10 +13,19 @@ Bump the version in package.json, create a git tag, and publish `@procurementexp
 
 Run these in parallel:
 - `git status` — working tree must be clean (no uncommitted changes)
+- `git branch --show-current` — must be on `main` branch
 - `npm whoami` — must be logged in to npm
 - `npm test` — all tests must pass
 
 If any check fails, stop and tell the user what to fix.
+
+**Version check:** Compare the current version in package.json against the latest published version:
+
+```bash
+npm view @procurementexpress.com/mcp version
+```
+
+If the versions match (not yet bumped), stop and tell the user to run `/bump-version` first to bump the version, commit, and merge a PR to `main` before publishing.
 
 ### 2. Determine version bump
 
