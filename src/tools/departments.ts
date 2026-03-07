@@ -8,10 +8,11 @@ export function registerDepartmentTools(server: Server, apiClient: ApiClient): v
   server.registerTool(
     "list_departments",
     {
-      description: "List departments with optional filters for archived status and company-specific",
+      description:
+        "List departments. By default returns only departments the current user has access to. Set company_specific=true to list all company departments regardless of user access.",
       inputSchema: {
-        archived: z.boolean().optional().describe("Filter by archived status"),
-        company_specific: z.boolean().optional().describe("Show only company-specific departments"),
+        archived: z.boolean().optional().describe("Filter by archived status (default: false)"),
+        company_specific: z.boolean().optional().describe("True to list all company departments, false/omit for user's departments only"),
       },
     },
     withErrorHandling(async (args) => {
@@ -45,9 +46,9 @@ export function registerDepartmentTools(server: Server, apiClient: ApiClient): v
       description: "Create a new department",
       inputSchema: {
         name: z.string().describe("Department name"),
-        contact_person: z.string().optional().describe("Contact person"),
+        contact_person: z.string().optional().describe("Contact person name"),
         phone_number: z.string().optional().describe("Phone number"),
-        email: z.string().email().optional().describe("Email"),
+        email: z.string().optional().describe("Email address"),
         address: z.string().optional().describe("Address"),
         tax_number: z.string().optional().describe("Tax number"),
         budget_ids: z.array(z.number().int()).optional().describe("Budget IDs to associate"),
@@ -72,7 +73,7 @@ export function registerDepartmentTools(server: Server, apiClient: ApiClient): v
         archived: z.boolean().optional().describe("Archive status"),
         contact_person: z.string().optional().describe("Contact person"),
         phone_number: z.string().optional().describe("Phone number"),
-        email: z.string().email().optional().describe("Email"),
+        email: z.string().optional().describe("Email"),
         address: z.string().optional().describe("Address"),
         tax_number: z.string().optional().describe("Tax number"),
         budget_ids: z.array(z.number().int()).optional().describe("Budget IDs"),

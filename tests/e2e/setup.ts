@@ -195,13 +195,10 @@ export function registerStandardRoutes(mock: MockApiServer): void {
     path: vPath("budgets"),
     handler: () => ({
       status: 200,
-      body: {
-        budgets: [
-          { id: 1, name: "Q1 Budget", amount: 50000, currency_id: 1, remaining_amount: 30000 },
-          { id: 2, name: "Q2 Budget", amount: 75000, currency_id: 1, remaining_amount: 75000 },
-        ],
-        meta: { current_page: 1, next_page: null, prev_page: null, total_pages: 1, total_count: 2 },
-      },
+      body: [
+        { id: 1, name: "Q1 Budget", amount: 50000, currency_id: 1, remaining_amount: 30000 },
+        { id: 2, name: "Q2 Budget", amount: 75000, currency_id: 1, remaining_amount: 75000 },
+      ],
     }),
   });
 
@@ -503,7 +500,7 @@ export function registerStandardRoutes(mock: MockApiServer): void {
   // Comments (V1/V3)
   mock.registerRoute({
     method: "POST",
-    path: /^\/api\/v[13]\/purchase_order\/\d+\/comments$/,
+    path: /^\/api\/v[13]\/purchase_orders\/\d+\/comments$/,
     handler: (_req, body) => {
       const parsed = JSON.parse(body);
       return {

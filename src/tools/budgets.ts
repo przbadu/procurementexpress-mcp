@@ -2,29 +2,28 @@ import { z } from "zod";
 import type { ApiClient } from "../api-client.js";
 import type { Server } from "../tool-helpers.js";
 import { jsonResponse, withErrorHandling } from "../tool-helpers.js";
-import type { Budget, PaginationMeta } from "../types.js";
+import type { Budget } from "../types.js";
 
 export function registerBudgetTools(server: Server, apiClient: ApiClient): void {
   server.registerTool(
     "list_budgets",
     {
-      description: "List budgets with pagination. Filter by department, archived status, or active only",
+      description:
+        "List budgets for the current company. Filter by department and/or archived status. Returns all matching budgets (no pagination).",
       inputSchema: {
-        page: z.number().int().positive().optional().describe("Page number (default: 1)"),
-        archived: z.boolean().optional().describe("Filter by archived status"),
-        only_active: z.boolean().optional().describe("Show only active budgets"),
         department_id: z.number().int().optional().describe("Filter by department ID"),
+        archived: z.boolean().optional().describe("Filter by archived status (default: false)"),
+        show_mappings: z.boolean().optional().describe("Include third-party ID mappings in response"),
       },
     },
     withErrorHandling(async (args) => {
       const params = new URLSearchParams();
-      if (args.page) params.set("page", String(args.page));
-      if (args.archived !== undefined) params.set("archived", String(args.archived));
-      if (args.only_active) params.set("only_active", "true");
       if (args.department_id) params.set("department_id", String(args.department_id));
+      if (args.archived !== undefined) params.set("archived", String(args.archived));
+      if (args.show_mappings) params.set("show_mappings", "true");
       const query = params.toString();
       const path = `${apiClient.buildPath("/budgets")}${query ? `?${query}` : ""}`;
-      const result = await apiClient.get<{ budgets: Budget[]; meta: PaginationMeta }>(path);
+      const result = await apiClient.get<Budget[]>(path);
       return jsonResponse(result);
     }),
   );
@@ -32,7 +31,7 @@ export function registerBudgetTools(server: Server, apiClient: ApiClient): void 
   server.registerTool(
     "get_budget",
     {
-      description: "Get a specific budget by ID, including remaining amount",
+      description: "Get a specific budget by ID, including remaining amount and associated departments/approvers",
       inputSchema: {
         id: z.number().int().positive().describe("Budget ID"),
       },
@@ -46,19 +45,22 @@ export function registerBudgetTools(server: Server, apiClient: ApiClient): void 
   server.registerTool(
     "create_budget",
     {
-      description: "Create a new budget",
+      description:
+        "Create a new budget. Dates must match the company's date_format setting.",
       inputSchema: {
         name: z.string().describe("Budget name"),
         amount: z.number().describe("Budget amount"),
-        currency_id: z.number().int().describe("Currency ID"),
-        creator_id: z.number().int().describe("Creator user ID"),
+        currency_id: z.number().int().optional().describe("Currency ID (defaults to company currency)"),
+        creator_id: z.number().int().optional().describe("Creator user ID"),
         cost_code: z.string().optional().describe("Cost code"),
         cost_type: z.string().optional().describe("Cost type"),
-        start_date: z.string().optional().describe("Start date (must match company date format)"),
-        end_date: z.string().optional().describe("End date"),
-        allow_anyone_to_approve_a_po: z.boolean().optional().describe("Allow anyone to approve"),
+        start_date: z.string().optional().describe("Start date (must match company date_format setting)"),
+        end_date: z.string().optional().describe("End date (must match company date_format setting)"),
+        allow_anyone_to_approve_a_po: z.boolean().optional().describe("Allow anyone to approve POs against this budget"),
+        chart_of_account_id: z.number().int().optional().describe("Chart of account ID (GL code)"),
+        qbo_class: z.string().optional().describe("QuickBooks class"),
         approver_ids: z.array(z.number().int()).optional().describe("Approver user IDs"),
-        department_ids: z.array(z.number().int()).optional().describe("Department IDs"),
+        department_ids: z.array(z.number().int()).optional().describe("Department IDs to associate"),
       },
     },
     withErrorHandling(async (args) => {
@@ -75,10 +77,14 @@ export function registerBudgetTools(server: Server, apiClient: ApiClient): void 
         id: z.number().int().positive().describe("Budget ID"),
         name: z.string().optional().describe("Budget name"),
         amount: z.number().optional().describe("Budget amount"),
+        currency_id: z.number().int().optional().describe("Currency ID"),
         cost_code: z.string().optional().describe("Cost code"),
         cost_type: z.string().optional().describe("Cost type"),
-        start_date: z.string().optional().describe("Start date"),
-        end_date: z.string().optional().describe("End date"),
+        start_date: z.string().optional().describe("Start date (must match company date_format setting)"),
+        end_date: z.string().optional().describe("End date (must match company date_format setting)"),
+        allow_anyone_to_approve_a_po: z.boolean().optional().describe("Allow anyone to approve"),
+        chart_of_account_id: z.number().int().optional().describe("Chart of account ID"),
+        qbo_class: z.string().optional().describe("QuickBooks class"),
         approver_ids: z.array(z.number().int()).optional().describe("Approver user IDs"),
         department_ids: z.array(z.number().int()).optional().describe("Department IDs"),
       },

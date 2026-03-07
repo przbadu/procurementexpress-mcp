@@ -14,14 +14,18 @@ export function registerSupplementaryTools(server: Server, apiClient: ApiClient)
   server.registerTool(
     "list_chart_of_accounts",
     {
-      description: "List chart of accounts with optional search",
+      description: "List chart of accounts (GL codes) with pagination and optional search",
       inputSchema: {
-        search: z.string().optional().describe("Search term"),
+        search: z.string().optional().describe("Search by account name or code"),
+        page: z.number().int().positive().optional().describe("Page number (default: 1)"),
+        per_page: z.number().int().positive().optional().describe("Results per page (default: company setting)"),
       },
     },
     withErrorHandling(async (args) => {
       const params = new URLSearchParams();
       if (args.search) params.set("search", args.search);
+      if (args.page) params.set("page", String(args.page));
+      if (args.per_page) params.set("per_page", String(args.per_page));
       const query = params.toString();
       const path = `${apiClient.buildPath("/chart_of_accounts")}${query ? `?${query}` : ""}`;
       const result = await apiClient.get<{
@@ -33,16 +37,34 @@ export function registerSupplementaryTools(server: Server, apiClient: ApiClient)
   );
 
   server.registerTool(
+    "get_chart_of_account",
+    {
+      description: "Get a specific chart of account by ID",
+      inputSchema: {
+        id: z.number().int().positive().describe("Chart of Account ID"),
+      },
+    },
+    withErrorHandling(async (args) => {
+      const result = await apiClient.get<ChartOfAccount>(apiClient.buildPath(`/chart_of_accounts/${args.id}`));
+      return jsonResponse(result);
+    }),
+  );
+
+  server.registerTool(
     "list_qbo_customers",
     {
-      description: "List QuickBooks customers with optional search",
+      description: "List QuickBooks customers with pagination and optional search",
       inputSchema: {
-        search: z.string().optional().describe("Search term"),
+        search: z.string().optional().describe("Search by customer name"),
+        page: z.number().int().positive().optional().describe("Page number (default: 1)"),
+        per_page: z.number().int().positive().optional().describe("Results per page"),
       },
     },
     withErrorHandling(async (args) => {
       const params = new URLSearchParams();
       if (args.search) params.set("search", args.search);
+      if (args.page) params.set("page", String(args.page));
+      if (args.per_page) params.set("per_page", String(args.per_page));
       const query = params.toString();
       const path = `${apiClient.buildPath("/qbo_customers")}${query ? `?${query}` : ""}`;
       const result = await apiClient.get<{
@@ -54,22 +76,54 @@ export function registerSupplementaryTools(server: Server, apiClient: ApiClient)
   );
 
   server.registerTool(
+    "get_qbo_customer",
+    {
+      description: "Get a specific QuickBooks customer by ID",
+      inputSchema: {
+        id: z.number().int().positive().describe("QBO Customer ID"),
+      },
+    },
+    withErrorHandling(async (args) => {
+      const result = await apiClient.get<QboCustomer>(apiClient.buildPath(`/qbo_customers/${args.id}`));
+      return jsonResponse(result);
+    }),
+  );
+
+  server.registerTool(
     "list_qbo_classes",
     {
-      description: "List QuickBooks classes with optional search",
+      description: "List QuickBooks classes with pagination and optional search",
       inputSchema: {
-        search: z.string().optional().describe("Search term"),
+        search: z.string().optional().describe("Search by class name"),
+        page: z.number().int().positive().optional().describe("Page number (default: 1)"),
+        per_page: z.number().int().positive().optional().describe("Results per page"),
       },
     },
     withErrorHandling(async (args) => {
       const params = new URLSearchParams();
       if (args.search) params.set("search", args.search);
+      if (args.page) params.set("page", String(args.page));
+      if (args.per_page) params.set("per_page", String(args.per_page));
       const query = params.toString();
       const path = `${apiClient.buildPath("/qbo_classes")}${query ? `?${query}` : ""}`;
       const result = await apiClient.get<{
         quickbooks_classes: QboClass[];
         meta: PaginationMeta;
       }>(path);
+      return jsonResponse(result);
+    }),
+  );
+
+  server.registerTool(
+    "get_qbo_class",
+    {
+      description: "Get a specific QuickBooks class by ID",
+      inputSchema: {
+        id: z.number().int().positive().describe("QuickBooks Class ID"),
+      },
+    },
+    withErrorHandling(async (args) => {
+      const result = await apiClient.get<QboClass>(apiClient.buildPath(`/qbo_classes/${args.id}`));
       return jsonResponse(result);
     }),
   );
@@ -91,16 +145,15 @@ export function registerSupplementaryTools(server: Server, apiClient: ApiClient)
   server.registerTool(
     "forward_purchase_order",
     {
-      description: "Forward a purchase order to supplier(s) via email",
+      description:
+        "Forward a purchase order to supplier(s) via email. The PO PDF is attached automatically.",
       inputSchema: {
         purchase_order_id: z.number().int().positive().describe("Purchase Order ID"),
-        emails: z.array(z.string().email()).describe("Recipient email addresses"),
-        cc: z.string().email().optional().describe("CC email address"),
-        notes: z.string().optional().describe("Email body / template text"),
-        email_subject: z.string().optional().describe("Email subject"),
-        template_label: z.string().optional().describe("Template label"),
-        save_template: z.boolean().optional().describe("Save as new template"),
-        is_default: z.boolean().optional().describe("Mark as default template"),
+        emails: z.string().describe("Comma-separated recipient email addresses"),
+        cc: z.string().optional().describe("CC email address (defaults to PO creator's email)"),
+        note: z.string().optional().describe("Email body / note text"),
+        email_subject: z.string().optional().describe("Email subject line"),
+        uploads: z.array(z.number().int()).optional().describe("Upload IDs to attach (must belong to this PO)"),
       },
     },
     withErrorHandling(async (args) => {
