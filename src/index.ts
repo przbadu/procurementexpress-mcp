@@ -146,6 +146,16 @@ registerTaxRateTools(server, apiClient);
 registerWebhookTools(server, apiClient);
 registerSupplementaryTools(server, apiClient);
 
+// Auto-authenticate from environment variables if available
+if (isV1) {
+  const envToken = process.env.PROCUREMENTEXPRESS_AUTH_TOKEN;
+  const envCompanyId = process.env.PROCUREMENTEXPRESS_COMPANY_ID;
+  if (envToken && envCompanyId) {
+    authManager.authenticateV1(envToken, envCompanyId);
+    console.error(`Auto-authenticated with V1 API (company ID: ${envCompanyId})`);
+  }
+}
+
 // Start the server
 async function main() {
   const transport = new StdioServerTransport();
