@@ -71,6 +71,7 @@ export function registerProductTools(server: Server, apiClient: ApiClient): void
         sku: z.string().optional().describe("SKU code"),
         unit_price: z.number().optional().describe("Unit price"),
         supplier_id: z.number().int().optional().describe("Supplier ID"),
+        archived: z.boolean().optional().describe("Whether the product is archived"),
       },
     },
     withErrorHandling(async (args) => {
