@@ -9,18 +9,18 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Schema Alignment
 
-- [ ] **SCHEMA-01**: All PO tool input Zod schemas match Rails PurchaseOrdersController strong params exactly
-- [ ] **SCHEMA-02**: All Invoice tool input Zod schemas match Rails InvoicesController strong params exactly
+- [x] **SCHEMA-01**: All PO tool input Zod schemas match Rails PurchaseOrdersController strong params exactly
+- [x] **SCHEMA-02**: All Invoice tool input Zod schemas match Rails InvoicesController strong params exactly
 - [ ] **SCHEMA-03**: All Supplier tool input Zod schemas match Rails SuppliersController strong params exactly
 - [ ] **SCHEMA-04**: All Budget tool input Zod schemas match Rails BudgetsController strong params exactly
 - [ ] **SCHEMA-05**: All Department tool input Zod schemas match Rails DepartmentsController strong params exactly
 - [ ] **SCHEMA-06**: All Company tool input Zod schemas match Rails CompaniesController strong params exactly
-- [ ] **SCHEMA-07**: All Webhook tool input Zod schemas match Rails WebhooksController strong params exactly
-- [ ] **SCHEMA-08**: All ApprovalFlow tool input Zod schemas match Rails ApprovalFlowsController strong params exactly
-- [ ] **SCHEMA-09**: All Payment tool input Zod schemas match Rails PaymentsController strong params exactly
-- [ ] **SCHEMA-10**: All TaxRate tool input Zod schemas match Rails TaxRatesController strong params exactly
-- [ ] **SCHEMA-11**: All Product tool input Zod schemas match Rails ProductsController strong params exactly
-- [ ] **SCHEMA-12**: All Comment tool input Zod schemas match Rails CommentsController strong params exactly
+- [x] **SCHEMA-07**: All Webhook tool input Zod schemas match Rails WebhooksController strong params exactly
+- [x] **SCHEMA-08**: All ApprovalFlow tool input Zod schemas match Rails ApprovalFlowsController strong params exactly
+- [x] **SCHEMA-09**: All Payment tool input Zod schemas match Rails PaymentsController strong params exactly
+- [x] **SCHEMA-10**: All TaxRate tool input Zod schemas match Rails TaxRatesController strong params exactly
+- [x] **SCHEMA-11**: All Product tool input Zod schemas match Rails ProductsController strong params exactly
+- [x] **SCHEMA-12**: All Comment tool input Zod schemas match Rails CommentsController strong params exactly
 
 ### Type System
 
@@ -148,18 +148,18 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SCHEMA-01 | Phase 1 | Pending |
-| SCHEMA-02 | Phase 1 | Pending |
+| SCHEMA-01 | Phase 1 | Complete |
+| SCHEMA-02 | Phase 1 | Complete |
 | SCHEMA-03 | Phase 1 | Pending |
 | SCHEMA-04 | Phase 1 | Pending |
 | SCHEMA-05 | Phase 1 | Pending |
 | SCHEMA-06 | Phase 1 | Pending |
-| SCHEMA-07 | Phase 1 | Pending |
-| SCHEMA-08 | Phase 1 | Pending |
-| SCHEMA-09 | Phase 1 | Pending |
-| SCHEMA-10 | Phase 1 | Pending |
-| SCHEMA-11 | Phase 1 | Pending |
-| SCHEMA-12 | Phase 1 | Pending |
+| SCHEMA-07 | Phase 1 | Complete |
+| SCHEMA-08 | Phase 1 | Complete |
+| SCHEMA-09 | Phase 1 | Complete |
+| SCHEMA-10 | Phase 1 | Complete |
+| SCHEMA-11 | Phase 1 | Complete |
+| SCHEMA-12 | Phase 1 | Complete |
 | TYPE-01 | Phase 1 | Complete |
 | TYPE-02 | Phase 1 | Complete |
 | TYPE-03 | Phase 1 | Complete |
