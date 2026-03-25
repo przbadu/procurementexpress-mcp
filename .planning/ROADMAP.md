@@ -35,7 +35,7 @@ Plans:
 - [x] 01-01-PLAN.md — Infrastructure: fix error handler + extract shared schemas
 - [x] 01-02-PLAN.md — Types: Summary/Detail type splits + missing serializer fields
 - [x] 01-03-PLAN.md — PO + Invoice schema alignment with Rails strong params
-- [ ] 01-04-PLAN.md — Company, Supplier, Budget, Department schema alignment
+- [x] 01-04-PLAN.md — Company, Supplier, Budget, Department schema alignment
 - [x] 01-05-PLAN.md — Webhook, ApprovalFlow, Payment, TaxRate, Product, Comment schema alignment
 - [ ] 01-06-PLAN.md — Integration verification + human review checkpoint
 

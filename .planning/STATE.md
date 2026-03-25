@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: Ready to execute
-stopped_at: Completed 01-schema-type-foundation 01-05-PLAN.md
-last_updated: "2026-03-25T13:38:55.298Z"
+stopped_at: Completed 01-04-PLAN.md
+last_updated: "2026-03-25T13:39:54.147Z"
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 6
-  completed_plans: 4
+  completed_plans: 5
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-25)
 ## Current Position
 
 Phase: 01 (schema-type-foundation) — EXECUTING
-Plan: 5 of 6
+Plan: 6 of 6
 
 ## Performance Metrics
 
@@ -50,6 +50,7 @@ Plan: 5 of 6
 | Phase 01-schema-type-foundation P01 | 5 | 2 tasks | 2 files |
 | Phase 01-schema-type-foundation P03 | 8 | 2 tasks | 2 files |
 | Phase 01-schema-type-foundation P05 | 6 | 2 tasks | 3 files |
+| Phase 01-schema-type-foundation P04 | 5 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -71,6 +72,8 @@ Recent decisions affecting current work:
 - [Phase 01-schema-type-foundation]: tax-rates.ts already correct — :name, :archived, :value all present; :company_id correctly server-set
 - [Phase 01-schema-type-foundation]: payments.ts body shape verified correct — { payment: {...} } and { npayment: {...} } match Rails strong params
 - [Phase 01-schema-type-foundation]: comments.ts body shapes verified — PO uses { comment: text }, Invoice uses { invoice_comments: { comment } }
+- [Phase 01-schema-type-foundation]: Company[] used for list_companies (Rails CompanySerializer), CompanyDetail[] for detail endpoints
+- [Phase 01-schema-type-foundation]: budgets.ts inline customFieldValueSchema replaced with shared import from schemas.ts
 
 ### Pending Todos
 
@@ -84,6 +87,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-25T13:38:55.295Z
-Stopped at: Completed 01-schema-type-foundation 01-05-PLAN.md
+Last session: 2026-03-25T13:39:54.143Z
+Stopped at: Completed 01-04-PLAN.md
 Resume file: None
