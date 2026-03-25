@@ -2,7 +2,7 @@ import { z } from "zod";
 import type { ApiClient } from "../api-client.js";
 import type { Server } from "../tool-helpers.js";
 import { jsonResponse, textResponse, withErrorHandling } from "../tool-helpers.js";
-import type { Approver, CompanyDetail, Employee } from "../types.js";
+import type { Approver, Company, CompanyDetail, Employee } from "../types.js";
 
 export function registerCompanyTools(server: Server, apiClient: ApiClient): void {
   server.registerTool(
@@ -12,7 +12,7 @@ export function registerCompanyTools(server: Server, apiClient: ApiClient): void
       inputSchema: {},
     },
     withErrorHandling(async () => {
-      const companies = await apiClient.get<CompanyDetail[]>(apiClient.buildPath("/companies"));
+      const companies = await apiClient.get<Company[]>(apiClient.buildPath("/companies"));
       return jsonResponse(companies);
     }),
   );
