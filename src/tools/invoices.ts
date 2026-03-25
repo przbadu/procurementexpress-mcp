@@ -2,33 +2,8 @@ import { z } from "zod";
 import type { ApiClient } from "../api-client.js";
 import type { Server } from "../tool-helpers.js";
 import { jsonResponse, withErrorHandling } from "../tool-helpers.js";
-import type { Invoice, PaginationMeta } from "../types.js";
-
-const customFieldValueSchema = z.object({
-  id: z.number().int().optional().describe("Custom field value ID (for updates)"),
-  value: z.string().describe("Custom field value"),
-  custom_field_id: z.number().int().describe("Custom field ID"),
-});
-
-const invoiceLineItemSchema = z.object({
-  id: z.number().int().optional().describe("Line item ID (for updates)"),
-  description: z.string().optional().describe("Line item description"),
-  unit_price: z.number().optional().describe("Unit price"),
-  quantity: z.number().optional().describe("Quantity"),
-  vat: z.number().optional().describe("VAT/tax percentage"),
-  net_amount: z.number().optional().describe("Net amount"),
-  sequence_no: z.number().int().optional().describe("Sequence number for ordering"),
-  tax_rate_id: z.number().int().optional().describe("Tax rate ID"),
-  chart_of_account_id: z.number().int().optional().describe("Chart of account ID (GL code)"),
-  qbo_customer_id: z.number().int().optional().describe("QuickBooks customer ID"),
-  quickbooks_class_id: z.number().int().optional().describe("QuickBooks class ID"),
-  qbo_line_description: z.string().optional().describe("QuickBooks line description override"),
-  purchase_order_id: z.number().int().optional().describe("Related purchase order ID"),
-  purchase_order_item_id: z.number().int().optional().describe("Related PO line item ID"),
-  billable_status: z.string().optional().describe("Billable status for QuickBooks"),
-  _destroy: z.boolean().optional().describe("Set true to remove this line item on update"),
-  custom_field_values_attributes: z.array(customFieldValueSchema).optional().describe("Custom field values for this line item"),
-});
+import type { Invoice, InvoiceSummary, PaginationMeta } from "../types.js";
+import { customFieldValueSchema, invoiceLineItemSchema } from "../schemas.js";
 
 export function registerInvoiceTools(server: Server, apiClient: ApiClient): void {
   server.registerTool(
@@ -75,7 +50,7 @@ export function registerInvoiceTools(server: Server, apiClient: ApiClient): void
       if (args.direction) params.set("direction", args.direction);
       const query = params.toString();
       const path = `${apiClient.buildPath("/invoices")}${query ? `?${query}` : ""}`;
-      const result = await apiClient.get<{ invoices: Invoice[]; meta: PaginationMeta }>(path);
+      const result = await apiClient.get<{ invoices: InvoiceSummary[]; meta: PaginationMeta }>(path);
       return jsonResponse(result);
     }),
   );
@@ -105,6 +80,7 @@ export function registerInvoiceTools(server: Server, apiClient: ApiClient): void
         uploaded_date: z.string().optional().describe("Upload date"),
         received_date: z.string().optional().describe("Received date"),
         due_date: z.string().optional().describe("Due date"),
+        validation_date: z.string().optional().describe("Validation date (ISO 8601 format)"),
         gross_amount: z.number().optional().describe("Gross amount"),
         currency_id: z.number().int().optional().describe("Currency ID"),
         supplier_id: z.number().int().optional().describe("Supplier ID"),
@@ -140,6 +116,7 @@ export function registerInvoiceTools(server: Server, apiClient: ApiClient): void
         uploaded_date: z.string().optional().describe("Upload date"),
         received_date: z.string().optional().describe("Received date"),
         due_date: z.string().optional().describe("Due date"),
+        validation_date: z.string().optional().describe("Validation date (ISO 8601 format)"),
         gross_amount: z.number().optional().describe("Gross amount"),
         currency_id: z.number().int().optional().describe("Currency ID"),
         supplier_id: z.number().int().optional().describe("Supplier ID"),
