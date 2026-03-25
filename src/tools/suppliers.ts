@@ -83,6 +83,9 @@ export function registerSupplierTools(server: Server, apiClient: ApiClient): voi
         uei: z.string().optional().describe("Unique Entity Identifier (UEI) for SAM.gov"),
         cage_code: z.string().optional().describe("CAGE code for government contracting"),
         department_ids: z.array(z.number().int()).optional().describe("Department IDs to restrict supplier to"),
+        xero_id: z.string().optional().describe("Xero integration ID"),
+        zapier_id: z.string().optional().describe("Zapier integration ID"),
+        quickbooks_id: z.string().optional().describe("QuickBooks integration ID"),
       },
     },
     withErrorHandling(async (args) => {
@@ -109,6 +112,9 @@ export function registerSupplierTools(server: Server, apiClient: ApiClient): voi
         uei: z.string().optional().describe("Unique Entity Identifier (UEI)"),
         cage_code: z.string().optional().describe("CAGE code"),
         department_ids: z.array(z.number().int()).optional().describe("Department IDs"),
+        xero_id: z.string().optional().describe("Xero integration ID"),
+        zapier_id: z.string().optional().describe("Zapier integration ID"),
+        quickbooks_id: z.string().optional().describe("QuickBooks integration ID"),
       },
     },
     withErrorHandling(async (args) => {
