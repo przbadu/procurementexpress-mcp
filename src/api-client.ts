@@ -1,4 +1,3 @@
-import type { ApiError } from "./types.js";
 
 export type ApiVersion = "v1" | "v3";
 
@@ -108,8 +107,21 @@ export class ApiClient {
     if (!response.ok) {
       let message: string;
       try {
-        const errorBody = (await response.json()) as ApiError;
-        message = errorBody.message || response.statusText;
+        const errorBody = (await response.json()) as Record<string, unknown>;
+        // Rails error_response() returns { error: "string" }
+        // V3 Doorkeeper returns { error: "invalid_grant" } or { errors: [...] }
+        // Legacy format: { message: "string" }
+        if (typeof errorBody.error === "string") {
+          message = errorBody.error;
+        } else if (Array.isArray(errorBody.error)) {
+          message = (errorBody.error as string[]).join("; ");
+        } else if (Array.isArray(errorBody.errors)) {
+          message = (errorBody.errors as string[]).join("; ");
+        } else if (typeof errorBody.message === "string") {
+          message = errorBody.message;
+        } else {
+          message = response.statusText;
+        }
       } catch {
         message = response.statusText;
       }
