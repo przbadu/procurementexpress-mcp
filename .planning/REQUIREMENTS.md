@@ -148,25 +148,85 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SCHEMA-01 through SCHEMA-12 | Phase 1 | Pending |
-| TYPE-01 through TYPE-07 | Phase 1 | Pending |
-| INFRA-01 through INFRA-04 | Phase 1 | Pending |
-| CF-01 through CF-06 | Phase 2 | Pending |
-| COMP-01 through COMP-10 | Phase 2 | Pending |
-| PO-01 through PO-04 | Phase 2 | Pending |
-| INV-01 through INV-03 | Phase 2 | Pending |
-| UPLOAD-01 through UPLOAD-03 | Phase 3 | Pending |
-| PROD-01 through PROD-02 | Phase 3 | Pending |
+| SCHEMA-01 | Phase 1 | Pending |
+| SCHEMA-02 | Phase 1 | Pending |
+| SCHEMA-03 | Phase 1 | Pending |
+| SCHEMA-04 | Phase 1 | Pending |
+| SCHEMA-05 | Phase 1 | Pending |
+| SCHEMA-06 | Phase 1 | Pending |
+| SCHEMA-07 | Phase 1 | Pending |
+| SCHEMA-08 | Phase 1 | Pending |
+| SCHEMA-09 | Phase 1 | Pending |
+| SCHEMA-10 | Phase 1 | Pending |
+| SCHEMA-11 | Phase 1 | Pending |
+| SCHEMA-12 | Phase 1 | Pending |
+| TYPE-01 | Phase 1 | Pending |
+| TYPE-02 | Phase 1 | Pending |
+| TYPE-03 | Phase 1 | Pending |
+| TYPE-04 | Phase 1 | Pending |
+| TYPE-05 | Phase 1 | Pending |
+| TYPE-06 | Phase 1 | Pending |
+| TYPE-07 | Phase 1 | Pending |
+| INFRA-01 | Phase 1 | Pending |
+| INFRA-02 | Phase 1 | Pending |
+| INFRA-03 | Phase 1 | Pending |
+| INFRA-04 | Phase 1 | Pending |
+| CF-01 | Phase 2 | Pending |
+| CF-02 | Phase 2 | Pending |
+| CF-03 | Phase 2 | Pending |
+| CF-04 | Phase 2 | Pending |
+| CF-05 | Phase 2 | Pending |
+| CF-06 | Phase 2 | Pending |
+| COMP-01 | Phase 2 | Pending |
+| COMP-02 | Phase 2 | Pending |
+| COMP-03 | Phase 2 | Pending |
+| COMP-04 | Phase 2 | Pending |
+| COMP-05 | Phase 2 | Pending |
+| COMP-06 | Phase 2 | Pending |
+| COMP-07 | Phase 2 | Pending |
+| COMP-08 | Phase 2 | Pending |
+| COMP-09 | Phase 2 | Pending |
+| COMP-10 | Phase 2 | Pending |
+| PO-01 | Phase 2 | Pending |
+| PO-02 | Phase 2 | Pending |
+| PO-03 | Phase 2 | Pending |
+| PO-04 | Phase 2 | Pending |
+| INV-01 | Phase 2 | Pending |
+| INV-02 | Phase 2 | Pending |
+| INV-03 | Phase 2 | Pending |
+| UPLOAD-01 | Phase 3 | Pending |
+| UPLOAD-02 | Phase 3 | Pending |
+| UPLOAD-03 | Phase 3 | Pending |
+| PROD-01 | Phase 3 | Pending |
+| PROD-02 | Phase 3 | Pending |
 | LOW-10 | Phase 3 | Pending |
-| POL-01 through POL-06 | Phase 4 | Pending |
-| LOW-01 through LOW-09 | Phase 4 | Pending |
-| TEST-01 through TEST-06 | Phase 5 | Pending |
+| POL-01 | Phase 4 | Pending |
+| POL-02 | Phase 4 | Pending |
+| POL-03 | Phase 4 | Pending |
+| POL-04 | Phase 4 | Pending |
+| POL-05 | Phase 4 | Pending |
+| POL-06 | Phase 4 | Pending |
+| LOW-01 | Phase 4 | Pending |
+| LOW-02 | Phase 4 | Pending |
+| LOW-03 | Phase 4 | Pending |
+| LOW-04 | Phase 4 | Pending |
+| LOW-05 | Phase 4 | Pending |
+| LOW-06 | Phase 4 | Pending |
+| LOW-07 | Phase 4 | Pending |
+| LOW-08 | Phase 4 | Pending |
+| LOW-09 | Phase 4 | Pending |
+| TEST-01 | Phase 5 | Pending |
+| TEST-02 | Phase 5 | Pending |
+| TEST-03 | Phase 5 | Pending |
+| TEST-04 | Phase 5 | Pending |
+| TEST-05 | Phase 5 | Pending |
+| TEST-06 | Phase 5 | Pending |
 
 **Coverage:**
 - v1 requirements: 67 total
 - Mapped to phases: 67
-- Unmapped: 0 ✓
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-25*
-*Last updated: 2026-03-25 after initial definition*
+*Last updated: 2026-03-25 after roadmap creation — full per-requirement traceability expanded*
