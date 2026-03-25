@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: Ready to execute
-stopped_at: Completed 01-schema-type-foundation 01-01-PLAN.md
-last_updated: "2026-03-25T13:29:15.508Z"
+stopped_at: Completed 01-schema-type-foundation 01-05-PLAN.md
+last_updated: "2026-03-25T13:38:55.298Z"
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 6
-  completed_plans: 2
+  completed_plans: 4
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-25)
 ## Current Position
 
 Phase: 01 (schema-type-foundation) — EXECUTING
-Plan: 3 of 6
+Plan: 5 of 6
 
 ## Performance Metrics
 
@@ -48,6 +48,8 @@ Plan: 3 of 6
 *Updated after each plan completion*
 | Phase 01-schema-type-foundation P02 | 2 | 2 tasks | 1 files |
 | Phase 01-schema-type-foundation P01 | 5 | 2 tasks | 2 files |
+| Phase 01-schema-type-foundation P03 | 8 | 2 tasks | 2 files |
+| Phase 01-schema-type-foundation P05 | 6 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -64,6 +66,11 @@ Recent decisions affecting current work:
 - [Phase 01-schema-type-foundation]: Summary/Detail type split established: *Summary for list endpoints, full type for detail endpoints
 - [Phase 01-schema-type-foundation]: Use Record<string, unknown> cast for ApiClient error body — Rails returns { error } not { message }; ApiError type removed from error block
 - [Phase 01-schema-type-foundation]: src/schemas.ts created as pure export file; tool imports deferred to Wave 2 plans for incremental migration
+- [Phase 01-schema-type-foundation]: src/schemas.ts is the single source of truth for shared Zod schemas — inline schema definitions removed from tool files
+- [Phase 01-schema-type-foundation]: list_purchase_orders and list_invoices return Summary types (PurchaseOrderSummary[], InvoiceSummary[]) matching Rails serializer list endpoints
+- [Phase 01-schema-type-foundation]: tax-rates.ts already correct — :name, :archived, :value all present; :company_id correctly server-set
+- [Phase 01-schema-type-foundation]: payments.ts body shape verified correct — { payment: {...} } and { npayment: {...} } match Rails strong params
+- [Phase 01-schema-type-foundation]: comments.ts body shapes verified — PO uses { comment: text }, Invoice uses { invoice_comments: { comment } }
 
 ### Pending Todos
 
@@ -77,6 +84,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-25T13:29:15.504Z
-Stopped at: Completed 01-schema-type-foundation 01-01-PLAN.md
+Last session: 2026-03-25T13:38:55.295Z
+Stopped at: Completed 01-schema-type-foundation 01-05-PLAN.md
 Resume file: None
