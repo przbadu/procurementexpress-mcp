@@ -1,3 +1,17 @@
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: Ready to execute
+stopped_at: Completed 01-02-PLAN.md — type splits and missing serializer fields in src/types.ts
+last_updated: "2026-03-25T13:29:06.498Z"
+progress:
+  total_phases: 5
+  completed_phases: 0
+  total_plans: 6
+  completed_plans: 2
+---
+
 # Project State
 
 ## Project Reference
@@ -5,20 +19,17 @@
 See: .planning/PROJECT.md (updated 2026-03-25)
 
 **Core value:** Every MCP tool must be a faithful, complete representation of the corresponding Rails API endpoint — zero invented params, zero missing params, zero mismatched response types
-**Current focus:** Phase 1 — Schema & Type Foundation
+**Current focus:** Phase 01 — schema-type-foundation
 
 ## Current Position
 
-Phase: 1 of 5 (Schema & Type Foundation)
-Plan: 0 of TBD in current phase
-Status: Ready to plan
-Last activity: 2026-03-25 — Roadmap created, requirements mapped, ready to begin Phase 1 planning
-
-Progress: [░░░░░░░░░░] 0%
+Phase: 01 (schema-type-foundation) — EXECUTING
+Plan: 3 of 6
 
 ## Performance Metrics
 
 **Velocity:**
+
 - Total plans completed: 0
 - Average duration: -
 - Total execution time: 0 hours
@@ -30,10 +41,13 @@ Progress: [░░░░░░░░░░] 0%
 | - | - | - | - |
 
 **Recent Trend:**
+
 - Last 5 plans: none yet
 - Trend: -
 
 *Updated after each plan completion*
+| Phase 01-schema-type-foundation P02 | 2 | 2 tasks | 1 files |
+| Phase 01-schema-type-foundation P01 | 5 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -46,6 +60,8 @@ Recent decisions affecting current work:
 - [Init]: Full E2E test coverage required for every new and modified tool using MockApiServer body validation
 - [Init]: Never remove, rename, or retype existing tool input params — backwards-compat frozen; widening (adding optional params) only
 - [Init]: Stay on Zod v3.25.x — MCP SDK 1.27.1 has confirmed bugs with Zod v4
+- [Phase 01-schema-type-foundation]: All new type fields added as optional (?) per prior decision on conditional/feature-flag serializer attributes
+- [Phase 01-schema-type-foundation]: Summary/Detail type split established: *Summary for list endpoints, full type for detail endpoints
 
 ### Pending Todos
 
@@ -59,6 +75,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-25
-Stopped at: Roadmap created, STATE.md initialized
+Last session: 2026-03-25T13:28:59.845Z
+Stopped at: Completed 01-02-PLAN.md — type splits and missing serializer fields in src/types.ts
 Resume file: None

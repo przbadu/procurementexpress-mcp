@@ -24,20 +24,20 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Type System
 
-- [ ] **TYPE-01**: PurchaseOrder has separate Summary (list) and Detail (get) TypeScript types matching respective serializers
-- [ ] **TYPE-02**: Invoice has separate Summary (list) and Detail (get) TypeScript types matching respective serializers
-- [ ] **TYPE-03**: Company has separate Summary (list) and Detail (get) TypeScript types matching respective serializers
-- [ ] **TYPE-04**: Webhook has separate Summary (list) and Detail (get) TypeScript types matching respective serializers
-- [ ] **TYPE-05**: ApprovalFlow has separate Summary (list) and Detail (get) TypeScript types matching respective serializers
-- [ ] **TYPE-06**: All response type fields match Rails ActiveModelSerializer attributes exactly (no missing, no invented)
-- [ ] **TYPE-07**: Conditional serializer fields typed as optional (e.g., authentication_token, third_party_id_mappings)
+- [x] **TYPE-01**: PurchaseOrder has separate Summary (list) and Detail (get) TypeScript types matching respective serializers
+- [x] **TYPE-02**: Invoice has separate Summary (list) and Detail (get) TypeScript types matching respective serializers
+- [x] **TYPE-03**: Company has separate Summary (list) and Detail (get) TypeScript types matching respective serializers
+- [x] **TYPE-04**: Webhook has separate Summary (list) and Detail (get) TypeScript types matching respective serializers
+- [x] **TYPE-05**: ApprovalFlow has separate Summary (list) and Detail (get) TypeScript types matching respective serializers
+- [x] **TYPE-06**: All response type fields match Rails ActiveModelSerializer attributes exactly (no missing, no invented)
+- [x] **TYPE-07**: Conditional serializer fields typed as optional (e.g., authentication_token, third_party_id_mappings)
 
 ### Infrastructure
 
-- [ ] **INFRA-01**: ApiClient error handler supports both `{ error: "..." }` and `{ errors: [...] }` response formats
-- [ ] **INFRA-02**: Shared Zod schemas extracted to src/schemas.ts (customFieldValues, lineItems, nested attributes)
-- [ ] **INFRA-03**: Non-paginated endpoints (departments, companies, currencies, employees, approvers) handle plain array responses correctly
-- [ ] **INFRA-04**: Paginated endpoints document meta fields (current_page, next_page, prev_page, total_pages, total_count)
+- [x] **INFRA-01**: ApiClient error handler supports both `{ error: "..." }` and `{ errors: [...] }` response formats
+- [x] **INFRA-02**: Shared Zod schemas extracted to src/schemas.ts (customFieldValues, lineItems, nested attributes)
+- [x] **INFRA-03**: Non-paginated endpoints (departments, companies, currencies, employees, approvers) handle plain array responses correctly
+- [x] **INFRA-04**: Paginated endpoints document meta fields (current_page, next_page, prev_page, total_pages, total_count)
 
 ### Custom Fields Module
 
@@ -160,17 +160,17 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SCHEMA-10 | Phase 1 | Pending |
 | SCHEMA-11 | Phase 1 | Pending |
 | SCHEMA-12 | Phase 1 | Pending |
-| TYPE-01 | Phase 1 | Pending |
-| TYPE-02 | Phase 1 | Pending |
-| TYPE-03 | Phase 1 | Pending |
-| TYPE-04 | Phase 1 | Pending |
-| TYPE-05 | Phase 1 | Pending |
-| TYPE-06 | Phase 1 | Pending |
-| TYPE-07 | Phase 1 | Pending |
-| INFRA-01 | Phase 1 | Pending |
-| INFRA-02 | Phase 1 | Pending |
-| INFRA-03 | Phase 1 | Pending |
-| INFRA-04 | Phase 1 | Pending |
+| TYPE-01 | Phase 1 | Complete |
+| TYPE-02 | Phase 1 | Complete |
+| TYPE-03 | Phase 1 | Complete |
+| TYPE-04 | Phase 1 | Complete |
+| TYPE-05 | Phase 1 | Complete |
+| TYPE-06 | Phase 1 | Complete |
+| TYPE-07 | Phase 1 | Complete |
+| INFRA-01 | Phase 1 | Complete |
+| INFRA-02 | Phase 1 | Complete |
+| INFRA-03 | Phase 1 | Complete |
+| INFRA-04 | Phase 1 | Complete |
 | CF-01 | Phase 2 | Pending |
 | CF-02 | Phase 2 | Pending |
 | CF-03 | Phase 2 | Pending |

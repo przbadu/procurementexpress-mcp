@@ -30,10 +30,10 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Any Rails error response (`{ error }`, `{ errors }`, `{ message }`) is surfaced to the MCP caller as a readable string, not an empty or undefined error
   4. Zod validation rejects nested `_destroy: true` without an accompanying `id` before the request reaches Rails
   5. Shared Zod schemas (custom_field_values_attributes, line items) live in `src/schemas.ts` and are imported by all tool files that use them
-**Plans:** 6 plans
+**Plans:** 2/6 plans executed
 Plans:
-- [ ] 01-01-PLAN.md — Infrastructure: fix error handler + extract shared schemas
-- [ ] 01-02-PLAN.md — Types: Summary/Detail type splits + missing serializer fields
+- [x] 01-01-PLAN.md — Infrastructure: fix error handler + extract shared schemas
+- [x] 01-02-PLAN.md — Types: Summary/Detail type splits + missing serializer fields
 - [ ] 01-03-PLAN.md — PO + Invoice schema alignment with Rails strong params
 - [ ] 01-04-PLAN.md — Company, Supplier, Budget, Department schema alignment
 - [ ] 01-05-PLAN.md — Webhook, ApprovalFlow, Payment, TaxRate, Product, Comment schema alignment
@@ -93,7 +93,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Schema & Type Foundation | 0/6 | Planned | - |
+| 1. Schema & Type Foundation | 2/6 | In Progress|  |
 | 2. High-Priority New Tools | 0/0 | Not started | - |
 | 3. Medium-Priority New Tools | 0/0 | Not started | - |
 | 4. Low-Priority New Tools | 0/0 | Not started | - |
