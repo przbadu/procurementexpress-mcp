@@ -2,34 +2,8 @@ import { z } from "zod";
 import type { ApiClient } from "../api-client.js";
 import type { Server } from "../tool-helpers.js";
 import { jsonResponse, textResponse, withErrorHandling } from "../tool-helpers.js";
-import type { PaginationMeta, PurchaseOrder } from "../types.js";
-
-const customFieldValueSchema = z.object({
-  id: z.number().int().optional().describe("Custom field value ID (for updates)"),
-  value: z.string().describe("Custom field value"),
-  custom_field_id: z.number().int().describe("Custom field ID"),
-});
-
-const lineItemSchema = z.object({
-  id: z.number().int().optional().describe("Line item ID (for updates)"),
-  description: z.string().describe("Item description"),
-  quantity: z.number().describe("Quantity"),
-  unit_price: z.number().describe("Unit price"),
-  budget_id: z.number().int().optional().describe("Budget ID"),
-  vat: z.number().optional().describe("VAT/tax percentage"),
-  tax_rate_id: z.number().int().optional().describe("Tax rate ID"),
-  item_number: z.string().optional().describe("Item number"),
-  sequence_no: z.number().int().optional().describe("Sequence number for ordering"),
-  department_id: z.number().int().optional().describe("Department ID for the line item"),
-  product_id: z.number().int().optional().describe("Product ID"),
-  chart_of_account_id: z.number().int().optional().describe("Chart of account ID (GL code)"),
-  qbo_customer_id: z.number().int().optional().describe("QuickBooks customer ID"),
-  quickbooks_class_id: z.number().int().optional().describe("QuickBooks class ID"),
-  qbo_line_description: z.string().optional().describe("QuickBooks line description override"),
-  archived: z.boolean().optional().describe("Whether the line item is archived"),
-  _destroy: z.boolean().optional().describe("Set true to remove this line item on update"),
-  custom_field_values_attributes: z.array(customFieldValueSchema).optional().describe("Custom field values for this line item"),
-});
+import type { PaginationMeta, PurchaseOrder, PurchaseOrderSummary } from "../types.js";
+import { customFieldValueSchema, lineItemSchema } from "../schemas.js";
 
 export function registerPurchaseOrderTools(server: Server, apiClient: ApiClient): void {
   server.registerTool(
@@ -95,7 +69,7 @@ export function registerPurchaseOrderTools(server: Server, apiClient: ApiClient)
       const query = params.toString();
       const path = `${apiClient.buildPath("/purchase_orders")}${query ? `?${query}` : ""}`;
       const result = await apiClient.get<{
-        purchase_orders: PurchaseOrder[];
+        purchase_orders: PurchaseOrderSummary[];
         meta: PaginationMeta;
       }>(path);
       return jsonResponse(result);
