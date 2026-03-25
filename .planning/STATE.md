@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: Ready to execute
-stopped_at: Completed 01-02-PLAN.md — type splits and missing serializer fields in src/types.ts
-last_updated: "2026-03-25T13:29:06.498Z"
+stopped_at: Completed 01-schema-type-foundation 01-01-PLAN.md
+last_updated: "2026-03-25T13:29:15.508Z"
 progress:
   total_phases: 5
   completed_phases: 0
@@ -62,6 +62,8 @@ Recent decisions affecting current work:
 - [Init]: Stay on Zod v3.25.x — MCP SDK 1.27.1 has confirmed bugs with Zod v4
 - [Phase 01-schema-type-foundation]: All new type fields added as optional (?) per prior decision on conditional/feature-flag serializer attributes
 - [Phase 01-schema-type-foundation]: Summary/Detail type split established: *Summary for list endpoints, full type for detail endpoints
+- [Phase 01-schema-type-foundation]: Use Record<string, unknown> cast for ApiClient error body — Rails returns { error } not { message }; ApiError type removed from error block
+- [Phase 01-schema-type-foundation]: src/schemas.ts created as pure export file; tool imports deferred to Wave 2 plans for incremental migration
 
 ### Pending Todos
 
@@ -75,6 +77,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-25T13:28:59.845Z
-Stopped at: Completed 01-02-PLAN.md — type splits and missing serializer fields in src/types.ts
+Last session: 2026-03-25T13:29:15.504Z
+Stopped at: Completed 01-schema-type-foundation 01-01-PLAN.md
 Resume file: None
