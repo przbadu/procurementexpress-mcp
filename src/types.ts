@@ -259,6 +259,7 @@ export interface CompanyDetail {
   scan_and_match_ff_enabled: boolean;
   approval_flow_ff_enabled: boolean;
   policy_ff_enabled: boolean;
+  sam_gov_enabled?: boolean;
   company_setting: CompanySetting;
   custom_fields: CustomField[];
   supported_currencies: Currency[];
@@ -361,6 +362,13 @@ export interface PurchaseOrderSummary {
   department_id: number | null;
   department_name: string | null;
   approver_requests?: ApproverRequest[];
+  compliance_status?: string;
+  delivered_on?: number | null;
+  delivery_status?: string | null;
+  payment_status?: string | null;
+  xero_export_status?: string | null;
+  synced_with_xero?: boolean;
+  xero_is_changed?: boolean;
 }
 
 // Purchase Order Detail (PurchaseOrderDetailsSerializer)
@@ -426,6 +434,12 @@ export interface PurchaseOrder {
   compliance_checks: ComplianceCheck[];
   approver_requests: ApproverRequest[];
   supplier: Supplier | null;
+  xero_export_status?: string | null;
+  xero_export_error_message?: string | null;
+  xero_last_export_at?: string | null;
+  xero_is_changed?: boolean;
+  can_justify?: boolean;
+  has_global_policies?: boolean;
 }
 
 // Approvers with flow
@@ -501,6 +515,8 @@ export interface InvoiceSummary {
   payment_term_id: number | null;
   payment_terms_list: PaymentTerm[];
   currency: Currency;
+  xero_export_status?: string | null;
+  xero_is_changed?: boolean;
 }
 
 // Invoice Detail (InvoiceDetailSerializer)
@@ -539,6 +555,10 @@ export interface Invoice {
   histories: InvoiceComment[];
   comments: InvoiceComment[];
   npayments: NpaymentSummary[];
+  xero_export_status?: string | null;
+  xero_export_error_message?: string | null;
+  xero_last_export_at?: string | null;
+  xero_is_changed?: boolean;
 }
 
 // Invoice Line Items (InvoiceLineItemSerializer)
