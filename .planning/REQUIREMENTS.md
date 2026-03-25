@@ -1,0 +1,172 @@
+# Requirements: ProcurementExpress MCP Server — Audit & Update
+
+**Defined:** 2026-03-25
+**Core Value:** Every MCP tool must be a faithful, complete representation of the corresponding Rails API endpoint
+
+## v1 Requirements
+
+Requirements for this milestone. Each maps to roadmap phases.
+
+### Schema Alignment
+
+- [ ] **SCHEMA-01**: All PO tool input Zod schemas match Rails PurchaseOrdersController strong params exactly
+- [ ] **SCHEMA-02**: All Invoice tool input Zod schemas match Rails InvoicesController strong params exactly
+- [ ] **SCHEMA-03**: All Supplier tool input Zod schemas match Rails SuppliersController strong params exactly
+- [ ] **SCHEMA-04**: All Budget tool input Zod schemas match Rails BudgetsController strong params exactly
+- [ ] **SCHEMA-05**: All Department tool input Zod schemas match Rails DepartmentsController strong params exactly
+- [ ] **SCHEMA-06**: All Company tool input Zod schemas match Rails CompaniesController strong params exactly
+- [ ] **SCHEMA-07**: All Webhook tool input Zod schemas match Rails WebhooksController strong params exactly
+- [ ] **SCHEMA-08**: All ApprovalFlow tool input Zod schemas match Rails ApprovalFlowsController strong params exactly
+- [ ] **SCHEMA-09**: All Payment tool input Zod schemas match Rails PaymentsController strong params exactly
+- [ ] **SCHEMA-10**: All TaxRate tool input Zod schemas match Rails TaxRatesController strong params exactly
+- [ ] **SCHEMA-11**: All Product tool input Zod schemas match Rails ProductsController strong params exactly
+- [ ] **SCHEMA-12**: All Comment tool input Zod schemas match Rails CommentsController strong params exactly
+
+### Type System
+
+- [ ] **TYPE-01**: PurchaseOrder has separate Summary (list) and Detail (get) TypeScript types matching respective serializers
+- [ ] **TYPE-02**: Invoice has separate Summary (list) and Detail (get) TypeScript types matching respective serializers
+- [ ] **TYPE-03**: Company has separate Summary (list) and Detail (get) TypeScript types matching respective serializers
+- [ ] **TYPE-04**: Webhook has separate Summary (list) and Detail (get) TypeScript types matching respective serializers
+- [ ] **TYPE-05**: ApprovalFlow has separate Summary (list) and Detail (get) TypeScript types matching respective serializers
+- [ ] **TYPE-06**: All response type fields match Rails ActiveModelSerializer attributes exactly (no missing, no invented)
+- [ ] **TYPE-07**: Conditional serializer fields typed as optional (e.g., authentication_token, third_party_id_mappings)
+
+### Infrastructure
+
+- [ ] **INFRA-01**: ApiClient error handler supports both `{ error: "..." }` and `{ errors: [...] }` response formats
+- [ ] **INFRA-02**: Shared Zod schemas extracted to src/schemas.ts (customFieldValues, lineItems, nested attributes)
+- [ ] **INFRA-03**: Non-paginated endpoints (departments, companies, currencies, employees, approvers) handle plain array responses correctly
+- [ ] **INFRA-04**: Paginated endpoints document meta fields (current_page, next_page, prev_page, total_pages, total_count)
+
+### Custom Fields Module
+
+- [ ] **CF-01**: User can list all custom fields for a company
+- [ ] **CF-02**: User can get a single custom field by ID
+- [ ] **CF-03**: User can create a custom field with all supported params (name, field_type, default_value, active, required, option_list, access_level, on_line_item, display_on_pdf, editable_after_approval, formula_builder, precision_display, archived)
+- [ ] **CF-04**: User can update an existing custom field
+- [ ] **CF-05**: User can delete a custom field
+- [ ] **CF-06**: User can update custom field positions (reorder)
+
+### Compliance Module
+
+- [ ] **COMP-01**: User can trigger a compliance check on a PO or invoice (async, 202 response)
+- [ ] **COMP-02**: User can trigger bulk compliance checks
+- [ ] **COMP-03**: User can get bulk check status
+- [ ] **COMP-04**: User can justify a compliance violation
+- [ ] **COMP-05**: User can generate a compliance memo (AI-generated)
+- [ ] **COMP-06**: User can list compliance scan history
+- [ ] **COMP-07**: User can get scan details by ID
+- [ ] **COMP-08**: User can create an evidence pack
+- [ ] **COMP-09**: User can get an evidence pack by ID
+- [ ] **COMP-10**: User can download an evidence pack
+
+### File Uploads Module
+
+- [ ] **UPLOAD-01**: User can upload a file to a purchase order
+- [ ] **UPLOAD-02**: User can upload a file to a comment
+- [ ] **UPLOAD-03**: User can check upload status by token
+
+### Missing PO Tools
+
+- [ ] **PO-01**: User can bulk save (create/update) purchase orders
+- [ ] **PO-02**: User can get auto-approvers list for a PO
+- [ ] **PO-03**: User can get available approvers list for a PO
+- [ ] **PO-04**: User can get approval flow link for a PO
+
+### Missing Invoice Tools
+
+- [ ] **INV-01**: User can list POs available to link to an invoice
+- [ ] **INV-02**: User can list PO items available to link to an invoice
+- [ ] **INV-03**: User can rerun approval flow on an invoice
+
+### Missing Product Tools
+
+- [ ] **PROD-01**: User can bulk create products
+- [ ] **PROD-02**: User can list product SKUs
+
+### Policies Module
+
+- [ ] **POL-01**: User can list policies
+- [ ] **POL-02**: User can get a policy by ID
+- [ ] **POL-03**: User can create a policy
+- [ ] **POL-04**: User can update a policy
+- [ ] **POL-05**: User can delete a policy
+- [ ] **POL-06**: User can list policy templates
+
+### Low-Priority Tools
+
+- [ ] **LOW-01**: User can check a supplier against SAM.gov database
+- [ ] **LOW-02**: User can list chat messages (V3 only)
+- [ ] **LOW-03**: User can create a chat message (V3 only)
+- [ ] **LOW-04**: User can delete a chat message (V3 only)
+- [ ] **LOW-05**: User can list pending supplier approval requests
+- [ ] **LOW-06**: User can create a digital invoice from upload (scan & create)
+- [ ] **LOW-07**: User can create an NPayment (multi-invoice/PO settlement)
+- [ ] **LOW-08**: User can get an NPayment by ID
+- [ ] **LOW-09**: User can list pending invites for a company
+- [ ] **LOW-10**: Missing approval flow tools (unpublish, version_details, bulk rerun)
+
+### Testing
+
+- [ ] **TEST-01**: Every modified tool has E2E tests validating request body shape against MockApiServer
+- [ ] **TEST-02**: Every new tool has E2E tests with MockApiServer mock routes
+- [ ] **TEST-03**: MockApiServer validates request bodies (not just routes)
+- [ ] **TEST-04**: Negative tests exist for invalid input (Zod rejection)
+- [ ] **TEST-05**: Build passes with zero TypeScript errors
+- [ ] **TEST-06**: All existing tests continue to pass (no regressions)
+
+## v2 Requirements
+
+Deferred to future release. Tracked but not in current roadmap.
+
+### Advanced Features
+
+- **ADV-01**: Real-time webhook event testing/simulation
+- **ADV-02**: Batch operations across multiple companies
+- **ADV-03**: Report generation tools (spend reports, budget summaries)
+- **ADV-04**: Automated schema drift detection (compare MCP schemas to Rails source)
+
+## Out of Scope
+
+Explicitly excluded. Documented to prevent scope creep.
+
+| Feature | Reason |
+|---------|--------|
+| Sign-in/Register API tools | Users must use pre-provisioned tokens; security risk |
+| Rails backend modifications | MCP must conform to backend, not vice versa |
+| UI/frontend changes | This is a CLI MCP server |
+| Breaking tool name changes | Must preserve backwards compatibility for MCP clients |
+| New runtime dependencies | Stack is locked; all work is manual schema authoring |
+| Zod v4 migration | MCP SDK has known bugs with Zod v4 schemas |
+| Exchange rate management | Handled via company settings, not standalone tools |
+| Billing/subscription admin | Not appropriate for MCP agent access |
+
+## Traceability
+
+Which phases cover which requirements. Updated during roadmap creation.
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| SCHEMA-01 through SCHEMA-12 | Phase 1 | Pending |
+| TYPE-01 through TYPE-07 | Phase 1 | Pending |
+| INFRA-01 through INFRA-04 | Phase 1 | Pending |
+| CF-01 through CF-06 | Phase 2 | Pending |
+| COMP-01 through COMP-10 | Phase 2 | Pending |
+| PO-01 through PO-04 | Phase 2 | Pending |
+| INV-01 through INV-03 | Phase 2 | Pending |
+| UPLOAD-01 through UPLOAD-03 | Phase 3 | Pending |
+| PROD-01 through PROD-02 | Phase 3 | Pending |
+| LOW-10 | Phase 3 | Pending |
+| POL-01 through POL-06 | Phase 4 | Pending |
+| LOW-01 through LOW-09 | Phase 4 | Pending |
+| TEST-01 through TEST-06 | Phase 5 | Pending |
+
+**Coverage:**
+- v1 requirements: 67 total
+- Mapped to phases: 67
+- Unmapped: 0 ✓
+
+---
+*Requirements defined: 2026-03-25*
+*Last updated: 2026-03-25 after initial definition*
