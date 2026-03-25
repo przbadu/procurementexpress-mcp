@@ -653,7 +653,25 @@ export interface NpaymentComment {
   updated_at: number;
 }
 
-// Approval Flows (ApprovalFlowSerializer / ApprovalFlowDetailSerializer)
+// Approval Flow List (ApprovalFlowSerializer)
+export interface ApprovalFlowSummary {
+  id: number;
+  name: string;
+  document_type: number;
+  self_approval_allowed: boolean;
+  company_id: number;
+  version_no: number;
+  archived: boolean;
+  status: string;
+  in_progress_entities_count: number;
+  completed_entities_count: number;
+  rejected_entities_count: number;
+  total_entities_count: number;
+  created_at: number;
+  updated_at: number;
+}
+
+// Approval Flow Detail (ApprovalFlowDetailSerializer)
 export interface ApprovalFlow {
   id: number;
   name: string;
@@ -722,6 +740,15 @@ export interface ApprovalEntity {
   updated_at: number;
 }
 
+// Approval Flow Version (from versions endpoint)
+export interface ApprovalFlowVersion {
+  id: number;
+  name: string;
+  created_at: number;
+  conditions_count: number;
+  steps_count: number;
+}
+
 // Tax Rates (TaxRateSerializer)
 export interface TaxRate {
   id: number;
@@ -747,7 +774,19 @@ export interface CombinedTaxRate {
   tax_amount?: number;
 }
 
-// Webhooks (WebhookSerializer / WebhookDetailSerializer)
+// Webhook List (WebhookSerializer)
+export interface WebhookSummary {
+  id: number;
+  name: string;
+  url: string;
+  archived: boolean;
+  event_type: string[];
+  tested: boolean;
+  response_code: number | null;
+  json_wrapper: string | null;
+}
+
+// Webhook Detail (WebhookDetailSerializer)
 export interface Webhook {
   id: number;
   name: string;
