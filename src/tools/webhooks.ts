@@ -2,7 +2,7 @@ import { z } from "zod";
 import type { ApiClient } from "../api-client.js";
 import type { Server } from "../tool-helpers.js";
 import { jsonResponse, withErrorHandling } from "../tool-helpers.js";
-import type { Webhook } from "../types.js";
+import type { Webhook, WebhookSummary } from "../types.js";
 
 export function registerWebhookTools(server: Server, apiClient: ApiClient): void {
   server.registerTool(
@@ -18,7 +18,7 @@ export function registerWebhookTools(server: Server, apiClient: ApiClient): void
       if (args.archived !== undefined) params.set("archived", String(args.archived));
       const query = params.toString();
       const path = `${apiClient.buildPath("/webhooks")}${query ? `?${query}` : ""}`;
-      const webhooks = await apiClient.get<Webhook[]>(path);
+      const webhooks = await apiClient.get<WebhookSummary[]>(path);
       return jsonResponse(webhooks);
     }),
   );
@@ -98,6 +98,7 @@ export function registerWebhookTools(server: Server, apiClient: ApiClient): void
         basic_auth_uname: z.string().optional().describe("Basic auth username"),
         basic_auth_pword: z.string().optional().describe("Basic auth password"),
         archived: z.boolean().optional().describe("Archive status"),
+        tested: z.boolean().optional().describe("Whether the webhook has been tested"),
         webhook_attributes: z
           .array(
             z.object({

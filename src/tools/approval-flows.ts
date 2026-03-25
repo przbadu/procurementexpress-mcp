@@ -2,7 +2,7 @@ import { z } from "zod";
 import type { ApiClient } from "../api-client.js";
 import type { Server } from "../tool-helpers.js";
 import { jsonResponse, withErrorHandling } from "../tool-helpers.js";
-import type { ApprovalFlow, PaginationMeta } from "../types.js";
+import type { ApprovalFlow, ApprovalFlowSummary, ApprovalFlowVersion, PaginationMeta } from "../types.js";
 
 const approvalConditionSchema = z.object({
   id: z.number().int().optional().describe("Condition ID (for updates)"),
@@ -10,6 +10,7 @@ const approvalConditionSchema = z.object({
   operator: z.enum(["equals", "not_equals", "greater_than", "less_than", "is_any_of", "is_none_of", "exists", "not_exists", "contains", "not_contains"]).describe("Condition operator"),
   value: z.string().describe("Condition value (single ID or comma-separated IDs for contains/not_contains)"),
   custom_field_id: z.number().int().optional().describe("Custom field ID (when property is custom_field_<id>)"),
+  approval_step_id: z.number().int().optional().describe("Approval step ID (set automatically for step-level conditions)"),
   _destroy: z.boolean().optional().describe("Set true to remove this condition on update"),
 });
 
@@ -46,7 +47,7 @@ export function registerApprovalFlowTools(server: Server, apiClient: ApiClient):
       const query = params.toString();
       const path = `${apiClient.buildPath("/approval_flows")}${query ? `?${query}` : ""}`;
       const result = await apiClient.get<{
-        approval_flows: ApprovalFlow[];
+        approval_flows: ApprovalFlowSummary[];
         meta: PaginationMeta;
       }>(path);
       return jsonResponse(result);
@@ -253,7 +254,7 @@ export function registerApprovalFlowTools(server: Server, apiClient: ApiClient):
       },
     },
     withErrorHandling(async (args) => {
-      const result = await apiClient.get(apiClient.buildPath(`/approval_flows/${args.id}/versions`));
+      const result = await apiClient.get<{ versions: ApprovalFlowVersion[]; meta: PaginationMeta }>(apiClient.buildPath(`/approval_flows/${args.id}/versions`));
       return jsonResponse(result);
     }),
   );
