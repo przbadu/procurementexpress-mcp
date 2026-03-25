@@ -3,12 +3,7 @@ import type { ApiClient } from "../api-client.js";
 import type { Server } from "../tool-helpers.js";
 import { jsonResponse, withErrorHandling } from "../tool-helpers.js";
 import type { Budget } from "../types.js";
-
-const customFieldValueSchema = z.object({
-  id: z.number().int().optional().describe("Custom field value ID (for updates)"),
-  value: z.string().describe("Custom field value"),
-  custom_field_id: z.number().int().describe("Custom field ID"),
-});
+import { customFieldValueSchema } from "../schemas.js";
 
 export function registerBudgetTools(server: Server, apiClient: ApiClient): void {
   server.registerTool(
@@ -67,6 +62,9 @@ export function registerBudgetTools(server: Server, apiClient: ApiClient): void 
         qbo_class: z.string().optional().describe("QuickBooks class"),
         approver_ids: z.array(z.number().int()).optional().describe("Approver user IDs"),
         department_ids: z.array(z.number().int()).optional().describe("Department IDs to associate"),
+        xero_id: z.string().optional().describe("Xero integration ID"),
+        zapier_id: z.string().optional().describe("Zapier integration ID"),
+        quickbooks_id: z.string().optional().describe("QuickBooks integration ID"),
         custom_field_values_attributes: z.array(customFieldValueSchema).optional().describe("Budget-level custom field values"),
       },
     },
@@ -94,6 +92,9 @@ export function registerBudgetTools(server: Server, apiClient: ApiClient): void 
         qbo_class: z.string().optional().describe("QuickBooks class"),
         approver_ids: z.array(z.number().int()).optional().describe("Approver user IDs"),
         department_ids: z.array(z.number().int()).optional().describe("Department IDs"),
+        xero_id: z.string().optional().describe("Xero integration ID"),
+        zapier_id: z.string().optional().describe("Zapier integration ID"),
+        quickbooks_id: z.string().optional().describe("QuickBooks integration ID"),
         custom_field_values_attributes: z.array(customFieldValueSchema).optional().describe("Budget-level custom field values"),
       },
     },
