@@ -80,4 +80,51 @@ export function registerProductTools(server: Server, apiClient: ApiClient): void
       return jsonResponse(product);
     }),
   );
+
+  server.registerTool(
+    "bulk_create_products",
+    {
+      description: "Create multiple products in a single call, all associated with one supplier.",
+      inputSchema: {
+        supplier_id: z.number().int().positive().describe("Supplier ID to associate all products with"),
+        products: z.array(z.object({
+          description: z.string().describe("Product description (required)"),
+          sku: z.string().optional().describe("SKU code"),
+          unit_price: z.number().optional().describe("Unit price"),
+        })).min(1).describe("Products to create (at least one required)"),
+      },
+    },
+    withErrorHandling(async (args) => {
+      const body = {
+        supplier_id: args.supplier_id,
+        product: {
+          product_item_attributes: args.products,
+        },
+      };
+      const result = await apiClient.post(apiClient.buildPath("/products/bulk_create"), body);
+      return jsonResponse(result);
+    }),
+  );
+
+  server.registerTool(
+    "list_product_skus",
+    {
+      description: "List all non-blank product SKUs. Optionally filter by text query, supplier, or archived status.",
+      inputSchema: {
+        query: z.string().optional().describe("Search text within SKU values"),
+        supplier_id: z.number().int().optional().describe("Filter by supplier ID"),
+        archived: z.boolean().optional().describe("Include archived products (default: false)"),
+      },
+    },
+    withErrorHandling(async (args) => {
+      const params = new URLSearchParams();
+      if (args.query) params.set("query", args.query);
+      if (args.supplier_id) params.set("supplier_id", String(args.supplier_id));
+      if (args.archived !== undefined) params.set("archived", String(args.archived));
+      const query = params.toString();
+      const path = `${apiClient.buildPath("/products/skus")}${query ? `?${query}` : ""}`;
+      const skus = await apiClient.get<string[]>(path);
+      return jsonResponse(skus);
+    }),
+  );
 }

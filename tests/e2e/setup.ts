@@ -307,7 +307,32 @@ export function registerStandardRoutes(mock: MockApiServer): void {
     },
   });
 
-  // Products (V1/V3)
+  // Products (V1/V3) — specific routes MUST be registered before the generic vPath("products") route
+  // to prevent the generic route from intercepting /products/skus and /products/bulk_create
+
+  // Product SKUs — GET /products/skus
+  mock.registerRoute({
+    method: "GET",
+    path: /^\/api\/v[13]\/products\/skus(\?.*)?$/,
+    handler: () => ({
+      status: 200,
+      body: ["WDG-001", "WDG-002", "GAD-001"],
+    }),
+  });
+
+  // Product Bulk Create — POST /products/bulk_create
+  mock.registerRoute({
+    method: "POST",
+    path: /^\/api\/v[13]\/products\/bulk_create$/,
+    handler: (_req, body) => {
+      const parsed = JSON.parse(body);
+      if (!parsed.supplier_id || !parsed.product?.product_item_attributes?.length) {
+        return { status: 422, body: { error: "Missing required fields" } };
+      }
+      return { status: 200, body: true };
+    },
+  });
+
   mock.registerRoute({
     method: "GET",
     path: vPath("products"),
