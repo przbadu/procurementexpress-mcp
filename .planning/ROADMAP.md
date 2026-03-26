@@ -82,7 +82,7 @@ Plans:
   3. A V3-authenticated agent can list, create, and delete chat messages on a PO (tool registration is gated on API version)
   4. An agent can list pending supplier approval requests and pending company invites
   5. An agent can create a digital invoice from a scanned document upload and create or retrieve an NPayment settlement
-**Plans:** 1/4 plans executed
+**Plans:** 3/4 plans executed
 Plans:
 - [x] 04-01-PLAN.md — Policies module: types + 6 CRUD tools + E2E tests
 - [x] 04-02-PLAN.md — SAM.gov check, supplier approvals, digital invoices: types + 3 tools + E2E tests
@@ -114,5 +114,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 1. Schema & Type Foundation | 7/7 | Complete |  |
 | 2. High-Priority New Tools | 5/5 | Complete   | 2026-03-26 |
 | 3. Medium-Priority New Tools | 2/2 | Complete   | 2026-03-26 |
-| 4. Low-Priority New Tools | 1/4 | In Progress|  |
+| 4. Low-Priority New Tools | 3/4 | In Progress|  |
 | 5. Test Coverage & Verification | 0/0 | Not started | - |
