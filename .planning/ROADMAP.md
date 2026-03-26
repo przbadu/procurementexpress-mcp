@@ -50,7 +50,13 @@ Plans:
   3. An agent can preview which approvers will be assigned to a PO before submitting it for approval
   4. An agent creating an invoice can call two tools to discover which POs and PO line items are available to link, then create the invoice with correct references
   5. An agent can retrieve the approval flow link for a PO to share with the supplier
-**Plans**: TBD
+**Plans:** 5 plans
+Plans:
+- [ ] 02-01-PLAN.md — Custom fields module: types + 6 tools + E2E tests
+- [ ] 02-02-PLAN.md — Compliance module: types + 10 tools + E2E tests
+- [ ] 02-03-PLAN.md — PO gap tools: 4 new tools + types + E2E tests
+- [ ] 02-04-PLAN.md — Invoice gap tools: 2 new tools + INV-03 test coverage
+- [ ] 02-05-PLAN.md — Wire new tool files into index.ts + integration verification
 
 ### Phase 3: Medium-Priority New Tools
 **Goal**: Document management and batch procurement workflows are available — agents can attach files, create invoices from scanned documents, bulk-create POs, and manage product catalogs
@@ -94,8 +100,8 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Schema & Type Foundation | 6/7 | In Progress (gap closure) |  |
-| 2. High-Priority New Tools | 0/0 | Not started | - |
+| 1. Schema & Type Foundation | 7/7 | Complete |  |
+| 2. High-Priority New Tools | 0/5 | Planned | - |
 | 3. Medium-Priority New Tools | 0/0 | Not started | - |
 | 4. Low-Priority New Tools | 0/0 | Not started | - |
 | 5. Test Coverage & Verification | 0/0 | Not started | - |
