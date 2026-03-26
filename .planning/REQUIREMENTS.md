@@ -63,9 +63,9 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### File Uploads Module
 
-- [ ] **UPLOAD-01**: User can upload a file to a purchase order
-- [ ] **UPLOAD-02**: User can upload a file to a comment
-- [ ] **UPLOAD-03**: User can check upload status by token
+- [x] **UPLOAD-01**: User can upload a file to a purchase order
+- [x] **UPLOAD-02**: User can upload a file to a comment
+- [x] **UPLOAD-03**: User can check upload status by token
 
 ### Missing PO Tools
 
@@ -82,8 +82,8 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Missing Product Tools
 
-- [ ] **PROD-01**: User can bulk create products
-- [ ] **PROD-02**: User can list product SKUs
+- [x] **PROD-01**: User can bulk create products
+- [x] **PROD-02**: User can list product SKUs
 
 ### Policies Module
 
@@ -105,7 +105,7 @@ Requirements for this milestone. Each maps to roadmap phases.
 - [ ] **LOW-07**: User can create an NPayment (multi-invoice/PO settlement)
 - [ ] **LOW-08**: User can get an NPayment by ID
 - [ ] **LOW-09**: User can list pending invites for a company
-- [ ] **LOW-10**: Missing approval flow tools (unpublish, version_details, bulk rerun)
+- [x] **LOW-10**: Missing approval flow tools (unpublish, version_details, bulk rerun)
 
 ### Testing
 
@@ -194,12 +194,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INV-01 | Phase 2 | Complete |
 | INV-02 | Phase 2 | Complete |
 | INV-03 | Phase 2 | Complete |
-| UPLOAD-01 | Phase 3 | Pending |
-| UPLOAD-02 | Phase 3 | Pending |
-| UPLOAD-03 | Phase 3 | Pending |
-| PROD-01 | Phase 3 | Pending |
-| PROD-02 | Phase 3 | Pending |
-| LOW-10 | Phase 3 | Pending |
+| UPLOAD-01 | Phase 3 | Complete |
+| UPLOAD-02 | Phase 3 | Complete |
+| UPLOAD-03 | Phase 3 | Complete |
+| PROD-01 | Phase 3 | Complete |
+| PROD-02 | Phase 3 | Complete |
+| LOW-10 | Phase 3 | Complete |
 | POL-01 | Phase 4 | Pending |
 | POL-02 | Phase 4 | Pending |
 | POL-03 | Phase 4 | Pending |

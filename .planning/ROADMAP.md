@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [ ] **Phase 1: Schema & Type Foundation** - Align all existing Zod schemas with Rails strong params and fix TypeScript response types
 - [x] **Phase 2: High-Priority New Tools** - Add 23 tools that complete core agent workflows (custom fields, compliance, PO/invoice gaps) (completed 2026-03-26)
-- [ ] **Phase 3: Medium-Priority New Tools** - Add file uploads, digital invoices, bulk operations, and approval flow additions
+- [x] **Phase 3: Medium-Priority New Tools** - Add file uploads, digital invoices, bulk operations, and approval flow additions (completed 2026-03-26)
 - [ ] **Phase 4: Low-Priority New Tools** - Add policies, SAM.gov, chat messages, supplier approvals, and payment terms
 - [ ] **Phase 5: Test Coverage & Verification** - Full E2E test suite for all new and modified tools
 
@@ -67,10 +67,10 @@ Plans:
   2. An agent can upload a file to a comment (e.g., supporting documentation on a PO discussion)
   3. An agent can bulk-create multiple products in a single call and retrieve the full SKU list
   4. An agent can call approval flow version details and unpublish/bulk-rerun flows via dedicated tools
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans complete
 Plans:
 - [x] 03-01-PLAN.md — Upload module: ApiClient.postMultipart(), Upload type, 3 upload tools + E2E tests
-- [ ] 03-02-PLAN.md — Product bulk tools, LOW-10 approval flow test coverage, wire uploads into index.ts
+- [x] 03-02-PLAN.md — Product bulk tools, LOW-10 approval flow test coverage, wire uploads into index.ts
 
 ### Phase 4: Low-Priority New Tools
 **Goal**: Narrow-audience capabilities are available for government procurement, V3 deployments, and companies with specific feature flags — without affecting the default V1 workflow
@@ -84,7 +84,7 @@ Plans:
   5. An agent can create a digital invoice from a scanned document upload and create or retrieve an NPayment settlement
 **Plans:** 2 plans
 Plans:
-- [ ] 03-01-PLAN.md — Upload module: ApiClient.postMultipart(), Upload type, 3 upload tools + E2E tests
+- [x] 03-01-PLAN.md — Upload module: ApiClient.postMultipart(), Upload type, 3 upload tools + E2E tests
 - [ ] 03-02-PLAN.md — Product bulk tools, LOW-10 approval flow test coverage, wire uploads into index.ts
 
 ### Phase 5: Test Coverage & Verification
@@ -111,6 +111,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 |-------|----------------|--------|-----------|
 | 1. Schema & Type Foundation | 7/7 | Complete |  |
 | 2. High-Priority New Tools | 5/5 | Complete   | 2026-03-26 |
-| 3. Medium-Priority New Tools | 1/2 | In Progress|  |
+| 3. Medium-Priority New Tools | 2/2 | Complete   | 2026-03-26 |
 | 4. Low-Priority New Tools | 0/0 | Not started | - |
 | 5. Test Coverage & Verification | 0/0 | Not started | - |
