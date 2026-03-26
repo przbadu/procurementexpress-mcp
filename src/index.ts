@@ -25,6 +25,7 @@ import { registerUserTools } from "./tools/users.js";
 import { registerUploadTools } from "./tools/uploads.js";
 import { registerWebhookTools } from "./tools/webhooks.js";
 import { registerPolicyTools } from "./tools/policies.js";
+import { registerDigitalInvoiceTools } from "./tools/digital-invoices.js";
 
 // Create API client and auth manager
 const apiClient = new ApiClient();
@@ -155,6 +156,7 @@ registerComplianceTools(server, apiClient);
 registerUploadTools(server, apiClient);
 registerChatMessageTools(server, apiClient);
 registerPolicyTools(server, apiClient);
+registerDigitalInvoiceTools(server, apiClient);
 
 // Auto-authenticate from environment variables if available
 if (isV1) {

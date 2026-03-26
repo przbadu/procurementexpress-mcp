@@ -1066,3 +1066,42 @@ export interface InviteUser {
   token: string;
   invited_by_name: string | null;
 }
+
+// SAM.gov (SamGovCheckSerializer)
+export interface SamGovCheck {
+  id: number;
+  supplier_id: number;
+  supplier_name: string;
+  uei: string | null;
+  status: string;
+  total_records: number;
+  has_active_exclusions: boolean;
+  exclusions: unknown[];
+  search_params: Record<string, unknown> | null;
+  checked_at: string | null;
+  fresh: boolean;
+  verification_pdf_url: string | null;
+  sam_gov_search_url: string | null;
+}
+
+export interface SamGovUnchecked {
+  status: "unchecked";
+  supplier_id: number;
+}
+
+// Supplier Approvals (SupplierApprovalSerializer)
+export interface SupplierApproval {
+  id: number;
+  name: string;
+  notes: string | null;
+  phone_number: string | null;
+  address: string | null;
+  email: string | null;
+  status: string;
+  requester: { id: number; email: string; name: string; roles: string[] } | Record<string, never>;
+  approver: { id: number; email: string; name: string; roles: string[] } | Record<string, never>;
+  created_at: number;
+  updated_at: number;
+  uei: string | null;
+  cage_code: string | null;
+}
