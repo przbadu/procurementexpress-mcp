@@ -3,6 +3,7 @@ import type { ApiClient } from "../api-client.js";
 import type { Server } from "../tool-helpers.js";
 import { jsonResponse, withErrorHandling } from "../tool-helpers.js";
 import type { Webhook, WebhookSummary } from "../types.js";
+import { destroyRequiresId } from "../schemas.js";
 
 export function registerWebhookTools(server: Server, apiClient: ApiClient): void {
   server.registerTool(
@@ -107,7 +108,7 @@ export function registerWebhookTools(server: Server, apiClient: ApiClient): void
               key: z.string().optional().describe("Attribute key"),
               value: z.string().optional().describe("Attribute value"),
               _destroy: z.boolean().optional().describe("Set true to remove"),
-            }),
+            }).superRefine(destroyRequiresId),
           )
           .optional()
           .describe("Custom webhook attributes"),

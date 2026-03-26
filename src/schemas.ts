@@ -1,6 +1,20 @@
 import { z } from "zod";
 
 /**
+ * Zod superRefine helper: rejects items where _destroy is true but id is missing.
+ * Rails nested_attributes silently discards _destroy without id — this catches the mistake at validation time.
+ */
+export function destroyRequiresId(item: { id?: number; _destroy?: boolean }, ctx: z.RefinementCtx) {
+  if (item._destroy === true && (item.id === undefined || item.id === null)) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "_destroy requires id — cannot destroy a record without specifying which one",
+      path: ["_destroy"],
+    });
+  }
+}
+
+/**
  * Shared Zod schema for custom field values.
  * Used by POs, invoices, budgets, and their line items.
  * Pattern: custom_field_values_attributes: [{ id?, value, custom_field_id }]
@@ -14,7 +28,7 @@ export const customFieldValueSchema = z.object({
 /**
  * Reusable _destroy mixin for nested Rails attributes.
  * Rails convention: id + _destroy: true removes the nested record on update.
- * Note: _destroy without id is rejected by Zod validation before reaching Rails.
+ * Note: _destroy without id is rejected by .superRefine() — see destroyRequiresId helper.
  */
 export const nestedDestroyMixin = {
   _destroy: z.boolean().optional().describe("Set true to remove this item on update"),
@@ -45,7 +59,7 @@ export const lineItemSchema = z.object({
   archived: z.boolean().optional().describe("Whether the line item is archived"),
   _destroy: z.boolean().optional().describe("Set true to remove this line item on update"),
   custom_field_values_attributes: z.array(customFieldValueSchema).optional().describe("Custom field values for this line item"),
-});
+}).superRefine(destroyRequiresId);
 
 /**
  * Shared Zod schema for invoice line items.
@@ -69,4 +83,4 @@ export const invoiceLineItemSchema = z.object({
   billable_status: z.string().optional().describe("Billable status for QuickBooks"),
   _destroy: z.boolean().optional().describe("Set true to remove this line item on update"),
   custom_field_values_attributes: z.array(customFieldValueSchema).optional().describe("Custom field values for this line item"),
-});
+}).superRefine(destroyRequiresId);

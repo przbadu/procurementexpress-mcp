@@ -3,6 +3,7 @@ import type { ApiClient } from "../api-client.js";
 import type { Server } from "../tool-helpers.js";
 import { jsonResponse, withErrorHandling } from "../tool-helpers.js";
 import type { ApprovalFlow, ApprovalFlowSummary, ApprovalFlowVersion, PaginationMeta } from "../types.js";
+import { destroyRequiresId } from "../schemas.js";
 
 const approvalConditionSchema = z.object({
   id: z.number().int().optional().describe("Condition ID (for updates)"),
@@ -12,7 +13,7 @@ const approvalConditionSchema = z.object({
   custom_field_id: z.number().int().optional().describe("Custom field ID (when property is custom_field_<id>)"),
   approval_step_id: z.number().int().optional().describe("Approval step ID (set automatically for step-level conditions)"),
   _destroy: z.boolean().optional().describe("Set true to remove this condition on update"),
-});
+}).superRefine(destroyRequiresId);
 
 const approvalStepSchema = z.object({
   id: z.number().int().optional().describe("Step ID (for updates)"),
@@ -21,7 +22,7 @@ const approvalStepSchema = z.object({
   approver_user_ids: z.array(z.number().int()).describe("User IDs of approvers for this step"),
   conditions: z.array(approvalConditionSchema).optional().describe("Step-level conditions (all must match for step to activate)"),
   _destroy: z.boolean().optional().describe("Set true to remove this step on update"),
-});
+}).superRefine(destroyRequiresId);
 
 export function registerApprovalFlowTools(server: Server, apiClient: ApiClient): void {
   server.registerTool(
