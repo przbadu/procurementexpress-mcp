@@ -102,7 +102,7 @@ Plans:
 **Plans:** 1/2 plans executed
 Plans:
 - [x] 05-01-PLAN.md — Zod rejection + negative tests for Group A (PO, invoices, budgets, departments, suppliers, companies, comments, custom-fields, compliance, approval-flows)
-- [ ] 05-02-PLAN.md — Zod rejection + negative tests for Group B (payments, webhooks, tax-rates, products, uploads, policies, chat-messages, digital-invoices, supplementary, users) + mock body validation + final verification
+- [x] 05-02-PLAN.md — Zod rejection + negative tests for Group B (payments, webhooks, tax-rates, products, uploads, policies, chat-messages, digital-invoices, supplementary, users) + mock body validation + final verification
 
 ## Progress
 
