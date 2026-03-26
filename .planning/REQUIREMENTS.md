@@ -87,12 +87,12 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Policies Module
 
-- [ ] **POL-01**: User can list policies
-- [ ] **POL-02**: User can get a policy by ID
-- [ ] **POL-03**: User can create a policy
-- [ ] **POL-04**: User can update a policy
-- [ ] **POL-05**: User can delete a policy
-- [ ] **POL-06**: User can list policy templates
+- [x] **POL-01**: User can list policies
+- [x] **POL-02**: User can get a policy by ID
+- [x] **POL-03**: User can create a policy
+- [x] **POL-04**: User can update a policy
+- [x] **POL-05**: User can delete a policy
+- [x] **POL-06**: User can list policy templates
 
 ### Low-Priority Tools
 
@@ -200,12 +200,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PROD-01 | Phase 3 | Complete |
 | PROD-02 | Phase 3 | Complete |
 | LOW-10 | Phase 3 | Complete |
-| POL-01 | Phase 4 | Pending |
-| POL-02 | Phase 4 | Pending |
-| POL-03 | Phase 4 | Pending |
-| POL-04 | Phase 4 | Pending |
-| POL-05 | Phase 4 | Pending |
-| POL-06 | Phase 4 | Pending |
+| POL-01 | Phase 4 | Complete |
+| POL-02 | Phase 4 | Complete |
+| POL-03 | Phase 4 | Complete |
+| POL-04 | Phase 4 | Complete |
+| POL-05 | Phase 4 | Complete |
+| POL-06 | Phase 4 | Complete |
 | LOW-01 | Phase 4 | Pending |
 | LOW-02 | Phase 4 | Pending |
 | LOW-03 | Phase 4 | Pending |
