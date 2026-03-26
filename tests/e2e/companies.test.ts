@@ -44,4 +44,14 @@ describe("Companies E2E", () => {
     expect(approvers).toHaveLength(1);
     expect(approvers[0].approval_limit).toBe(10000);
   });
+
+  it("list_pending_invites (LOW-09) — should return pending invites with email, status, and token", async () => {
+    const invites = await apiClient.get<any[]>(apiClient.buildPath("/companies/pending_invites"));
+    expect(invites).toHaveLength(1);
+    expect(invites[0].email).toBe("newuser@example.com");
+    expect(invites[0].status).toBe("pending");
+    expect(invites[0].token).toBe("inv_abc123");
+    expect(invites[0].roles).toContain("requester");
+    expect(invites[0].invited_by_name).toBe("Test User");
+  });
 });
