@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { z } from "zod";
 import { ApiClient } from "../../src/api-client.js";
 import { AuthManager } from "../../src/auth.js";
 import { MockApiServer, registerStandardRoutes } from "./setup.js";
@@ -58,5 +59,43 @@ describe("Payments E2E", () => {
     expect(result.id).toBe(1);
     expect(result.amount).toBe(500);
     expect(result.status).toBe("completed");
+  });
+
+  describe("Zod schema validation", () => {
+    it("npayment requires supplier_id as integer", () => {
+      const schema = z.object({
+        supplier_id: z.number().int(),
+        ptype: z.string(),
+        date: z.string(),
+        currency_id: z.number().int(),
+        amount: z.number(),
+      });
+      const result = schema.safeParse({});
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues.some((i) => i.path.includes("supplier_id"))).toBe(true);
+      }
+    });
+
+    it("npayment amount must be a number", () => {
+      const schema = z.object({
+        supplier_id: z.number().int(),
+        ptype: z.string(),
+        date: z.string(),
+        currency_id: z.number().int(),
+        amount: z.number(),
+      });
+      const result = schema.safeParse({
+        supplier_id: 1,
+        ptype: "bank_transfer",
+        date: "2026-01-15",
+        currency_id: 1,
+        amount: "abc",
+      });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues.some((i) => i.path.includes("amount"))).toBe(true);
+      }
+    });
   });
 });

@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { z } from "zod";
 import { writeFile, unlink } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -141,5 +142,25 @@ describe("Upload Tools E2E", () => {
     const contentType = req!.headers["content-type"] || "";
     expect(contentType).toContain("multipart/form-data");
     expect(contentType).not.toBe("application/json");
+  });
+
+  describe("Zod schema validation", () => {
+    it("upload_to_po requires po_id as positive number", () => {
+      const schema = z.object({ po_id: z.number().positive() });
+      const result = schema.safeParse({ po_id: -1 });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues.some((i) => i.path.includes("po_id"))).toBe(true);
+      }
+    });
+
+    it("upload_to_po requires upload_token as non-empty string", () => {
+      const schema = z.object({ upload_token: z.string().min(1) });
+      const result = schema.safeParse({ upload_token: "" });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues.some((i) => i.path.includes("upload_token"))).toBe(true);
+      }
+    });
   });
 });

@@ -513,6 +513,42 @@ export function registerStandardRoutes(mock: MockApiServer): void {
     }),
   });
 
+  mock.registerRoute({
+    method: "GET",
+    path: vPathWithId("tax_rates"),
+    handler: () => ({
+      status: 200,
+      body: { id: 1, name: "Standard VAT", value: 20, archived: false },
+    }),
+  });
+
+  mock.registerRoute({
+    method: "POST",
+    path: vPath("tax_rates"),
+    handler: (_req, body) => {
+      const parsed = JSON.parse(body);
+      if (!parsed.tax_rate?.name) {
+        return { status: 422, body: { error: "name is required" } };
+      }
+      return { status: 201, body: { id: 2, archived: false, ...parsed.tax_rate } };
+    },
+  });
+
+  mock.registerRoute({
+    method: "PUT",
+    path: vPathWithId("tax_rates"),
+    handler: (_req, body) => {
+      const parsed = JSON.parse(body);
+      return { status: 200, body: { id: 1, name: "Standard VAT", value: 20, archived: false, ...parsed.tax_rate } };
+    },
+  });
+
+  mock.registerRoute({
+    method: "DELETE",
+    path: vPathWithId("tax_rates"),
+    handler: () => ({ status: 204, body: {} }),
+  });
+
   // Webhooks (V1/V3)
   mock.registerRoute({
     method: "GET",
@@ -521,6 +557,86 @@ export function registerStandardRoutes(mock: MockApiServer): void {
       status: 200,
       body: [{ id: 1, name: "My Webhook", url: "https://example.com/hook", event_type: ["new_po"] }],
     }),
+  });
+
+  mock.registerRoute({
+    method: "GET",
+    path: vPathWithId("webhooks"),
+    handler: () => ({
+      status: 200,
+      body: { id: 1, name: "My Webhook", url: "https://example.com/hook", event_type: ["new_po"] },
+    }),
+  });
+
+  mock.registerRoute({
+    method: "POST",
+    path: vPath("webhooks"),
+    handler: (_req, body) => {
+      const parsed = JSON.parse(body);
+      if (!parsed.webhook?.url) {
+        return { status: 422, body: { error: "url is required" } };
+      }
+      return { status: 201, body: { id: 2, ...parsed.webhook } };
+    },
+  });
+
+  mock.registerRoute({
+    method: "PUT",
+    path: vPathWithId("webhooks"),
+    handler: (_req, body) => {
+      const parsed = JSON.parse(body);
+      return { status: 200, body: { id: 1, name: "My Webhook", url: "https://example.com/hook", event_type: ["new_po"], ...parsed.webhook } };
+    },
+  });
+
+  mock.registerRoute({
+    method: "DELETE",
+    path: vPathWithId("webhooks"),
+    handler: () => ({ status: 204, body: {} }),
+  });
+
+  // Payments — NPayments (V1/V3)
+  mock.registerRoute({
+    method: "GET",
+    path: vPath("npayments"),
+    handler: () => ({
+      status: 200,
+      body: [{ id: 1, amount: 500, status: "completed", supplier_id: 1 }],
+    }),
+  });
+
+  mock.registerRoute({
+    method: "GET",
+    path: vPathWithId("npayments"),
+    handler: () => ({
+      status: 200,
+      body: { id: 1, amount: 500, status: "completed", supplier_id: 1 },
+    }),
+  });
+
+  mock.registerRoute({
+    method: "POST",
+    path: vPath("npayments"),
+    handler: (_req, body) => {
+      const parsed = JSON.parse(body);
+      if (!parsed.npayment?.amount) {
+        return { status: 422, body: { error: "amount is required" } };
+      }
+      return { status: 201, body: { id: 1, status: "pending", supplier_id: parsed.npayment.supplier_id, amount: parsed.npayment.amount } };
+    },
+  });
+
+  // PO-level payments
+  mock.registerRoute({
+    method: "POST",
+    path: /^\/api\/v[13]\/purchase_orders\/\d+\/payments$/,
+    handler: (_req, body) => {
+      const parsed = JSON.parse(body);
+      if (!parsed.payment?.amount && !parsed.payment?.purchase_order_item_payments_attributes) {
+        return { status: 422, body: { error: "amount or item payments are required" } };
+      }
+      return { status: 201, body: { id: 1, amount: parsed.payment?.amount, status: "completed" } };
+    },
   });
 
   // Currencies (V1/V3)

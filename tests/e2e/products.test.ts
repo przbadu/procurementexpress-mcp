@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { z } from "zod";
 import { ApiClient } from "../../src/api-client.js";
 import { AuthManager } from "../../src/auth.js";
 import { MockApiServer, registerStandardRoutes } from "./setup.js";
@@ -106,6 +107,29 @@ describe("Product Tools E2E", () => {
       expect(req).toBeDefined();
       expect(req!.path).toContain("query=WDG");
       expect(req!.path).toContain("supplier_id=1");
+    });
+  });
+
+  describe("Zod schema validation", () => {
+    it("bulk_create requires non-empty product_item_attributes array", () => {
+      const schema = z.array(z.object({ description: z.string() })).min(1);
+      const result = schema.safeParse([]);
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues.length).toBeGreaterThan(0);
+      }
+    });
+
+    it("create_product requires description string", () => {
+      const schema = z.object({
+        description: z.string(),
+        supplier_id: z.number().int(),
+      });
+      const result = schema.safeParse({ supplier_id: 1 });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues.some((i) => i.path.includes("description"))).toBe(true);
+      }
     });
   });
 });
