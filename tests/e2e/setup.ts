@@ -548,6 +548,51 @@ export function registerStandardRoutes(mock: MockApiServer): void {
     }),
   });
 
+  // Approval Flow Actions (V1/V3) — LOW-10 tools: unpublish, version_details, rerun
+
+  // Unpublish Approval Flow — PATCH /approval_flows/:id/unpublish
+  mock.registerRoute({
+    method: "PATCH",
+    path: /^\/api\/v[13]\/approval_flows\/\d+\/unpublish$/,
+    handler: () => ({
+      status: 200,
+      body: { id: 1, name: "Default Flow", published: false },
+    }),
+  });
+
+  // Approval Flow Version Details — GET /approval_flows/:id/version_details?version_id=N
+  mock.registerRoute({
+    method: "GET",
+    path: /^\/api\/v[13]\/approval_flows\/\d+\/version_details(\?.*)?$/,
+    handler: () => ({
+      status: 200,
+      body: {
+        version_id: 1,
+        approval_flow_id: 1,
+        version_number: 1,
+        approval_steps: [],
+        created_at: "2026-01-01T00:00:00Z",
+      },
+    }),
+  });
+
+  // Rerun Approval Flows — POST /approval_flows/rerun_approval_flows
+  mock.registerRoute({
+    method: "POST",
+    path: /^\/api\/v[13]\/approval_flows\/rerun_approval_flows$/,
+    handler: (_req, body) => {
+      const parsed = JSON.parse(body);
+      return {
+        status: 200,
+        body: {
+          message: "Approval flows rerun initiated",
+          order_ids: parsed.order_ids || [],
+          invoice_ids: parsed.invoice_ids || [],
+        },
+      };
+    },
+  });
+
   // Chart of Accounts (V1/V3)
   mock.registerRoute({
     method: "GET",
