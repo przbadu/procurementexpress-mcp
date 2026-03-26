@@ -588,6 +588,23 @@ export function registerStandardRoutes(mock: MockApiServer): void {
     handler: () => ({ status: 200, body: { success: true } }),
   });
 
+  // PO Bulk Save (V1/V3)
+  mock.registerRoute({
+    method: "POST",
+    path: vPathSuffix("purchase_orders", "bulk_save"),
+    handler: (_req, body) => {
+      const parsed = JSON.parse(body);
+      const data = parsed.purchase_order?.data || [];
+      return {
+        status: 200,
+        body: {
+          done: data.map((item: { _id?: string }, idx: number) => ({ _id: item._id || String(idx), id: 100 + idx })),
+          failed: [],
+        },
+      };
+    },
+  });
+
   // Compliance (V1/V3)
 
   // Compliance Check — 202 async
@@ -790,6 +807,36 @@ export function registerStandardRoutes(mock: MockApiServer): void {
           updated_at: "2026-01-01T00:01:00Z",
         },
       },
+    }),
+  });
+
+  // PO Auto-Approvers List (V1/V3)
+  mock.registerRoute({
+    method: "GET",
+    path: /^\/api\/v[13]\/purchase_orders\/auto_approvers_list(\?.*)?$/,
+    handler: () => ({
+      status: 200,
+      body: [{ id: 2, email: "approver@example.com", name: "Auto Approver", approver_name: "Auto Approver" }],
+    }),
+  });
+
+  // PO Approver List (V1/V3)
+  mock.registerRoute({
+    method: "POST",
+    path: vPathSuffix("purchase_orders", "approver_list"),
+    handler: () => ({
+      status: 200,
+      body: [{ approval_flow_name: "Default Flow", approval_flow_id: 1, approvers: [{ name: "Approver One", email: "approver@example.com", id: 2 }] }],
+    }),
+  });
+
+  // PO Approval Flow Link (V1/V3) — matches /purchase_orders/:id/aff_link
+  mock.registerRoute({
+    method: "GET",
+    path: /^\/api\/v[13]\/purchase_orders\/[^/]+\/aff_link$/,
+    handler: () => ({
+      status: 200,
+      body: { aff_link: "https://app.procurementexpress.com/approval/abc123" }
     }),
   });
 
