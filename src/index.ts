@@ -24,6 +24,7 @@ import { registerTaxRateTools } from "./tools/tax-rates.js";
 import { registerUserTools } from "./tools/users.js";
 import { registerUploadTools } from "./tools/uploads.js";
 import { registerWebhookTools } from "./tools/webhooks.js";
+import { registerPolicyTools } from "./tools/policies.js";
 
 // Create API client and auth manager
 const apiClient = new ApiClient();
@@ -153,6 +154,7 @@ registerCustomFieldTools(server, apiClient);
 registerComplianceTools(server, apiClient);
 registerUploadTools(server, apiClient);
 registerChatMessageTools(server, apiClient);
+registerPolicyTools(server, apiClient);
 
 // Auto-authenticate from environment variables if available
 if (isV1) {

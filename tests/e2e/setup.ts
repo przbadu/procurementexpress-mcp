@@ -991,4 +991,157 @@ export function registerStandardRoutes(mock: MockApiServer): void {
       };
     },
   });
+
+  // Chat Messages (V3 only — mock routes are version-agnostic for test flexibility)
+
+  // List chat messages — GET /chat_messages
+  mock.registerRoute({
+    method: "GET",
+    path: /^\/api\/v[13]\/chat_messages(\?.*)?$/,
+    handler: () => ({
+      status: 200,
+      body: {
+        messages: [
+          { id: 1, body: "Hello, can you confirm delivery?", created_at: "2026-01-01T00:00:00Z", creator: { id: 1, name: "Test User", type: "Employee", employer: { id: 100, name: "Test Company", type: "Company" } } },
+          { id: 2, body: "Yes, delivery is on schedule.", created_at: "2026-01-01T01:00:00Z", creator: { id: 50, name: "Supplier Contact", type: "SupplierContact", employer: { id: 1, name: "Acme Corp", type: "Supplier" } } },
+        ],
+        next_cursor: null,
+      },
+    }),
+  });
+
+  // Create chat message — POST /chat_messages
+  mock.registerRoute({
+    method: "POST",
+    path: /^\/api\/v[13]\/chat_messages$/,
+    handler: (_req, body) => {
+      const parsed = JSON.parse(body);
+      if (!parsed.document_type || !parsed.document_id || !parsed.supplier_id || !parsed.body) {
+        return { status: 422, body: { error: "Missing required params" } };
+      }
+      return {
+        status: 201,
+        body: { id: 3, body: parsed.body, created_at: "2026-01-02T00:00:00Z", creator: { id: 1, name: "Test User", type: "Employee", employer: { id: 100, name: "Test Company", type: "Company" } } },
+      };
+    },
+  });
+
+  // Delete chat message — DELETE /chat_messages/:id
+  mock.registerRoute({
+    method: "DELETE",
+    path: /^\/api\/v[13]\/chat_messages\/\d+(\?.*)?$/,
+    handler: () => ({ status: 204, body: {} }),
+  });
+
+  // NPayments (V1/V3) — for LOW-07, LOW-08 test coverage
+
+  // Create NPayment — POST /npayments
+  mock.registerRoute({
+    method: "POST",
+    path: vPath("npayments"),
+    handler: (_req, body) => {
+      const parsed = JSON.parse(body);
+      return {
+        status: 201,
+        body: { id: 1, ...parsed.npayment, status: "pending", created_at: "2026-01-01T00:00:00Z" },
+      };
+    },
+  });
+
+  // Get NPayment — GET /npayments/:id
+  mock.registerRoute({
+    method: "GET",
+    path: vPathWithId("npayments"),
+    handler: () => ({
+      status: 200,
+      body: { id: 1, amount: 500, status: "completed", payment_method: "bank_transfer", created_at: "2026-01-01T00:00:00Z" },
+    }),
+  });
+
+  // Pending Invites — GET /companies/pending_invites
+  mock.registerRoute({
+    method: "GET",
+    path: vPathSuffix("companies", "pending_invites"),
+    handler: () => ({
+      status: 200,
+      body: [
+        { id: 1, email: "newuser@example.com", name: null, roles: ["requester"], department_ids: [1], approval_limit: null, status: "pending", created_at: 1704067200, token: "inv_abc123", invited_by_name: "Test User" },
+      ],
+    }),
+  });
+
+  // Policies (V1/V3)
+
+  // List policies — GET /policies (paginated)
+  mock.registerRoute({
+    method: "GET",
+    path: /^\/api\/v[13]\/policies(\?.*)?$/,
+    handler: () => ({
+      status: 200,
+      body: {
+        policies: [
+          { id: 1, name: "Budget Policy", description: "Enforce budget limits", status: "active", archived: false, category: "spending", scope: "company", budget_ids: [1], min_amount: null, max_amount: 10000, required_attachments: [], min_quotes_required: null, source_template_id: null, versions_count: 2, created_at: 1704067200, updated_at: 1704067200, budgets: [{ id: 1, name: "Q1 Budget" }] },
+        ],
+        meta: { current_page: 1, next_page: null, prev_page: null, total_pages: 1, total_count: 1 },
+      },
+    }),
+  });
+
+  // Get policy — GET /policies/:id
+  mock.registerRoute({
+    method: "GET",
+    path: vPathWithId("policies"),
+    handler: () => ({
+      status: 200,
+      body: {
+        policy: { id: 1, name: "Budget Policy", description: "Enforce budget limits", status: "active", archived: false, category: "spending", scope: "company", budget_ids: [1], min_amount: null, max_amount: 10000, required_attachments: [], min_quotes_required: null, source_template_id: null, versions_count: 2, created_at: 1704067200, updated_at: 1704067200, budgets: [{ id: 1, name: "Q1 Budget" }], content: "All purchases over $10,000 require 3 quotes." },
+        versions: [{ id: 1, item_type: "Policy", item_id: 1, event: "create", whodunnit: "1", whodunnit_name: "Test User", object: null, object_changes: {}, created_at: "2026-01-01T00:00:00Z" }],
+      },
+    }),
+  });
+
+  // Create policy — POST /policies
+  mock.registerRoute({
+    method: "POST",
+    path: vPath("policies"),
+    handler: (_req, body) => {
+      const parsed = JSON.parse(body);
+      if (!parsed.policy?.name) {
+        return { status: 422, body: { error: "Name is required" } };
+      }
+      return { status: 201, body: { id: 10, ...parsed.policy, archived: false, budget_ids: parsed.policy.budget_ids || [], required_attachments: parsed.policy.required_attachments || [], versions_count: 0, created_at: 1704067200, updated_at: 1704067200, budgets: [] } };
+    },
+  });
+
+  // Update policy — PATCH /policies/:id
+  mock.registerRoute({
+    method: "PATCH",
+    path: vPathWithId("policies"),
+    handler: (_req, body) => {
+      const parsed = JSON.parse(body);
+      return { status: 200, body: { id: 1, name: "Updated Policy", ...parsed.policy } };
+    },
+  });
+
+  // Delete policy — DELETE /policies/:id
+  mock.registerRoute({
+    method: "DELETE",
+    path: vPathWithId("policies"),
+    handler: () => ({ status: 204, body: {} }),
+  });
+
+  // Policy Templates — GET /policy_templates
+  mock.registerRoute({
+    method: "GET",
+    path: vPath("policy_templates"),
+    handler: () => ({
+      status: 200,
+      body: {
+        templates: [
+          { id: 1, name: "Sole Source Policy", description: "Template for sole source justification", category: "sourcing", content: "When a single supplier..." },
+          { id: 2, name: "Travel Policy", description: "Template for travel expenses", category: "travel", content: "Travel expenses must..." },
+        ],
+      },
+    }),
+  });
 }
