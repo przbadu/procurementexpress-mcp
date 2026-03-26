@@ -38,7 +38,7 @@ Plans:
 - [x] 01-04-PLAN.md — Company, Supplier, Budget, Department schema alignment
 - [x] 01-05-PLAN.md — Webhook, ApprovalFlow, Payment, TaxRate, Product, Comment schema alignment
 - [x] 01-06-PLAN.md — Integration verification + human review checkpoint
-- [ ] 01-07-PLAN.md — Gap closure: _destroy+id cross-field validation (Success Criterion 4)
+- [x] 01-07-PLAN.md — Gap closure: _destroy+id cross-field validation (Success Criterion 4)
 
 ### Phase 2: High-Priority New Tools
 **Goal**: Core agent workflows are unblocked — agents can discover custom fields, preview approvers, link invoices to POs, check compliance, and communicate approval flow links
