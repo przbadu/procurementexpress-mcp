@@ -471,6 +471,23 @@ export interface PurchaseOrder {
   has_global_policies?: boolean;
 }
 
+// Bulk Save Result (from PurchaseOrdersController#bulk_save)
+export interface BulkSaveResult {
+  done: Array<{ _id: string; id: number }>;
+  failed: Array<{ _id: string; errors: string[] }>;
+}
+
+// Approver Group (from PurchaseOrdersController#approver_list)
+export interface PurchaseOrderApproverGroup {
+  approval_flow_name: string;
+  approval_flow_id: number;
+  approvers: Array<{
+    name: string;
+    email: string;
+    id: number;
+  }>;
+}
+
 // Approvers with flow
 export interface ApproverWithFlow {
   status: string;
