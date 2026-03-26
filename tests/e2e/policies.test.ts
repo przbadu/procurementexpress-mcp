@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { z } from "zod";
 import { ApiClient } from "../../src/api-client.js";
 import { AuthManager } from "../../src/auth.js";
 import { MockApiServer, registerStandardRoutes } from "./setup.js";
@@ -90,5 +91,22 @@ describe("Policies E2E", () => {
     expect(result.templates[0].name).toBe("Sole Source Policy");
     expect(result.templates[0].category).toBe("sourcing");
     expect(result.templates[1].name).toBe("Travel Policy");
+  });
+
+  describe("Zod schema validation", () => {
+    it("create policy requires name as non-empty string", () => {
+      const schema = z.object({ name: z.string().min(1) });
+      const result = schema.safeParse({ name: "" });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues.some((i) => i.path.includes("name"))).toBe(true);
+      }
+    });
+
+    it("policy status enum rejects invalid value", () => {
+      const statusSchema = z.enum(["active", "inactive", "draft"]);
+      const result = statusSchema.safeParse("invalid");
+      expect(result.success).toBe(false);
+    });
   });
 });

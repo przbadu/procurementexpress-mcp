@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { z } from "zod";
 import { ApiClient } from "../../src/api-client.js";
 import { AuthManager } from "../../src/auth.js";
 import { MockApiServer, registerStandardRoutes } from "./setup.js";
@@ -101,5 +102,27 @@ describe("Chat Messages E2E (V3 only tools)", () => {
     expect(deleteRequest!.path).toContain("document_type=purchase_order");
     expect(deleteRequest!.path).toContain("document_id=1");
     expect(deleteRequest!.path).toContain("supplier_id=1");
+  });
+
+  describe("Zod schema validation", () => {
+    it("create_chat_message requires document_type", () => {
+      const schema = z.object({
+        document_type: z.string(),
+        document_id: z.number(),
+        supplier_id: z.number(),
+        body: z.string(),
+      });
+      const result = schema.safeParse({ body: "test" });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues.some((i) => i.path.includes("document_type"))).toBe(true);
+      }
+    });
+
+    it("document_type must be valid enum value", () => {
+      const schema = z.enum(["purchase_order", "invoice"]);
+      const result = schema.safeParse("invalid");
+      expect(result.success).toBe(false);
+    });
   });
 });

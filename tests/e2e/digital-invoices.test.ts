@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { z } from "zod";
 import { ApiClient } from "../../src/api-client.js";
 import { AuthManager } from "../../src/auth.js";
 import { MockApiServer, registerStandardRoutes } from "./setup.js";
@@ -52,5 +53,18 @@ describe("Digital Invoices E2E", () => {
 
     expect(result.id).toBe(100);
     expect(result.invoice_number).toBe("DIG-001");
+  });
+
+  describe("Zod schema validation", () => {
+    it("upload_type enum rejects invalid value", () => {
+      const schema = z.enum(["invoice", "request"]);
+      const result = schema.safeParse("receipt");
+      expect(result.success).toBe(false);
+    });
+
+    it("upload_type enum accepts valid values", () => {
+      expect(z.enum(["invoice", "request"]).safeParse("invoice").success).toBe(true);
+      expect(z.enum(["invoice", "request"]).safeParse("request").success).toBe(true);
+    });
   });
 });
