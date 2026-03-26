@@ -82,10 +82,12 @@ Plans:
   3. A V3-authenticated agent can list, create, and delete chat messages on a PO (tool registration is gated on API version)
   4. An agent can list pending supplier approval requests and pending company invites
   5. An agent can create a digital invoice from a scanned document upload and create or retrieve an NPayment settlement
-**Plans:** 2 plans
+**Plans:** 4 plans
 Plans:
-- [x] 03-01-PLAN.md — Upload module: ApiClient.postMultipart(), Upload type, 3 upload tools + E2E tests
-- [ ] 03-02-PLAN.md — Product bulk tools, LOW-10 approval flow test coverage, wire uploads into index.ts
+- [ ] 04-01-PLAN.md — Policies module: types + 6 CRUD tools + E2E tests
+- [ ] 04-02-PLAN.md — SAM.gov check, supplier approvals, digital invoices: types + 3 tools + E2E tests
+- [ ] 04-03-PLAN.md — V3-only chat messages + E2E tests for existing NPayment and pending invite tools
+- [ ] 04-04-PLAN.md — Wire new tool files into index.ts (V3-gated chat messages) + integration verification
 
 ### Phase 5: Test Coverage & Verification
 **Goal**: Every tool — new and modified — has E2E test coverage that validates request shape against MockApiServer, and the full suite passes with zero TypeScript errors
@@ -99,8 +101,8 @@ Plans:
   5. At least one Zod rejection test exists per tool group (invalid input returns error without reaching Rails)
 **Plans:** 2 plans
 Plans:
-- [ ] 03-01-PLAN.md — Upload module: ApiClient.postMultipart(), Upload type, 3 upload tools + E2E tests
-- [ ] 03-02-PLAN.md — Product bulk tools, LOW-10 approval flow test coverage, wire uploads into index.ts
+- [ ] 05-01-PLAN.md — Comprehensive E2E test coverage for all tool groups
+- [ ] 05-02-PLAN.md — Negative tests, Zod rejection tests, final verification
 
 ## Progress
 
@@ -112,5 +114,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 1. Schema & Type Foundation | 7/7 | Complete |  |
 | 2. High-Priority New Tools | 5/5 | Complete   | 2026-03-26 |
 | 3. Medium-Priority New Tools | 2/2 | Complete   | 2026-03-26 |
-| 4. Low-Priority New Tools | 0/0 | Not started | - |
+| 4. Low-Priority New Tools | 0/4 | In progress | - |
 | 5. Test Coverage & Verification | 0/0 | Not started | - |
