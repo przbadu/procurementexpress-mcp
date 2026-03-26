@@ -8,6 +8,7 @@ import { AuthManager } from "./auth.js";
 import { jsonResponse, textResponse, withErrorHandling } from "./tool-helpers.js";
 import { registerApprovalFlowTools } from "./tools/approval-flows.js";
 import { registerBudgetTools } from "./tools/budgets.js";
+import { registerChatMessageTools } from "./tools/chat-messages.js";
 import { registerComplianceTools } from "./tools/compliance.js";
 import { registerCustomFieldTools } from "./tools/custom-fields.js";
 import { registerCommentTools } from "./tools/comments.js";
@@ -151,6 +152,7 @@ registerSupplementaryTools(server, apiClient);
 registerCustomFieldTools(server, apiClient);
 registerComplianceTools(server, apiClient);
 registerUploadTools(server, apiClient);
+registerChatMessageTools(server, apiClient);
 
 // Auto-authenticate from environment variables if available
 if (isV1) {
