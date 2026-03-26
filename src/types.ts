@@ -367,7 +367,7 @@ export interface Upload {
   file_file_name: string;
   file_content_type: string;
   url: string;
-  upload_token: string;
+  upload_token: string | null;
 }
 
 // Purchase Order List (PurchaseOrderSerializer)

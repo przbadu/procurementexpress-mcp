@@ -21,6 +21,7 @@ import { registerSupplementaryTools } from "./tools/supplementary.js";
 import { registerSupplierTools } from "./tools/suppliers.js";
 import { registerTaxRateTools } from "./tools/tax-rates.js";
 import { registerUserTools } from "./tools/users.js";
+import { registerUploadTools } from "./tools/uploads.js";
 import { registerWebhookTools } from "./tools/webhooks.js";
 
 // Create API client and auth manager
@@ -149,6 +150,7 @@ registerWebhookTools(server, apiClient);
 registerSupplementaryTools(server, apiClient);
 registerCustomFieldTools(server, apiClient);
 registerComplianceTools(server, apiClient);
+registerUploadTools(server, apiClient);
 
 // Auto-authenticate from environment variables if available
 if (isV1) {
