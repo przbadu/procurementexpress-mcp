@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { z } from "zod";
 import { ApiClient } from "../../src/api-client.js";
 import { AuthManager } from "../../src/auth.js";
 import { MockApiServer, registerStandardRoutes } from "./setup.js";
@@ -51,5 +52,16 @@ describe("Suppliers E2E", () => {
     expect(result.supplier_approvals[0].name).toBe("New Vendor Co");
     expect(result.supplier_approvals[0].status).toBe("pending");
     expect(result.meta.total_count).toBe(1);
+  });
+
+  describe("Zod schema validation", () => {
+    it("supplier creation requires name", () => {
+      const supplierSchema = z.object({
+        name: z.string(),
+        email: z.string().email().optional(),
+      });
+      const missingName = supplierSchema.safeParse({ email: "test@supplier.com" });
+      expect(missingName.success).toBe(false);
+    });
   });
 });

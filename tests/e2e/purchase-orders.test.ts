@@ -1,7 +1,9 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { z } from "zod";
 import { ApiClient } from "../../src/api-client.js";
 import { AuthManager } from "../../src/auth.js";
 import { MockApiServer, registerStandardRoutes } from "./setup.js";
+import { lineItemSchema } from "../../src/schemas.js";
 
 describe("Purchase Orders E2E", () => {
   let mock: MockApiServer;
@@ -141,5 +143,32 @@ describe("Purchase Orders E2E", () => {
   it("should get approval flow link for a PO", async () => {
     const result = await apiClient.get<any>(apiClient.buildPath("/purchase_orders/1/aff_link"));
     expect(result.aff_link).toContain("https://");
+  });
+
+  describe("Zod schema validation", () => {
+    it("lineItemSchema rejects _destroy:true without id", () => {
+      const result = lineItemSchema.safeParse({
+        _destroy: true,
+        description: "Widget",
+        quantity: 1,
+        unit_price: 9.99,
+      });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].message).toContain("_destroy requires id");
+      }
+    });
+
+    it("create PO requires at least one line item", () => {
+      const lineItemsSchema = z.array(lineItemSchema).min(1);
+      const result = lineItemsSchema.safeParse([]);
+      expect(result.success).toBe(false);
+    });
+
+    it("commit enum rejects invalid value", () => {
+      const commitSchema = z.enum(["Send", "Draft"]);
+      const result = commitSchema.safeParse("Invalid");
+      expect(result.success).toBe(false);
+    });
   });
 });

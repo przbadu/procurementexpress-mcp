@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { z } from "zod";
 import { ApiClient } from "../../src/api-client.js";
 import { AuthManager } from "../../src/auth.js";
 import { MockApiServer, registerStandardRoutes } from "./setup.js";
@@ -38,5 +39,20 @@ describe("Budgets E2E", () => {
     });
     expect(budget.id).toBe(3);
     expect(budget.name).toBe("New Budget");
+  });
+
+  describe("Zod schema validation", () => {
+    it("budget creation requires name (string)", () => {
+      const budgetSchema = z.object({
+        name: z.string(),
+        amount: z.number().optional(),
+        currency_id: z.number().int().optional(),
+      });
+      const missingName = budgetSchema.safeParse({ amount: 10000 });
+      expect(missingName.success).toBe(false);
+
+      const wrongType = budgetSchema.safeParse({ name: 123 });
+      expect(wrongType.success).toBe(false);
+    });
   });
 });

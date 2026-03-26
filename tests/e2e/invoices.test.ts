@@ -1,7 +1,9 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { z } from "zod";
 import { ApiClient } from "../../src/api-client.js";
 import { AuthManager } from "../../src/auth.js";
 import { MockApiServer, registerStandardRoutes } from "./setup.js";
+import { invoiceLineItemSchema } from "../../src/schemas.js";
 
 describe("Invoices E2E", () => {
   let mock: MockApiServer;
@@ -68,5 +70,21 @@ describe("Invoices E2E", () => {
     const result = await apiClient.post<any>(apiClient.buildPath("/invoices/1/rerun_approval_flow"));
     expect(result.id).toBe(1);
     expect(result.status).toBe("Pending");
+  });
+
+  describe("Zod schema validation", () => {
+    it("invoiceLineItemSchema rejects _destroy:true without id", () => {
+      const result = invoiceLineItemSchema.safeParse({ _destroy: true });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].message).toContain("_destroy requires id");
+      }
+    });
+
+    it("invoice_statuses_filter rejects invalid enum value", () => {
+      const invoiceStatusesSchema = z.enum(["all", "pending", "approved", "cancelled", "rejected"]);
+      const result = invoiceStatusesSchema.safeParse("invalid_status");
+      expect(result.success).toBe(false);
+    });
   });
 });

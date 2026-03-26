@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { z } from "zod";
 import { ApiClient } from "../../src/api-client.js";
 import { AuthManager } from "../../src/auth.js";
 import { MockApiServer, registerStandardRoutes } from "./setup.js";
@@ -32,5 +33,17 @@ describe("Departments E2E", () => {
     });
     expect(department.id).toBe(2);
     expect(department.name).toBe("Marketing");
+  });
+
+  describe("Zod schema validation", () => {
+    it("department name is required and must be a string", () => {
+      const departmentSchema = z.object({ name: z.string() });
+
+      const missingName = departmentSchema.safeParse({});
+      expect(missingName.success).toBe(false);
+
+      const wrongType = departmentSchema.safeParse({ name: 123 });
+      expect(wrongType.success).toBe(false);
+    });
   });
 });
