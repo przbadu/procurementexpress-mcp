@@ -1026,6 +1026,36 @@ export function registerStandardRoutes(mock: MockApiServer): void {
     },
   });
 
+  // SAM.gov Check — POST /sam_gov/check
+  mock.registerRoute({
+    method: "POST",
+    path: vPath("sam_gov/check"),
+    handler: (_req, body) => {
+      const parsed = JSON.parse(body);
+      if (!parsed.supplier_id) {
+        return { status: 422, body: { error: "supplier_id is required" } };
+      }
+      return {
+        status: 200,
+        body: {
+          id: 1,
+          supplier_id: parsed.supplier_id,
+          supplier_name: "Acme Corp",
+          uei: "ABC123DEF456",
+          status: "active",
+          total_records: 1,
+          has_active_exclusions: false,
+          exclusions: [],
+          search_params: { name: "Acme Corp" },
+          checked_at: "2026-01-01T00:00:00Z",
+          fresh: true,
+          verification_pdf_url: "https://sam.gov/verify/abc123.pdf",
+          sam_gov_search_url: "https://sam.gov/search?uei=ABC123DEF456",
+        },
+      };
+    },
+  });
+
   // Delete chat message — DELETE /chat_messages/:id
   mock.registerRoute({
     method: "DELETE",
@@ -1067,6 +1097,35 @@ export function registerStandardRoutes(mock: MockApiServer): void {
       body: [
         { id: 1, email: "newuser@example.com", name: null, roles: ["requester"], department_ids: [1], approval_limit: null, status: "pending", created_at: 1704067200, token: "inv_abc123", invited_by_name: "Test User" },
       ],
+    }),
+  });
+
+  // Supplier Approvals — GET /supplier_approvals
+  mock.registerRoute({
+    method: "GET",
+    path: /^\/api\/v[13]\/supplier_approvals(\?.*)?$/,
+    handler: () => ({
+      status: 200,
+      body: {
+        supplier_approvals: [
+          {
+            id: 1,
+            name: "New Vendor Co",
+            notes: "Pending review",
+            phone_number: null,
+            address: null,
+            email: "vendor@example.com",
+            status: "pending",
+            requester: { id: 1, email: "test@example.com", name: "Test User", roles: ["companyadmin"] },
+            approver: {},
+            created_at: 1704067200,
+            updated_at: 1704067200,
+            uei: null,
+            cage_code: null,
+          },
+        ],
+        meta: { current_page: 1, next_page: null, prev_page: null, total_pages: 1, total_count: 1 },
+      },
     }),
   });
 
@@ -1143,5 +1202,20 @@ export function registerStandardRoutes(mock: MockApiServer): void {
         ],
       },
     }),
+  });
+
+  // Digital Invoices — POST /digital_invoices (multipart)
+  mock.registerRoute({
+    method: "POST",
+    path: /^\/api\/v[13]\/digital_invoices$/,
+    handler: (_req, body) => {
+      if (!body.includes("file")) {
+        return { status: 422, body: { error: "File is required" } };
+      }
+      return {
+        status: 201,
+        body: { id: 100, invoice_number: "DIG-001", gross_amount: 500, currency_id: 1, status: "Draft" },
+      };
+    },
   });
 }
