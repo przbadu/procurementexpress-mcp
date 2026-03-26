@@ -102,6 +102,9 @@ if (isV1) {
       );
     }),
   );
+
+  // V3-only tools
+  registerChatMessageTools(server, apiClient);
 }
 
 server.registerTool(
@@ -154,7 +157,6 @@ registerSupplementaryTools(server, apiClient);
 registerCustomFieldTools(server, apiClient);
 registerComplianceTools(server, apiClient);
 registerUploadTools(server, apiClient);
-registerChatMessageTools(server, apiClient);
 registerPolicyTools(server, apiClient);
 registerDigitalInvoiceTools(server, apiClient);
 
