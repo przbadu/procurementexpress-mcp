@@ -67,9 +67,9 @@ Plans:
   2. An agent can upload a file to a comment (e.g., supporting documentation on a PO discussion)
   3. An agent can bulk-create multiple products in a single call and retrieve the full SKU list
   4. An agent can call approval flow version details and unpublish/bulk-rerun flows via dedicated tools
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 Plans:
-- [ ] 03-01-PLAN.md — Upload module: ApiClient.postMultipart(), Upload type, 3 upload tools + E2E tests
+- [x] 03-01-PLAN.md — Upload module: ApiClient.postMultipart(), Upload type, 3 upload tools + E2E tests
 - [ ] 03-02-PLAN.md — Product bulk tools, LOW-10 approval flow test coverage, wire uploads into index.ts
 
 ### Phase 4: Low-Priority New Tools
@@ -111,6 +111,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 |-------|----------------|--------|-----------|
 | 1. Schema & Type Foundation | 7/7 | Complete |  |
 | 2. High-Priority New Tools | 5/5 | Complete   | 2026-03-26 |
-| 3. Medium-Priority New Tools | 0/0 | Not started | - |
+| 3. Medium-Priority New Tools | 1/2 | In Progress|  |
 | 4. Low-Priority New Tools | 0/0 | Not started | - |
 | 5. Test Coverage & Verification | 0/0 | Not started | - |
