@@ -67,7 +67,10 @@ Plans:
   2. An agent can upload a file to a comment (e.g., supporting documentation on a PO discussion)
   3. An agent can bulk-create multiple products in a single call and retrieve the full SKU list
   4. An agent can call approval flow version details and unpublish/bulk-rerun flows via dedicated tools
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 03-01-PLAN.md — Upload module: ApiClient.postMultipart(), Upload type, 3 upload tools + E2E tests
+- [ ] 03-02-PLAN.md — Product bulk tools, LOW-10 approval flow test coverage, wire uploads into index.ts
 
 ### Phase 4: Low-Priority New Tools
 **Goal**: Narrow-audience capabilities are available for government procurement, V3 deployments, and companies with specific feature flags — without affecting the default V1 workflow
@@ -79,7 +82,10 @@ Plans:
   3. A V3-authenticated agent can list, create, and delete chat messages on a PO (tool registration is gated on API version)
   4. An agent can list pending supplier approval requests and pending company invites
   5. An agent can create a digital invoice from a scanned document upload and create or retrieve an NPayment settlement
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 03-01-PLAN.md — Upload module: ApiClient.postMultipart(), Upload type, 3 upload tools + E2E tests
+- [ ] 03-02-PLAN.md — Product bulk tools, LOW-10 approval flow test coverage, wire uploads into index.ts
 
 ### Phase 5: Test Coverage & Verification
 **Goal**: Every tool — new and modified — has E2E test coverage that validates request shape against MockApiServer, and the full suite passes with zero TypeScript errors
@@ -91,7 +97,10 @@ Plans:
   3. `npm run build` completes with zero TypeScript errors
   4. `npm test` passes all existing tests (no regressions from Phase 1 schema changes)
   5. At least one Zod rejection test exists per tool group (invalid input returns error without reaching Rails)
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 03-01-PLAN.md — Upload module: ApiClient.postMultipart(), Upload type, 3 upload tools + E2E tests
+- [ ] 03-02-PLAN.md — Product bulk tools, LOW-10 approval flow test coverage, wire uploads into index.ts
 
 ## Progress
 
