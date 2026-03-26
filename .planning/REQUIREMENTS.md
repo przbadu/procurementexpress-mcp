@@ -50,16 +50,16 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Compliance Module
 
-- [ ] **COMP-01**: User can trigger a compliance check on a PO or invoice (async, 202 response)
-- [ ] **COMP-02**: User can trigger bulk compliance checks
-- [ ] **COMP-03**: User can get bulk check status
-- [ ] **COMP-04**: User can justify a compliance violation
-- [ ] **COMP-05**: User can generate a compliance memo (AI-generated)
-- [ ] **COMP-06**: User can list compliance scan history
-- [ ] **COMP-07**: User can get scan details by ID
-- [ ] **COMP-08**: User can create an evidence pack
-- [ ] **COMP-09**: User can get an evidence pack by ID
-- [ ] **COMP-10**: User can download an evidence pack
+- [x] **COMP-01**: User can trigger a compliance check on a PO or invoice (async, 202 response)
+- [x] **COMP-02**: User can trigger bulk compliance checks
+- [x] **COMP-03**: User can get bulk check status
+- [x] **COMP-04**: User can justify a compliance violation
+- [x] **COMP-05**: User can generate a compliance memo (AI-generated)
+- [x] **COMP-06**: User can list compliance scan history
+- [x] **COMP-07**: User can get scan details by ID
+- [x] **COMP-08**: User can create an evidence pack
+- [x] **COMP-09**: User can get an evidence pack by ID
+- [x] **COMP-10**: User can download an evidence pack
 
 ### File Uploads Module
 
@@ -177,16 +177,16 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CF-04 | Phase 2 | Complete |
 | CF-05 | Phase 2 | Complete |
 | CF-06 | Phase 2 | Complete |
-| COMP-01 | Phase 2 | Pending |
-| COMP-02 | Phase 2 | Pending |
-| COMP-03 | Phase 2 | Pending |
-| COMP-04 | Phase 2 | Pending |
-| COMP-05 | Phase 2 | Pending |
-| COMP-06 | Phase 2 | Pending |
-| COMP-07 | Phase 2 | Pending |
-| COMP-08 | Phase 2 | Pending |
-| COMP-09 | Phase 2 | Pending |
-| COMP-10 | Phase 2 | Pending |
+| COMP-01 | Phase 2 | Complete |
+| COMP-02 | Phase 2 | Complete |
+| COMP-03 | Phase 2 | Complete |
+| COMP-04 | Phase 2 | Complete |
+| COMP-05 | Phase 2 | Complete |
+| COMP-06 | Phase 2 | Complete |
+| COMP-07 | Phase 2 | Complete |
+| COMP-08 | Phase 2 | Complete |
+| COMP-09 | Phase 2 | Complete |
+| COMP-10 | Phase 2 | Complete |
 | PO-01 | Phase 2 | Complete |
 | PO-02 | Phase 2 | Complete |
 | PO-03 | Phase 2 | Complete |
