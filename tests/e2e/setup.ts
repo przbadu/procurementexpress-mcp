@@ -536,6 +536,58 @@ export function registerStandardRoutes(mock: MockApiServer): void {
     }),
   });
 
+  // Custom Fields (V1/V3)
+  mock.registerRoute({
+    method: "GET",
+    path: vPath("custom_fields"),
+    handler: () => ({
+      status: 200,
+      body: [
+        { id: 1, company_id: 100, name: "Project Code", field_type: "text", active: true, required: false, options: [], option_list: null, access_level: "all", position: 0, on_line_item: false, display_on_pdf: true, default_value: null, editable_after_approval: false, readonly: false, archived: false, formula_builder: null, precision_display: null, display_on_pdf_even_if_value_is_nil: false, created_at: "2026-01-01T00:00:00Z", updated_at: "2026-01-01T00:00:00Z", webhook_enabled: false, response_populated: false, payload_included: false, is_auto_populated: false },
+        { id: 2, company_id: 100, name: "Cost Center", field_type: "dropdown", active: true, required: true, options: ["CC1", "CC2"], option_list: "CC1,CC2", access_level: "all", position: 1, on_line_item: false, display_on_pdf: false, default_value: "CC1", editable_after_approval: true, readonly: false, archived: false, formula_builder: null, precision_display: null, display_on_pdf_even_if_value_is_nil: false, created_at: "2026-01-01T00:00:00Z", updated_at: "2026-01-01T00:00:00Z", webhook_enabled: false, response_populated: false, payload_included: false, is_auto_populated: false },
+      ],
+    }),
+  });
+
+  mock.registerRoute({
+    method: "GET",
+    path: vPathWithId("custom_fields"),
+    handler: () => ({
+      status: 200,
+      body: { id: 1, company_id: 100, name: "Project Code", field_type: "text", active: true, required: false, options: [], option_list: null, access_level: "all", position: 0, on_line_item: false, display_on_pdf: true, default_value: null, editable_after_approval: false, readonly: false, archived: false, formula_builder: null, precision_display: null, display_on_pdf_even_if_value_is_nil: false, created_at: "2026-01-01T00:00:00Z", updated_at: "2026-01-01T00:00:00Z", webhook_enabled: false, response_populated: false, payload_included: false, is_auto_populated: false },
+    }),
+  });
+
+  mock.registerRoute({
+    method: "POST",
+    path: vPath("custom_fields"),
+    handler: (_req, body) => {
+      const parsed = JSON.parse(body);
+      return { status: 201, body: { id: 3, company_id: 100, ...parsed.custom_field } };
+    },
+  });
+
+  mock.registerRoute({
+    method: "PATCH",
+    path: vPathWithId("custom_fields"),
+    handler: (_req, body) => {
+      const parsed = JSON.parse(body);
+      return { status: 200, body: { id: 1, company_id: 100, ...parsed.custom_field } };
+    },
+  });
+
+  mock.registerRoute({
+    method: "DELETE",
+    path: vPathWithId("custom_fields"),
+    handler: () => ({ status: 200, body: { archived: true } }),
+  });
+
+  mock.registerRoute({
+    method: "PATCH",
+    path: vPathSuffix("custom_fields", "update_positions"),
+    handler: () => ({ status: 200, body: { success: true } }),
+  });
+
   // Comments (V1/V3)
   mock.registerRoute({
     method: "POST",
