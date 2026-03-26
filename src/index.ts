@@ -8,6 +8,7 @@ import { AuthManager } from "./auth.js";
 import { jsonResponse, textResponse, withErrorHandling } from "./tool-helpers.js";
 import { registerApprovalFlowTools } from "./tools/approval-flows.js";
 import { registerBudgetTools } from "./tools/budgets.js";
+import { registerCustomFieldTools } from "./tools/custom-fields.js";
 import { registerCommentTools } from "./tools/comments.js";
 import { registerCompanyTools } from "./tools/companies.js";
 import { registerDepartmentTools } from "./tools/departments.js";
@@ -145,6 +146,7 @@ registerPaymentTools(server, apiClient);
 registerTaxRateTools(server, apiClient);
 registerWebhookTools(server, apiClient);
 registerSupplementaryTools(server, apiClient);
+registerCustomFieldTools(server, apiClient);
 
 // Auto-authenticate from environment variables if available
 if (isV1) {
