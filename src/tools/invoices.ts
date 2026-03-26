@@ -214,6 +214,46 @@ export function registerInvoiceTools(server: Server, apiClient: ApiClient): void
   );
 
   server.registerTool(
+    "list_invoice_purchase_orders",
+    {
+      description: "List purchase orders available to link to an invoice. Use selected_ids to pre-select specific POs.",
+      inputSchema: {
+        selected_ids: z.array(z.number().int()).optional().describe("Pre-selected PO IDs to include"),
+        page: z.number().int().positive().optional().describe("Page number"),
+        per_page: z.number().int().positive().optional().describe("Results per page (default: 10)"),
+      },
+    },
+    withErrorHandling(async (args) => {
+      const params = new URLSearchParams();
+      if (args.selected_ids?.length) params.set("selected_ids", args.selected_ids.join(","));
+      if (args.page) params.set("page", String(args.page));
+      if (args.per_page) params.set("per_page", String(args.per_page));
+      const query = params.toString();
+      const path = `${apiClient.buildPath("/invoices/purchase_order_list")}${query ? `?${query}` : ""}`;
+      const result = await apiClient.get<unknown>(path);
+      return jsonResponse(result);
+    }),
+  );
+
+  server.registerTool(
+    "list_invoice_purchase_order_items",
+    {
+      description: "List purchase order line items available to link to an invoice. Provide the PO IDs whose items you want.",
+      inputSchema: {
+        purchase_order_ids: z.array(z.number().int()).min(1).describe("Array of purchase order IDs"),
+      },
+    },
+    withErrorHandling(async (args) => {
+      const params = new URLSearchParams();
+      args.purchase_order_ids.forEach(id => params.append("purchase_order_ids[]", String(id)));
+      const query = params.toString();
+      const path = `${apiClient.buildPath("/invoices/purchase_order_item_list")}${query ? `?${query}` : ""}`;
+      const result = await apiClient.get<unknown>(path);
+      return jsonResponse(result);
+    }),
+  );
+
+  server.registerTool(
     "rerun_invoice_approval_flow",
     {
       description: "Rerun the approval flow for an invoice. Useful when approval flow rules have changed.",

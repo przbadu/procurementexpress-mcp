@@ -439,6 +439,45 @@ export function registerStandardRoutes(mock: MockApiServer): void {
     handler: () => ({ status: 200, body: { id: 1, status: "Approved" } }),
   });
 
+  // Invoice Purchase Order List (V1/V3) — for linking POs to invoice
+  mock.registerRoute({
+    method: "GET",
+    path: vPathSuffix("invoices", "purchase_order_list"),
+    handler: () => ({
+      status: 200,
+      body: {
+        purchase_orders: [
+          { id: 1, status: "Approved", supplier_name: "Acme Corp", total: 500 },
+          { id: 2, status: "Approved", supplier_name: "Globex", total: 1200 },
+        ],
+        meta: { current_page: 1, next_page: null, prev_page: null, total_pages: 1, total_count: 2 },
+      },
+    }),
+  });
+
+  // Invoice Purchase Order Item List (V1/V3) — for linking PO items to invoice
+  mock.registerRoute({
+    method: "GET",
+    path: /^\/api\/v[13]\/invoices\/purchase_order_item_list(\?.*)?$/,
+    handler: () => ({
+      status: 200,
+      body: [
+        { id: 10, description: "Widget", quantity: 5, unit_price: 9.99, purchase_order_id: 1 },
+        { id: 11, description: "Gadget", quantity: 3, unit_price: 19.99, purchase_order_id: 1 },
+      ],
+    }),
+  });
+
+  // Invoice Rerun Approval Flow (V1/V3) — for INV-03 test
+  mock.registerRoute({
+    method: "POST",
+    path: /^\/api\/v[13]\/invoices\/\d+\/rerun_approval_flow$/,
+    handler: () => ({
+      status: 200,
+      body: { id: 1, status: "Pending", message: "Approval flow rerun initiated" },
+    }),
+  });
+
   // Tax Rates (V1/V3)
   mock.registerRoute({
     method: "GET",

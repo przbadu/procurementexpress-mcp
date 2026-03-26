@@ -49,4 +49,24 @@ describe("Invoices E2E", () => {
     const result = await apiClient.put<any>(apiClient.buildPath("/invoices/1/approve"));
     expect(result.status).toBe("Approved");
   });
+
+  it("should list purchase orders available for invoice linking", async () => {
+    const result = await apiClient.get<any>(apiClient.buildPath("/invoices/purchase_order_list"));
+    expect(result.purchase_orders).toHaveLength(2);
+    expect(result.purchase_orders[0].supplier_name).toBe("Acme Corp");
+  });
+
+  it("should list purchase order items for invoice linking", async () => {
+    const result = await apiClient.get<any[]>(
+      `${apiClient.buildPath("/invoices/purchase_order_item_list")}?purchase_order_ids[]=1`
+    );
+    expect(result).toHaveLength(2);
+    expect(result[0].description).toBe("Widget");
+  });
+
+  it("should rerun invoice approval flow", async () => {
+    const result = await apiClient.post<any>(apiClient.buildPath("/invoices/1/rerun_approval_flow"));
+    expect(result.id).toBe(1);
+    expect(result.status).toBe("Pending");
+  });
 });
