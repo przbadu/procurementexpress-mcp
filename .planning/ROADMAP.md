@@ -30,7 +30,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Any Rails error response (`{ error }`, `{ errors }`, `{ message }`) is surfaced to the MCP caller as a readable string, not an empty or undefined error
   4. Zod validation rejects nested `_destroy: true` without an accompanying `id` before the request reaches Rails
   5. Shared Zod schemas (custom_field_values_attributes, line items) live in `src/schemas.ts` and are imported by all tool files that use them
-**Plans:** 4/6 plans executed
+**Plans:** 7 plans (6 executed, 1 gap closure)
 Plans:
 - [x] 01-01-PLAN.md — Infrastructure: fix error handler + extract shared schemas
 - [x] 01-02-PLAN.md — Types: Summary/Detail type splits + missing serializer fields
@@ -38,6 +38,7 @@ Plans:
 - [x] 01-04-PLAN.md — Company, Supplier, Budget, Department schema alignment
 - [x] 01-05-PLAN.md — Webhook, ApprovalFlow, Payment, TaxRate, Product, Comment schema alignment
 - [x] 01-06-PLAN.md — Integration verification + human review checkpoint
+- [ ] 01-07-PLAN.md — Gap closure: _destroy+id cross-field validation (Success Criterion 4)
 
 ### Phase 2: High-Priority New Tools
 **Goal**: Core agent workflows are unblocked — agents can discover custom fields, preview approvers, link invoices to POs, check compliance, and communicate approval flow links
@@ -93,7 +94,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Schema & Type Foundation | 4/6 | In Progress|  |
+| 1. Schema & Type Foundation | 6/7 | In Progress (gap closure) |  |
 | 2. High-Priority New Tools | 0/0 | Not started | - |
 | 3. Medium-Priority New Tools | 0/0 | Not started | - |
 | 4. Low-Priority New Tools | 0/0 | Not started | - |
