@@ -99,9 +99,9 @@ Plans:
   3. `npm run build` completes with zero TypeScript errors
   4. `npm test` passes all existing tests (no regressions from Phase 1 schema changes)
   5. At least one Zod rejection test exists per tool group (invalid input returns error without reaching Rails)
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 Plans:
-- [ ] 05-01-PLAN.md — Zod rejection + negative tests for Group A (PO, invoices, budgets, departments, suppliers, companies, comments, custom-fields, compliance, approval-flows)
+- [x] 05-01-PLAN.md — Zod rejection + negative tests for Group A (PO, invoices, budgets, departments, suppliers, companies, comments, custom-fields, compliance, approval-flows)
 - [ ] 05-02-PLAN.md — Zod rejection + negative tests for Group B (payments, webhooks, tax-rates, products, uploads, policies, chat-messages, digital-invoices, supplementary, users) + mock body validation + final verification
 
 ## Progress
@@ -115,4 +115,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 2. High-Priority New Tools | 5/5 | Complete   | 2026-03-26 |
 | 3. Medium-Priority New Tools | 2/2 | Complete   | 2026-03-26 |
 | 4. Low-Priority New Tools | 4/4 | Complete   | 2026-03-26 |
-| 5. Test Coverage & Verification | 0/2 | Not started | - |
+| 5. Test Coverage & Verification | 1/2 | In Progress|  |

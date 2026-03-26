@@ -109,11 +109,11 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Testing
 
-- [ ] **TEST-01**: Every modified tool has E2E tests validating request body shape against MockApiServer
-- [ ] **TEST-02**: Every new tool has E2E tests with MockApiServer mock routes
+- [x] **TEST-01**: Every modified tool has E2E tests validating request body shape against MockApiServer
+- [x] **TEST-02**: Every new tool has E2E tests with MockApiServer mock routes
 - [ ] **TEST-03**: MockApiServer validates request bodies (not just routes)
 - [ ] **TEST-04**: Negative tests exist for invalid input (Zod rejection)
-- [ ] **TEST-05**: Build passes with zero TypeScript errors
+- [x] **TEST-05**: Build passes with zero TypeScript errors
 - [ ] **TEST-06**: All existing tests continue to pass (no regressions)
 
 ## v2 Requirements
@@ -215,11 +215,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | LOW-07 | Phase 4 | Complete |
 | LOW-08 | Phase 4 | Complete |
 | LOW-09 | Phase 4 | Complete |
-| TEST-01 | Phase 5 | Pending |
-| TEST-02 | Phase 5 | Pending |
+| TEST-01 | Phase 5 | Complete |
+| TEST-02 | Phase 5 | Complete |
 | TEST-03 | Phase 5 | Pending |
 | TEST-04 | Phase 5 | Pending |
-| TEST-05 | Phase 5 | Pending |
+| TEST-05 | Phase 5 | Complete |
 | TEST-06 | Phase 5 | Pending |
 
 **Coverage:**
