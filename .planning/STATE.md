@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: Ready to execute
-stopped_at: Completed 02-04-PLAN.md
-last_updated: "2026-03-26T06:36:08.282Z"
+stopped_at: Completed 02-01-PLAN.md
+last_updated: "2026-03-26T06:37:35.337Z"
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 12
-  completed_plans: 8
+  completed_plans: 10
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-25)
 ## Current Position
 
 Phase: 02 (high-priority-new-tools) — EXECUTING
-Plan: 2 of 5
+Plan: 4 of 5
 
 ## Performance Metrics
 
@@ -53,6 +53,8 @@ Plan: 2 of 5
 | Phase 01-schema-type-foundation P04 | 5 | 2 tasks | 3 files |
 | Phase 01-schema-type-foundation P07 | 112 | 1 tasks | 4 files |
 | Phase 02-high-priority-new-tools P04 | 7 | 1 tasks | 3 files |
+| Phase 02-high-priority-new-tools P03 | 6 | 2 tasks | 4 files |
+| Phase 02-high-priority-new-tools P01 | 8 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -78,6 +80,10 @@ Recent decisions affecting current work:
 - [Phase 01-schema-type-foundation]: budgets.ts inline customFieldValueSchema replaced with shared import from schemas.ts
 - [Phase 01-schema-type-foundation]: destroyRequiresId exported from schemas.ts as shared helper — approval-flows.ts and webhooks.ts import it for superRefine cross-field validation
 - [Phase 02-high-priority-new-tools]: selected_ids comma-joined and purchase_order_ids[] array params — Rails controller serialization requirements
+- [Phase 02-high-priority-new-tools]: Query-string-tolerant mock regex needed for GET tools that append URL params
+- [Phase 02-high-priority-new-tools]: CustomFieldAdmin is a separate interface from CustomField to reflect admin serializer with additional fields (archived, formula_builder, precision_display, webhook_enabled, etc.)
+- [Phase 02-high-priority-new-tools]: option_list serialized from string[] to comma-separated string before POST/PATCH to Rails
+- [Phase 02-high-priority-new-tools]: update_positions converts [{id, position}] array to Record<string, number> hash for Rails controller
 
 ### Pending Todos
 
@@ -91,6 +97,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-26T06:36:08.278Z
-Stopped at: Completed 02-04-PLAN.md
+Last session: 2026-03-26T06:37:35.331Z
+Stopped at: Completed 02-01-PLAN.md
 Resume file: None

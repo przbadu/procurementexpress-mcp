@@ -41,12 +41,12 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Custom Fields Module
 
-- [ ] **CF-01**: User can list all custom fields for a company
-- [ ] **CF-02**: User can get a single custom field by ID
-- [ ] **CF-03**: User can create a custom field with all supported params (name, field_type, default_value, active, required, option_list, access_level, on_line_item, display_on_pdf, editable_after_approval, formula_builder, precision_display, archived)
-- [ ] **CF-04**: User can update an existing custom field
-- [ ] **CF-05**: User can delete a custom field
-- [ ] **CF-06**: User can update custom field positions (reorder)
+- [x] **CF-01**: User can list all custom fields for a company
+- [x] **CF-02**: User can get a single custom field by ID
+- [x] **CF-03**: User can create a custom field with all supported params (name, field_type, default_value, active, required, option_list, access_level, on_line_item, display_on_pdf, editable_after_approval, formula_builder, precision_display, archived)
+- [x] **CF-04**: User can update an existing custom field
+- [x] **CF-05**: User can delete a custom field
+- [x] **CF-06**: User can update custom field positions (reorder)
 
 ### Compliance Module
 
@@ -69,10 +69,10 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Missing PO Tools
 
-- [ ] **PO-01**: User can bulk save (create/update) purchase orders
-- [ ] **PO-02**: User can get auto-approvers list for a PO
-- [ ] **PO-03**: User can get available approvers list for a PO
-- [ ] **PO-04**: User can get approval flow link for a PO
+- [x] **PO-01**: User can bulk save (create/update) purchase orders
+- [x] **PO-02**: User can get auto-approvers list for a PO
+- [x] **PO-03**: User can get available approvers list for a PO
+- [x] **PO-04**: User can get approval flow link for a PO
 
 ### Missing Invoice Tools
 
@@ -171,12 +171,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INFRA-02 | Phase 1 | Complete |
 | INFRA-03 | Phase 1 | Complete |
 | INFRA-04 | Phase 1 | Complete |
-| CF-01 | Phase 2 | Pending |
-| CF-02 | Phase 2 | Pending |
-| CF-03 | Phase 2 | Pending |
-| CF-04 | Phase 2 | Pending |
-| CF-05 | Phase 2 | Pending |
-| CF-06 | Phase 2 | Pending |
+| CF-01 | Phase 2 | Complete |
+| CF-02 | Phase 2 | Complete |
+| CF-03 | Phase 2 | Complete |
+| CF-04 | Phase 2 | Complete |
+| CF-05 | Phase 2 | Complete |
+| CF-06 | Phase 2 | Complete |
 | COMP-01 | Phase 2 | Pending |
 | COMP-02 | Phase 2 | Pending |
 | COMP-03 | Phase 2 | Pending |
@@ -187,10 +187,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | COMP-08 | Phase 2 | Pending |
 | COMP-09 | Phase 2 | Pending |
 | COMP-10 | Phase 2 | Pending |
-| PO-01 | Phase 2 | Pending |
-| PO-02 | Phase 2 | Pending |
-| PO-03 | Phase 2 | Pending |
-| PO-04 | Phase 2 | Pending |
+| PO-01 | Phase 2 | Complete |
+| PO-02 | Phase 2 | Complete |
+| PO-03 | Phase 2 | Complete |
+| PO-04 | Phase 2 | Complete |
 | INV-01 | Phase 2 | Complete |
 | INV-02 | Phase 2 | Complete |
 | INV-03 | Phase 2 | Complete |

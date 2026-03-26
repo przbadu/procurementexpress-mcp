@@ -52,9 +52,9 @@ Plans:
   5. An agent can retrieve the approval flow link for a PO to share with the supplier
 **Plans:** 5 plans
 Plans:
-- [ ] 02-01-PLAN.md — Custom fields module: types + 6 tools + E2E tests
+- [x] 02-01-PLAN.md — Custom fields module: types + 6 tools + E2E tests
 - [ ] 02-02-PLAN.md — Compliance module: types + 10 tools + E2E tests
-- [ ] 02-03-PLAN.md — PO gap tools: 4 new tools + types + E2E tests
+- [x] 02-03-PLAN.md — PO gap tools: 4 new tools + types + E2E tests
 - [x] 02-04-PLAN.md — Invoice gap tools: 2 new tools + INV-03 test coverage
 - [ ] 02-05-PLAN.md — Wire new tool files into index.ts + integration verification
 
