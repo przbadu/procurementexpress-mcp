@@ -101,8 +101,8 @@ Plans:
   5. At least one Zod rejection test exists per tool group (invalid input returns error without reaching Rails)
 **Plans:** 2 plans
 Plans:
-- [ ] 05-01-PLAN.md — Comprehensive E2E test coverage for all tool groups
-- [ ] 05-02-PLAN.md — Negative tests, Zod rejection tests, final verification
+- [ ] 05-01-PLAN.md — Zod rejection + negative tests for Group A (PO, invoices, budgets, departments, suppliers, companies, comments, custom-fields, compliance, approval-flows)
+- [ ] 05-02-PLAN.md — Zod rejection + negative tests for Group B (payments, webhooks, tax-rates, products, uploads, policies, chat-messages, digital-invoices, supplementary, users) + mock body validation + final verification
 
 ## Progress
 
@@ -115,4 +115,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 2. High-Priority New Tools | 5/5 | Complete   | 2026-03-26 |
 | 3. Medium-Priority New Tools | 2/2 | Complete   | 2026-03-26 |
 | 4. Low-Priority New Tools | 4/4 | Complete   | 2026-03-26 |
-| 5. Test Coverage & Verification | 0/0 | Not started | - |
+| 5. Test Coverage & Verification | 0/2 | Not started | - |
