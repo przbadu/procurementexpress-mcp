@@ -37,7 +37,7 @@ Plans:
 - [x] 01-03-PLAN.md — PO + Invoice schema alignment with Rails strong params
 - [x] 01-04-PLAN.md — Company, Supplier, Budget, Department schema alignment
 - [x] 01-05-PLAN.md — Webhook, ApprovalFlow, Payment, TaxRate, Product, Comment schema alignment
-- [ ] 01-06-PLAN.md — Integration verification + human review checkpoint
+- [x] 01-06-PLAN.md — Integration verification + human review checkpoint
 
 ### Phase 2: High-Priority New Tools
 **Goal**: Core agent workflows are unblocked — agents can discover custom fields, preview approvers, link invoices to POs, check compliance, and communicate approval flow links
