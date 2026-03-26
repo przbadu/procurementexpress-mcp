@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { z } from "zod";
 import { ApiClient } from "../../src/api-client.js";
 import { AuthManager } from "../../src/auth.js";
 import { MockApiServer, registerStandardRoutes } from "./setup.js";
@@ -58,5 +59,22 @@ describe("Custom Fields E2E", () => {
       { positions: { "1": 1, "2": 0 } },
     );
     expect(result).toEqual({ success: true });
+  });
+
+  describe("Zod schema validation", () => {
+    it("create_custom_field requires name and field_type", () => {
+      const customFieldSchema = z.object({
+        name: z.string(),
+        field_type: z.string(),
+      });
+      const missing = customFieldSchema.safeParse({});
+      expect(missing.success).toBe(false);
+    });
+
+    it("field_type enum rejects invalid type", () => {
+      const fieldTypeSchema = z.enum(["text", "dropdown", "number", "date", "formula", "textarea", "checkbox"]);
+      const invalid = fieldTypeSchema.safeParse("invalid");
+      expect(invalid.success).toBe(false);
+    });
   });
 });

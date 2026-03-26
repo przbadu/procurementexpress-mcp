@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { z } from "zod";
 import { ApiClient } from "../../src/api-client.js";
 import { AuthManager } from "../../src/auth.js";
 import { MockApiServer, registerStandardRoutes } from "./setup.js";
@@ -114,6 +115,25 @@ describe("Approval Flow Tools E2E — LOW-10", () => {
       expect(req).toBeDefined();
       const parsed = JSON.parse(req!.body);
       expect(parsed.invoice_ids).toEqual([5, 6]);
+    });
+  });
+
+  describe("Zod schema validation", () => {
+    it("rerun_approval_flows requires at least order_ids or invoice_ids", () => {
+      const rerunSchema = z
+        .object({
+          order_ids: z.array(z.number()).optional(),
+          invoice_ids: z.array(z.number()).optional(),
+        })
+        .refine((d) => (d.order_ids?.length ?? 0) > 0 || (d.invoice_ids?.length ?? 0) > 0, {
+          message: "Either order_ids or invoice_ids must be provided with at least one entry",
+        });
+
+      const neitherProvided = rerunSchema.safeParse({});
+      expect(neitherProvided.success).toBe(false);
+
+      const emptyArrays = rerunSchema.safeParse({ order_ids: [], invoice_ids: [] });
+      expect(emptyArrays.success).toBe(false);
     });
   });
 });

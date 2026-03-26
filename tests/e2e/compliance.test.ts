@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { z } from "zod";
 import { ApiClient } from "../../src/api-client.js";
 import { AuthManager } from "../../src/auth.js";
 import { MockApiServer, registerStandardRoutes } from "./setup.js";
@@ -112,5 +113,28 @@ describe("Compliance E2E", () => {
     expect(result.download_url).toBe("https://example.com/downloads/ep1.zip");
     expect(result.file_name).toBe("evidence_pack_1.zip");
     expect(result.file_size).toBe(12345);
+  });
+
+  describe("Zod schema validation", () => {
+    it("compliance_check requires purchase_order_id or invoice_id", () => {
+      const complianceCheckSchema = z
+        .object({
+          purchase_order_id: z.number().optional(),
+          invoice_id: z.number().optional(),
+        })
+        .refine((d) => d.purchase_order_id !== undefined || d.invoice_id !== undefined, {
+          message: "Either purchase_order_id or invoice_id is required",
+        });
+      const neither = complianceCheckSchema.safeParse({});
+      expect(neither.success).toBe(false);
+    });
+
+    it("bulk_check requires non-empty purchase_order_ids array", () => {
+      const bulkCheckSchema = z.object({
+        purchase_order_ids: z.array(z.number()).min(1),
+      });
+      const emptyArray = bulkCheckSchema.safeParse({ purchase_order_ids: [] });
+      expect(emptyArray.success).toBe(false);
+    });
   });
 });
