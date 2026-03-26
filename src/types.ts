@@ -984,3 +984,85 @@ export interface Approver {
   name: string;
   approval_limit: number | null;
 }
+
+// Policies (PolicySerializer / PolicyDetailSerializer)
+export interface PolicyBudget {
+  id: number;
+  name: string;
+}
+
+export interface PolicySummary {
+  id: number;
+  name: string;
+  description: string | null;
+  status: string;
+  archived: boolean;
+  category: string | null;
+  scope: string | null;
+  budget_ids: number[];
+  min_amount: number | null;
+  max_amount: number | null;
+  required_attachments: string[];
+  min_quotes_required: number | null;
+  source_template_id: number | null;
+  versions_count: number;
+  created_at: number;
+  updated_at: number;
+  budgets: PolicyBudget[];
+}
+
+export interface PolicyDetail extends PolicySummary {
+  content: string | null;
+}
+
+export interface PolicyVersion {
+  id: number;
+  item_type: string;
+  item_id: number;
+  event: string;
+  whodunnit: string | null;
+  whodunnit_name: string | null;
+  object: Record<string, unknown> | null;
+  object_changes: Record<string, unknown> | null;
+  created_at: string;
+}
+
+export interface PolicyTemplate {
+  id: number;
+  name: string;
+  description: string | null;
+  category: string | null;
+  content: string | null;
+}
+
+// Chat Messages (V3 only — chat_service.rb#message_json)
+export interface ChatMessage {
+  id: number;
+  body: string;
+  created_at: string;
+  creator: {
+    id: number;
+    name: string;
+    type: string;
+    employer: { id: number; name: string; type: string };
+  };
+}
+
+export interface ChatMessagesResponse {
+  messages: ChatMessage[];
+  next_cursor: number | null;
+}
+
+// Pending Invites (InviteUserSerializer)
+export interface InviteUser {
+  id: number;
+  email: string;
+  name: string | null;
+  roles: string[];
+  department_ids: number[];
+  approval_limit: number | null;
+  status: string;
+  created_at: number;
+  token: string;
+  invited_by_name: string | null;
+}
