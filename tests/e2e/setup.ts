@@ -588,6 +588,211 @@ export function registerStandardRoutes(mock: MockApiServer): void {
     handler: () => ({ status: 200, body: { success: true } }),
   });
 
+  // Compliance (V1/V3)
+
+  // Compliance Check — 202 async
+  mock.registerRoute({
+    method: "POST",
+    path: vPathSuffix("compliance", "check"),
+    handler: (_req, body) => {
+      const parsed = JSON.parse(body);
+      return {
+        status: 202,
+        body: {
+          status: "processing",
+          job_id: "job_abc123",
+          purchase_order_id: parsed.compliance_check?.purchase_order_id || null,
+          message: "Compliance check initiated",
+        },
+      };
+    },
+  });
+
+  // Bulk Check — 202 async
+  mock.registerRoute({
+    method: "POST",
+    path: vPathSuffix("compliance", "bulk_check"),
+    handler: (_req, body) => {
+      const parsed = JSON.parse(body);
+      return {
+        status: 202,
+        body: {
+          status: "processing",
+          bulk_scan_id: 42,
+          total_count: parsed.purchase_order_ids?.length || 0,
+          skipped: { already_passed: 0, already_scanning: 0 },
+        },
+      };
+    },
+  });
+
+  // Bulk Check Status
+  mock.registerRoute({
+    method: "GET",
+    path: vPathSuffix("compliance", "bulk_check_status"),
+    handler: () => ({
+      status: 200,
+      body: {
+        bulk_scan_id: 42,
+        status: "completed",
+        total_count: 5,
+        scanned_count: 5,
+        passed_count: 4,
+        failed_count: 1,
+        error_count: 0,
+        progress_percent: 100,
+        results_data: null,
+        started_at: "2026-01-01T00:00:00Z",
+        completed_at: "2026-01-01T00:01:00Z",
+        initiated_by: "test@example.com",
+      },
+    }),
+  });
+
+  // Justify Violation
+  mock.registerRoute({
+    method: "POST",
+    path: vPathSuffix("compliance", "justify"),
+    handler: () => ({
+      status: 200,
+      body: {
+        violation: {
+          id: 1,
+          policy_name: "Budget Policy",
+          resolved: true,
+          justification_reason: "Approved by manager",
+        },
+        all_justified: true,
+      },
+    }),
+  });
+
+  // Generate Memo
+  mock.registerRoute({
+    method: "POST",
+    path: vPathSuffix("compliance", "generate_memo"),
+    handler: () => ({
+      status: 200,
+      body: { memo: { title: "Sole Source Justification", content: "Generated memo content" } },
+    }),
+  });
+
+  // Scan History (paginated)
+  mock.registerRoute({
+    method: "GET",
+    path: vPathSuffix("compliance", "scan_history"),
+    handler: () => ({
+      status: 200,
+      body: {
+        scans: [
+          {
+            id: 1,
+            status: "completed",
+            total_count: 10,
+            passed_count: 9,
+            failed_count: 1,
+            error_count: 0,
+            completed_at: "2026-01-01T00:00:00Z",
+            initiated_by: "test@example.com",
+          },
+        ],
+        meta: { current_page: 1, total_pages: 1, total_count: 1, next_page: null },
+      },
+    }),
+  });
+
+  // Scan History Detail — /compliance/scan_history/:id
+  mock.registerRoute({
+    method: "GET",
+    path: /^\/api\/v[13]\/compliance\/scan_history\/\d+$/,
+    handler: () => ({
+      status: 200,
+      body: {
+        bulk_scan_id: 1,
+        status: "completed",
+        total_count: 10,
+        scanned_count: 10,
+        passed_count: 9,
+        failed_count: 1,
+        error_count: 0,
+        progress_percent: 100,
+        results_data: null,
+        started_at: "2026-01-01T00:00:00Z",
+        completed_at: "2026-01-01T00:01:00Z",
+        initiated_by: "test@example.com",
+      },
+    }),
+  });
+
+  // Evidence Pack Create
+  mock.registerRoute({
+    method: "POST",
+    path: vPathSuffix("compliance", "evidence_packs"),
+    handler: () => ({
+      status: 201,
+      body: {
+        message: "Evidence pack generation started",
+        evidence_pack: {
+          id: 1,
+          compliance_check_id: 10,
+          purchase_order_id: 1,
+          po_snapshot: {},
+          attachments_metadata: [],
+          audit_log: [],
+          zip_status: "pending",
+          zip_error: null,
+          zip_file_name: null,
+          zip_file_size: null,
+          zip_updated_at: null,
+          download_url: null,
+          created_at: "2026-01-01T00:00:00Z",
+          updated_at: "2026-01-01T00:00:00Z",
+        },
+      },
+    }),
+  });
+
+  // Evidence Pack Download — /compliance/evidence_packs/:id/download (registered before :id to avoid prefix conflict)
+  mock.registerRoute({
+    method: "GET",
+    path: /^\/api\/v[13]\/compliance\/evidence_packs\/\d+\/download$/,
+    handler: () => ({
+      status: 200,
+      body: {
+        download_url: "https://example.com/downloads/ep1.zip",
+        file_name: "evidence_pack_1.zip",
+        file_size: 12345,
+      },
+    }),
+  });
+
+  // Evidence Pack Get — /compliance/evidence_packs/:id
+  mock.registerRoute({
+    method: "GET",
+    path: /^\/api\/v[13]\/compliance\/evidence_packs\/\d+$/,
+    handler: () => ({
+      status: 200,
+      body: {
+        evidence_pack: {
+          id: 1,
+          compliance_check_id: 10,
+          purchase_order_id: 1,
+          po_snapshot: {},
+          attachments_metadata: [],
+          audit_log: [],
+          zip_status: "completed",
+          zip_error: null,
+          zip_file_name: "evidence_pack_1.zip",
+          zip_file_size: 12345,
+          zip_updated_at: "2026-01-01T00:01:00Z",
+          download_url: "https://example.com/downloads/ep1.zip",
+          created_at: "2026-01-01T00:00:00Z",
+          updated_at: "2026-01-01T00:01:00Z",
+        },
+      },
+    }),
+  });
+
   // Comments (V1/V3)
   mock.registerRoute({
     method: "POST",
