@@ -85,8 +85,8 @@ Plans:
 **Plans:** 1/4 plans executed
 Plans:
 - [x] 04-01-PLAN.md — Policies module: types + 6 CRUD tools + E2E tests
-- [ ] 04-02-PLAN.md — SAM.gov check, supplier approvals, digital invoices: types + 3 tools + E2E tests
-- [ ] 04-03-PLAN.md — V3-only chat messages + E2E tests for existing NPayment and pending invite tools
+- [x] 04-02-PLAN.md — SAM.gov check, supplier approvals, digital invoices: types + 3 tools + E2E tests
+- [x] 04-03-PLAN.md — V3-only chat messages + E2E tests for existing NPayment and pending invite tools
 - [ ] 04-04-PLAN.md — Wire new tool files into index.ts (V3-gated chat messages) + integration verification
 
 ### Phase 5: Test Coverage & Verification

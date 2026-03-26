@@ -97,14 +97,14 @@ Requirements for this milestone. Each maps to roadmap phases.
 ### Low-Priority Tools
 
 - [ ] **LOW-01**: User can check a supplier against SAM.gov database
-- [ ] **LOW-02**: User can list chat messages (V3 only)
-- [ ] **LOW-03**: User can create a chat message (V3 only)
-- [ ] **LOW-04**: User can delete a chat message (V3 only)
+- [x] **LOW-02**: User can list chat messages (V3 only)
+- [x] **LOW-03**: User can create a chat message (V3 only)
+- [x] **LOW-04**: User can delete a chat message (V3 only)
 - [ ] **LOW-05**: User can list pending supplier approval requests
 - [ ] **LOW-06**: User can create a digital invoice from upload (scan & create)
-- [ ] **LOW-07**: User can create an NPayment (multi-invoice/PO settlement)
-- [ ] **LOW-08**: User can get an NPayment by ID
-- [ ] **LOW-09**: User can list pending invites for a company
+- [x] **LOW-07**: User can create an NPayment (multi-invoice/PO settlement)
+- [x] **LOW-08**: User can get an NPayment by ID
+- [x] **LOW-09**: User can list pending invites for a company
 - [x] **LOW-10**: Missing approval flow tools (unpublish, version_details, bulk rerun)
 
 ### Testing
@@ -207,14 +207,14 @@ Which phases cover which requirements. Updated during roadmap creation.
 | POL-05 | Phase 4 | Complete |
 | POL-06 | Phase 4 | Complete |
 | LOW-01 | Phase 4 | Pending |
-| LOW-02 | Phase 4 | Pending |
-| LOW-03 | Phase 4 | Pending |
-| LOW-04 | Phase 4 | Pending |
+| LOW-02 | Phase 4 | Complete |
+| LOW-03 | Phase 4 | Complete |
+| LOW-04 | Phase 4 | Complete |
 | LOW-05 | Phase 4 | Pending |
 | LOW-06 | Phase 4 | Pending |
-| LOW-07 | Phase 4 | Pending |
-| LOW-08 | Phase 4 | Pending |
-| LOW-09 | Phase 4 | Pending |
+| LOW-07 | Phase 4 | Complete |
+| LOW-08 | Phase 4 | Complete |
+| LOW-09 | Phase 4 | Complete |
 | TEST-01 | Phase 5 | Pending |
 | TEST-02 | Phase 5 | Pending |
 | TEST-03 | Phase 5 | Pending |
