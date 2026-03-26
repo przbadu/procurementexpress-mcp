@@ -840,6 +840,67 @@ export function registerStandardRoutes(mock: MockApiServer): void {
     }),
   });
 
+  // Uploads (V1/V3)
+
+  // Upload to PO — POST /uploads/po (multipart)
+  mock.registerRoute({
+    method: "POST",
+    path: /^\/api\/v[13]\/uploads\/po$/,
+    handler: (_req, body) => {
+      // Multipart body — verify key fields are present in raw string
+      if (!body.includes("upload_token") || !body.includes("po_id")) {
+        return { status: 422, body: { error: "Missing required upload fields" } };
+      }
+      return {
+        status: 200,
+        body: {
+          id: 1,
+          file_file_name: "test-file.pdf",
+          file_content_type: "application/pdf",
+          url: "https://example.com/uploads/test-file.pdf",
+          upload_token: "abc1234567",
+        },
+      };
+    },
+  });
+
+  // Upload to Comment — POST /uploads/poc (multipart)
+  mock.registerRoute({
+    method: "POST",
+    path: /^\/api\/v[13]\/uploads\/poc$/,
+    handler: (_req, body) => {
+      if (!body.includes("upload_token") || !body.includes("poc_id")) {
+        return { status: 422, body: { error: "Missing required upload fields" } };
+      }
+      return {
+        status: 200,
+        body: {
+          id: 2,
+          file_file_name: "comment-doc.pdf",
+          file_content_type: "application/pdf",
+          url: "https://example.com/uploads/comment-doc.pdf",
+          upload_token: "def7654321",
+        },
+      };
+    },
+  });
+
+  // Upload Status — GET /uploads/status?upload_token=TOKEN
+  mock.registerRoute({
+    method: "GET",
+    path: /^\/api\/v[13]\/uploads\/status(\?.*)?$/,
+    handler: () => ({
+      status: 200,
+      body: {
+        id: 1,
+        file_file_name: "test-file.pdf",
+        file_content_type: "application/pdf",
+        url: "https://example.com/uploads/test-file.pdf",
+        upload_token: "abc1234567",
+      },
+    }),
+  });
+
   // Comments (V1/V3)
   mock.registerRoute({
     method: "POST",
