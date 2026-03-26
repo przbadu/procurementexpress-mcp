@@ -76,9 +76,9 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Missing Invoice Tools
 
-- [ ] **INV-01**: User can list POs available to link to an invoice
-- [ ] **INV-02**: User can list PO items available to link to an invoice
-- [ ] **INV-03**: User can rerun approval flow on an invoice
+- [x] **INV-01**: User can list POs available to link to an invoice
+- [x] **INV-02**: User can list PO items available to link to an invoice
+- [x] **INV-03**: User can rerun approval flow on an invoice
 
 ### Missing Product Tools
 
@@ -191,9 +191,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PO-02 | Phase 2 | Pending |
 | PO-03 | Phase 2 | Pending |
 | PO-04 | Phase 2 | Pending |
-| INV-01 | Phase 2 | Pending |
-| INV-02 | Phase 2 | Pending |
-| INV-03 | Phase 2 | Pending |
+| INV-01 | Phase 2 | Complete |
+| INV-02 | Phase 2 | Complete |
+| INV-03 | Phase 2 | Complete |
 | UPLOAD-01 | Phase 3 | Pending |
 | UPLOAD-02 | Phase 3 | Pending |
 | UPLOAD-03 | Phase 3 | Pending |
