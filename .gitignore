@@ -28,3 +28,4 @@ dist/
 .DS_Store
 prd.md
 .planning/
+.taskmaster/
