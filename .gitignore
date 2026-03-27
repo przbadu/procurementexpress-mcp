@@ -27,3 +27,4 @@ dist/
 # OS specific
 .DS_Store
 prd.md
+.planning/
