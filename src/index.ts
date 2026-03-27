@@ -8,6 +8,9 @@ import { AuthManager } from "./auth.js";
 import { jsonResponse, textResponse, withErrorHandling } from "./tool-helpers.js";
 import { registerApprovalFlowTools } from "./tools/approval-flows.js";
 import { registerBudgetTools } from "./tools/budgets.js";
+import { registerChatMessageTools } from "./tools/chat-messages.js";
+import { registerComplianceTools } from "./tools/compliance.js";
+import { registerCustomFieldTools } from "./tools/custom-fields.js";
 import { registerCommentTools } from "./tools/comments.js";
 import { registerCompanyTools } from "./tools/companies.js";
 import { registerDepartmentTools } from "./tools/departments.js";
@@ -19,7 +22,10 @@ import { registerSupplementaryTools } from "./tools/supplementary.js";
 import { registerSupplierTools } from "./tools/suppliers.js";
 import { registerTaxRateTools } from "./tools/tax-rates.js";
 import { registerUserTools } from "./tools/users.js";
+import { registerUploadTools } from "./tools/uploads.js";
 import { registerWebhookTools } from "./tools/webhooks.js";
+import { registerPolicyTools } from "./tools/policies.js";
+import { registerDigitalInvoiceTools } from "./tools/digital-invoices.js";
 
 // Create API client and auth manager
 const apiClient = new ApiClient();
@@ -96,6 +102,9 @@ if (isV1) {
       );
     }),
   );
+
+  // V3-only tools
+  registerChatMessageTools(server, apiClient);
 }
 
 server.registerTool(
@@ -145,6 +154,11 @@ registerPaymentTools(server, apiClient);
 registerTaxRateTools(server, apiClient);
 registerWebhookTools(server, apiClient);
 registerSupplementaryTools(server, apiClient);
+registerCustomFieldTools(server, apiClient);
+registerComplianceTools(server, apiClient);
+registerUploadTools(server, apiClient);
+registerPolicyTools(server, apiClient);
+registerDigitalInvoiceTools(server, apiClient);
 
 // Auto-authenticate from environment variables if available
 if (isV1) {

@@ -1,4 +1,3 @@
-import type { ApiError } from "./types.js";
 
 export type ApiVersion = "v1" | "v3";
 
@@ -108,8 +107,21 @@ export class ApiClient {
     if (!response.ok) {
       let message: string;
       try {
-        const errorBody = (await response.json()) as ApiError;
-        message = errorBody.message || response.statusText;
+        const errorBody = (await response.json()) as Record<string, unknown>;
+        // Rails error_response() returns { error: "string" }
+        // V3 Doorkeeper returns { error: "invalid_grant" } or { errors: [...] }
+        // Legacy format: { message: "string" }
+        if (typeof errorBody.error === "string") {
+          message = errorBody.error;
+        } else if (Array.isArray(errorBody.error)) {
+          message = (errorBody.error as string[]).join("; ");
+        } else if (Array.isArray(errorBody.errors)) {
+          message = (errorBody.errors as string[]).join("; ");
+        } else if (typeof errorBody.message === "string") {
+          message = errorBody.message;
+        } else {
+          message = response.statusText;
+        }
       } catch {
         message = response.statusText;
       }
@@ -154,5 +166,48 @@ export class ApiClient {
 
   async delete<T>(path: string, extraHeaders?: Record<string, string>): Promise<T> {
     return this.request<T>("DELETE", path, undefined, extraHeaders);
+  }
+
+  async postMultipart<T>(
+    path: string,
+    form: FormData,
+    extraHeaders?: Record<string, string>,
+  ): Promise<T> {
+    const url = `${this.baseUrl}${path}`;
+    // Build headers WITHOUT Content-Type — fetch sets it with multipart boundary automatically
+    const headers: Record<string, string> = {};
+    if (this.token) {
+      if (this.authMode === "v1") {
+        headers["authentication_token"] = this.token;
+      } else {
+        headers["Authorization"] = `Bearer ${this.token}`;
+      }
+    }
+    if (this.companyId) headers["app_company_id"] = this.companyId;
+    if (extraHeaders) Object.assign(headers, extraHeaders);
+
+    const response = await fetch(url, { method: "POST", headers, body: form });
+    if (!response.ok) {
+      let message: string;
+      try {
+        const errorBody = (await response.json()) as Record<string, unknown>;
+        if (typeof errorBody.error === "string") {
+          message = errorBody.error;
+        } else if (Array.isArray(errorBody.error)) {
+          message = (errorBody.error as string[]).join("; ");
+        } else if (Array.isArray(errorBody.errors)) {
+          message = (errorBody.errors as string[]).join("; ");
+        } else if (typeof errorBody.message === "string") {
+          message = errorBody.message;
+        } else {
+          message = response.statusText;
+        }
+      } catch {
+        message = response.statusText;
+      }
+      throw new ApiClientError(response.status, `${response.status}: ${message}`);
+    }
+    if (response.status === 204) return {} as T;
+    return (await response.json()) as T;
   }
 }

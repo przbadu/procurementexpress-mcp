@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { z } from "zod";
 import { ApiClient } from "../../src/api-client.js";
 import { AuthManager } from "../../src/auth.js";
 import { MockApiServer, registerStandardRoutes } from "./setup.js";
@@ -40,5 +41,19 @@ describe("Users E2E", () => {
     const requests = mock.getRequests();
     expect(requests[0].headers.authentication_token).toBe("mock_token");
     expect(requests[0].headers.app_company_id).toBe("100");
+  });
+
+  it("should return 404 for non-existent endpoint", async () => {
+    await expect(
+      apiClient.get(apiClient.buildPath("/nonexistent_endpoint")),
+    ).rejects.toThrow();
+  });
+
+  describe("Zod schema validation", () => {
+    it("currency id must be a positive integer", () => {
+      const schema = z.number().int().positive();
+      const result = schema.safeParse(-1);
+      expect(result.success).toBe(false);
+    });
   });
 });

@@ -2,34 +2,8 @@ import { z } from "zod";
 import type { ApiClient } from "../api-client.js";
 import type { Server } from "../tool-helpers.js";
 import { jsonResponse, textResponse, withErrorHandling } from "../tool-helpers.js";
-import type { PaginationMeta, PurchaseOrder } from "../types.js";
-
-const customFieldValueSchema = z.object({
-  id: z.number().int().optional().describe("Custom field value ID (for updates)"),
-  value: z.string().describe("Custom field value"),
-  custom_field_id: z.number().int().describe("Custom field ID"),
-});
-
-const lineItemSchema = z.object({
-  id: z.number().int().optional().describe("Line item ID (for updates)"),
-  description: z.string().describe("Item description"),
-  quantity: z.number().describe("Quantity"),
-  unit_price: z.number().describe("Unit price"),
-  budget_id: z.number().int().optional().describe("Budget ID"),
-  vat: z.number().optional().describe("VAT/tax percentage"),
-  tax_rate_id: z.number().int().optional().describe("Tax rate ID"),
-  item_number: z.string().optional().describe("Item number"),
-  sequence_no: z.number().int().optional().describe("Sequence number for ordering"),
-  department_id: z.number().int().optional().describe("Department ID for the line item"),
-  product_id: z.number().int().optional().describe("Product ID"),
-  chart_of_account_id: z.number().int().optional().describe("Chart of account ID (GL code)"),
-  qbo_customer_id: z.number().int().optional().describe("QuickBooks customer ID"),
-  quickbooks_class_id: z.number().int().optional().describe("QuickBooks class ID"),
-  qbo_line_description: z.string().optional().describe("QuickBooks line description override"),
-  archived: z.boolean().optional().describe("Whether the line item is archived"),
-  _destroy: z.boolean().optional().describe("Set true to remove this line item on update"),
-  custom_field_values_attributes: z.array(customFieldValueSchema).optional().describe("Custom field values for this line item"),
-});
+import type { BulkSaveResult, PaginationMeta, PurchaseOrder, PurchaseOrderApproverGroup, PurchaseOrderSummary } from "../types.js";
+import { customFieldValueSchema, lineItemSchema } from "../schemas.js";
 
 export function registerPurchaseOrderTools(server: Server, apiClient: ApiClient): void {
   server.registerTool(
@@ -95,7 +69,7 @@ export function registerPurchaseOrderTools(server: Server, apiClient: ApiClient)
       const query = params.toString();
       const path = `${apiClient.buildPath("/purchase_orders")}${query ? `?${query}` : ""}`;
       const result = await apiClient.get<{
-        purchase_orders: PurchaseOrder[];
+        purchase_orders: PurchaseOrderSummary[];
         meta: PaginationMeta;
       }>(path);
       return jsonResponse(result);
@@ -363,6 +337,116 @@ export function registerPurchaseOrderTools(server: Server, apiClient: ApiClient)
     },
     withErrorHandling(async (args) => {
       const result = await apiClient.post(apiClient.buildPath(`/purchase_orders/${args.id}/complete_delivery`));
+      return jsonResponse(result);
+    }),
+  );
+
+  server.registerTool(
+    "bulk_save_purchase_orders",
+    {
+      description: "Bulk create or update multiple purchase orders in a single request. Each item in the data array can include a _id field for response correlation.",
+      inputSchema: {
+        data: z.array(z.object({
+          _id: z.string().optional().describe("Client-side temporary ID for response correlation"),
+          supplier_name: z.string().optional().describe("Supplier name"),
+          supplier_id: z.number().int().optional().describe("Supplier ID"),
+          new_supplier_name: z.string().optional().describe("Name for creating a new supplier"),
+          department_id: z.number().int().optional().describe("Department ID"),
+          creator_id: z.number().int().optional().describe("Creator user ID"),
+          on_behalf_of: z.number().int().optional().describe("User ID if creating on behalf of"),
+          submitted_on: z.string().optional().describe("Submission date"),
+          notes: z.string().optional().describe("PO notes"),
+          currency_id: z.number().int().optional().describe("Currency ID"),
+          commit: z.string().optional().describe("Set to 'send' to submit for approval"),
+          approver_list: z.array(z.number().int()).optional().describe("Approver user IDs"),
+          purchase_order_items_attributes: z.array(z.object({
+            description: z.string(),
+            quantity: z.number(),
+            unit_price: z.number(),
+            net_amount: z.number().optional(),
+            budget_id: z.number().int().optional(),
+            vat: z.number().optional(),
+            tax_rate_id: z.number().int().optional(),
+          })).optional().describe("Line items"),
+          custom_field_values_attributes: z.array(z.object({
+            id: z.number().int().optional(),
+            value: z.string(),
+            custom_field_id: z.number().int(),
+          })).optional().describe("Custom field values"),
+        })).describe("Array of purchase order objects"),
+      },
+    },
+    withErrorHandling(async (args) => {
+      const result = await apiClient.post<BulkSaveResult>(apiClient.buildPath("/purchase_orders/bulk_save"), {
+        purchase_order: { data: args.data },
+      });
+      return jsonResponse(result);
+    }),
+  );
+
+  server.registerTool(
+    "get_po_auto_approvers",
+    {
+      description: "Get the list of auto-assigned approvers based on PO total amount and budgets",
+      inputSchema: {
+        gross_total: z.number().optional().describe("PO gross total amount"),
+        budget_ids: z.array(z.number().int()).optional().describe("Array of budget IDs"),
+        show_last_approver_on_edit: z.boolean().optional().describe("Show last approver on edit"),
+      },
+    },
+    withErrorHandling(async (args) => {
+      const params = new URLSearchParams();
+      if (args.gross_total !== undefined) params.set("gross_total", String(args.gross_total));
+      if (args.budget_ids) args.budget_ids.forEach((id) => params.append("budget_ids[]", String(id)));
+      if (args.show_last_approver_on_edit !== undefined) params.set("show_last_approver_on_edit", String(args.show_last_approver_on_edit));
+      const query = params.toString();
+      const path = `${apiClient.buildPath("/purchase_orders/auto_approvers_list")}${query ? `?${query}` : ""}`;
+      const result = await apiClient.get(path);
+      return jsonResponse(result);
+    }),
+  );
+
+  server.registerTool(
+    "get_po_available_approvers",
+    {
+      description: "Preview which approvers will be assigned to a PO based on its attributes (department, amounts, line items). Call before submitting to know who will approve.",
+      inputSchema: {
+        purchase_order_id: z.number().int().optional().describe("Existing PO ID (for edit preview)"),
+        department_id: z.number().int().optional().describe("Department ID"),
+        total_gross_amount: z.number().optional().describe("Total gross amount"),
+        total_net_amount: z.number().optional().describe("Total net amount"),
+        purchase_order_items_attributes: z.array(z.object({
+          description: z.string().optional(),
+          quantity: z.number().optional(),
+          unit_price: z.number().optional(),
+          budget_id: z.number().int().optional(),
+        })).optional().describe("Line items for approval flow evaluation"),
+      },
+    },
+    withErrorHandling(async (args) => {
+      const poData: Record<string, unknown> = {};
+      if (args.purchase_order_id !== undefined) poData.purchase_order_id = args.purchase_order_id;
+      if (args.department_id !== undefined) poData.department_id = args.department_id;
+      if (args.total_gross_amount !== undefined) poData.total_gross_amount = args.total_gross_amount;
+      if (args.total_net_amount !== undefined) poData.total_net_amount = args.total_net_amount;
+      if (args.purchase_order_items_attributes) poData.purchase_order_items_attributes = args.purchase_order_items_attributes;
+      const result = await apiClient.post<PurchaseOrderApproverGroup[]>(apiClient.buildPath("/purchase_orders/approver_list"), {
+        purchase_order: poData,
+      });
+      return jsonResponse(result);
+    }),
+  );
+
+  server.registerTool(
+    "get_po_approval_flow_link",
+    {
+      description: "Get the approval flow link for a purchase order. This link can be shared with the supplier.",
+      inputSchema: {
+        id: z.string().describe("Purchase order ID, slug, or approval key"),
+      },
+    },
+    withErrorHandling(async (args) => {
+      const result = await apiClient.get<{ aff_link: string }>(apiClient.buildPath(`/purchase_orders/${args.id}/aff_link`));
       return jsonResponse(result);
     }),
   );

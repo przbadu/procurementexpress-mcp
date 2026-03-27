@@ -183,6 +183,35 @@ export interface CustomField {
   readonly: boolean;
 }
 
+// Custom Fields Admin (CustomFieldAdminSerializer — used by CRUD endpoints)
+export interface CustomFieldAdmin {
+  id: number;
+  company_id: number;
+  name: string;
+  field_type: string;
+  active: boolean;
+  required: boolean;
+  options: string[];
+  option_list: string | null;
+  access_level: string;
+  position: number;
+  on_line_item: boolean;
+  display_on_pdf: boolean;
+  default_value: string | null;
+  editable_after_approval: boolean;
+  readonly: boolean;
+  archived: boolean;
+  formula_builder: string | null;
+  precision_display: number | null;
+  display_on_pdf_even_if_value_is_nil: boolean;
+  created_at: string;
+  updated_at: string;
+  webhook_enabled: boolean;
+  response_populated: boolean;
+  payload_included: boolean;
+  is_auto_populated: boolean;
+}
+
 // Custom Field Values (CustomFieldValueSerializer)
 export interface CustomFieldValue {
   id: number;
@@ -259,6 +288,7 @@ export interface CompanyDetail {
   scan_and_match_ff_enabled: boolean;
   approval_flow_ff_enabled: boolean;
   policy_ff_enabled: boolean;
+  sam_gov_enabled?: boolean;
   company_setting: CompanySetting;
   custom_fields: CustomField[];
   supported_currencies: Currency[];
@@ -337,7 +367,7 @@ export interface Upload {
   file_file_name: string;
   file_content_type: string;
   url: string;
-  upload_token: string;
+  upload_token: string | null;
 }
 
 // Purchase Order List (PurchaseOrderSerializer)
@@ -361,6 +391,13 @@ export interface PurchaseOrderSummary {
   department_id: number | null;
   department_name: string | null;
   approver_requests?: ApproverRequest[];
+  compliance_status?: string;
+  delivered_on?: number | null;
+  delivery_status?: string | null;
+  payment_status?: string | null;
+  xero_export_status?: string | null;
+  synced_with_xero?: boolean;
+  xero_is_changed?: boolean;
 }
 
 // Purchase Order Detail (PurchaseOrderDetailsSerializer)
@@ -426,6 +463,29 @@ export interface PurchaseOrder {
   compliance_checks: ComplianceCheck[];
   approver_requests: ApproverRequest[];
   supplier: Supplier | null;
+  xero_export_status?: string | null;
+  xero_export_error_message?: string | null;
+  xero_last_export_at?: string | null;
+  xero_is_changed?: boolean;
+  can_justify?: boolean;
+  has_global_policies?: boolean;
+}
+
+// Bulk Save Result (from PurchaseOrdersController#bulk_save)
+export interface BulkSaveResult {
+  done: Array<{ _id: string; id: number }>;
+  failed: Array<{ _id: string; errors: string[] }>;
+}
+
+// Approver Group (from PurchaseOrdersController#approver_list)
+export interface PurchaseOrderApproverGroup {
+  approval_flow_name: string;
+  approval_flow_id: number;
+  approvers: Array<{
+    name: string;
+    email: string;
+    id: number;
+  }>;
 }
 
 // Approvers with flow
@@ -471,6 +531,81 @@ export interface ComplianceViolation {
   resolved: boolean;
   resolved_at: string | null;
   resolution_method: string | null;
+  justified_by_id: number | null;
+  justified_by_name: string | null;
+  justification_reason: string | null;
+  sam_gov_check_id: number | null;
+  sam_gov_exclusion_details: Record<string, unknown> | null;
+}
+
+// Compliance Check Job Response (202 async — from ComplianceController#check)
+export interface ComplianceCheckJobResponse {
+  status: string;
+  job_id: string;
+  purchase_order_id: number | null;
+  message: string;
+}
+
+// Bulk Compliance Check Job Response (202 async — from ComplianceController#bulk_check)
+export interface BulkCheckJobResponse {
+  status: string;
+  bulk_scan_id: number;
+  total_count: number;
+  skipped: {
+    already_passed: number;
+    already_scanning: number;
+  };
+}
+
+// Bulk Compliance Scan (from ComplianceController#bulk_check_status and scan_history)
+export interface BulkComplianceScan {
+  bulk_scan_id: number;
+  status: string;
+  total_count: number;
+  scanned_count: number;
+  passed_count: number;
+  failed_count: number;
+  error_count: number;
+  progress_percent: number;
+  results_data: unknown;
+  started_at: string | null;
+  completed_at: string | null;
+  initiated_by: string | null;
+}
+
+// Compliance Scan History Item (list item — subset of BulkComplianceScan)
+export interface ComplianceScanSummary {
+  id: number;
+  status: string;
+  total_count: number;
+  passed_count: number;
+  failed_count: number;
+  error_count: number;
+  completed_at: string | null;
+  initiated_by: string | null;
+}
+
+// Evidence Pack (from evidence_pack_json helper in EvidencePacksController)
+export interface EvidencePack {
+  id: number;
+  compliance_check_id: number;
+  purchase_order_id: number | null;
+  po_snapshot: unknown;
+  attachments_metadata: unknown;
+  audit_log: unknown;
+  zip_status: string;
+  zip_error: string | null;
+  zip_file_name: string | null;
+  zip_file_size: number | null;
+  zip_updated_at: string | null;
+  download_url: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+// Compliance Memo Response (from ComplianceController#generate_memo)
+export interface ComplianceMemo {
+  memo: Record<string, unknown>;
 }
 
 // Invoice List (InvoiceSerializer)
@@ -501,6 +636,8 @@ export interface InvoiceSummary {
   payment_term_id: number | null;
   payment_terms_list: PaymentTerm[];
   currency: Currency;
+  xero_export_status?: string | null;
+  xero_is_changed?: boolean;
 }
 
 // Invoice Detail (InvoiceDetailSerializer)
@@ -539,6 +676,10 @@ export interface Invoice {
   histories: InvoiceComment[];
   comments: InvoiceComment[];
   npayments: NpaymentSummary[];
+  xero_export_status?: string | null;
+  xero_export_error_message?: string | null;
+  xero_last_export_at?: string | null;
+  xero_is_changed?: boolean;
 }
 
 // Invoice Line Items (InvoiceLineItemSerializer)
@@ -633,7 +774,25 @@ export interface NpaymentComment {
   updated_at: number;
 }
 
-// Approval Flows (ApprovalFlowSerializer / ApprovalFlowDetailSerializer)
+// Approval Flow List (ApprovalFlowSerializer)
+export interface ApprovalFlowSummary {
+  id: number;
+  name: string;
+  document_type: number;
+  self_approval_allowed: boolean;
+  company_id: number;
+  version_no: number;
+  archived: boolean;
+  status: string;
+  in_progress_entities_count: number;
+  completed_entities_count: number;
+  rejected_entities_count: number;
+  total_entities_count: number;
+  created_at: number;
+  updated_at: number;
+}
+
+// Approval Flow Detail (ApprovalFlowDetailSerializer)
 export interface ApprovalFlow {
   id: number;
   name: string;
@@ -702,6 +861,15 @@ export interface ApprovalEntity {
   updated_at: number;
 }
 
+// Approval Flow Version (from versions endpoint)
+export interface ApprovalFlowVersion {
+  id: number;
+  name: string;
+  created_at: number;
+  conditions_count: number;
+  steps_count: number;
+}
+
 // Tax Rates (TaxRateSerializer)
 export interface TaxRate {
   id: number;
@@ -727,7 +895,19 @@ export interface CombinedTaxRate {
   tax_amount?: number;
 }
 
-// Webhooks (WebhookSerializer / WebhookDetailSerializer)
+// Webhook List (WebhookSerializer)
+export interface WebhookSummary {
+  id: number;
+  name: string;
+  url: string;
+  archived: boolean;
+  event_type: string[];
+  tested: boolean;
+  response_code: number | null;
+  json_wrapper: string | null;
+}
+
+// Webhook Detail (WebhookDetailSerializer)
 export interface Webhook {
   id: number;
   name: string;
@@ -803,4 +983,125 @@ export interface Approver {
   email: string;
   name: string;
   approval_limit: number | null;
+}
+
+// Policies (PolicySerializer / PolicyDetailSerializer)
+export interface PolicyBudget {
+  id: number;
+  name: string;
+}
+
+export interface PolicySummary {
+  id: number;
+  name: string;
+  description: string | null;
+  status: string;
+  archived: boolean;
+  category: string | null;
+  scope: string | null;
+  budget_ids: number[];
+  min_amount: number | null;
+  max_amount: number | null;
+  required_attachments: string[];
+  min_quotes_required: number | null;
+  source_template_id: number | null;
+  versions_count: number;
+  created_at: number;
+  updated_at: number;
+  budgets: PolicyBudget[];
+}
+
+export interface PolicyDetail extends PolicySummary {
+  content: string | null;
+}
+
+export interface PolicyVersion {
+  id: number;
+  item_type: string;
+  item_id: number;
+  event: string;
+  whodunnit: string | null;
+  whodunnit_name: string | null;
+  object: Record<string, unknown> | null;
+  object_changes: Record<string, unknown> | null;
+  created_at: string;
+}
+
+export interface PolicyTemplate {
+  id: number;
+  name: string;
+  description: string | null;
+  category: string | null;
+  content: string | null;
+}
+
+// Chat Messages (V3 only — chat_service.rb#message_json)
+export interface ChatMessage {
+  id: number;
+  body: string;
+  created_at: string;
+  creator: {
+    id: number;
+    name: string;
+    type: string;
+    employer: { id: number; name: string; type: string };
+  };
+}
+
+export interface ChatMessagesResponse {
+  messages: ChatMessage[];
+  next_cursor: number | null;
+}
+
+// Pending Invites (InviteUserSerializer)
+export interface InviteUser {
+  id: number;
+  email: string;
+  name: string | null;
+  roles: string[];
+  department_ids: number[];
+  approval_limit: number | null;
+  status: string;
+  created_at: number;
+  token: string;
+  invited_by_name: string | null;
+}
+
+// SAM.gov (SamGovCheckSerializer)
+export interface SamGovCheck {
+  id: number;
+  supplier_id: number;
+  supplier_name: string;
+  uei: string | null;
+  status: string;
+  total_records: number;
+  has_active_exclusions: boolean;
+  exclusions: unknown[];
+  search_params: Record<string, unknown> | null;
+  checked_at: string | null;
+  fresh: boolean;
+  verification_pdf_url: string | null;
+  sam_gov_search_url: string | null;
+}
+
+export interface SamGovUnchecked {
+  status: "unchecked";
+  supplier_id: number;
+}
+
+// Supplier Approvals (SupplierApprovalSerializer)
+export interface SupplierApproval {
+  id: number;
+  name: string;
+  notes: string | null;
+  phone_number: string | null;
+  address: string | null;
+  email: string | null;
+  status: string;
+  requester: { id: number; email: string; name: string; roles: string[] } | Record<string, never>;
+  approver: { id: number; email: string; name: string; roles: string[] } | Record<string, never>;
+  created_at: number;
+  updated_at: number;
+  uei: string | null;
+  cage_code: string | null;
 }

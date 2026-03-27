@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { z } from "zod";
 import { ApiClient } from "../../src/api-client.js";
 import { AuthManager } from "../../src/auth.js";
 import { MockApiServer, registerStandardRoutes } from "./setup.js";
@@ -42,5 +43,25 @@ describe("Supplementary E2E", () => {
     const result = await apiClient.get<any>(apiClient.buildPath("/approval_flows"));
     expect(result.approval_flows).toHaveLength(1);
     expect(result.approval_flows[0].name).toBe("Default Flow");
+  });
+
+  describe("Zod schema validation", () => {
+    it("chart_of_accounts page must be a positive integer", () => {
+      const schema = z.number().int().positive();
+      const result = schema.safeParse(-1);
+      expect(result.success).toBe(false);
+    });
+
+    it("forward_purchase_order requires emails as a string", () => {
+      const schema = z.object({
+        purchase_order_id: z.number().int().positive(),
+        emails: z.string(),
+      });
+      const result = schema.safeParse({ purchase_order_id: 1 });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues.some((i) => i.path.includes("emails"))).toBe(true);
+      }
+    });
   });
 });

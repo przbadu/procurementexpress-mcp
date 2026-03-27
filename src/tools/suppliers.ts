@@ -2,7 +2,7 @@ import { z } from "zod";
 import type { ApiClient } from "../api-client.js";
 import type { Server } from "../tool-helpers.js";
 import { jsonResponse, withErrorHandling } from "../tool-helpers.js";
-import type { PaginationMeta, Supplier } from "../types.js";
+import type { PaginationMeta, SamGovCheck, SamGovUnchecked, Supplier, SupplierApproval } from "../types.js";
 
 export function registerSupplierTools(server: Server, apiClient: ApiClient): void {
   server.registerTool(
@@ -83,6 +83,9 @@ export function registerSupplierTools(server: Server, apiClient: ApiClient): voi
         uei: z.string().optional().describe("Unique Entity Identifier (UEI) for SAM.gov"),
         cage_code: z.string().optional().describe("CAGE code for government contracting"),
         department_ids: z.array(z.number().int()).optional().describe("Department IDs to restrict supplier to"),
+        xero_id: z.string().optional().describe("Xero integration ID"),
+        zapier_id: z.string().optional().describe("Zapier integration ID"),
+        quickbooks_id: z.string().optional().describe("QuickBooks integration ID"),
       },
     },
     withErrorHandling(async (args) => {
@@ -109,6 +112,9 @@ export function registerSupplierTools(server: Server, apiClient: ApiClient): voi
         uei: z.string().optional().describe("Unique Entity Identifier (UEI)"),
         cage_code: z.string().optional().describe("CAGE code"),
         department_ids: z.array(z.number().int()).optional().describe("Department IDs"),
+        xero_id: z.string().optional().describe("Xero integration ID"),
+        zapier_id: z.string().optional().describe("Zapier integration ID"),
+        quickbooks_id: z.string().optional().describe("QuickBooks integration ID"),
       },
     },
     withErrorHandling(async (args) => {
@@ -117,6 +123,49 @@ export function registerSupplierTools(server: Server, apiClient: ApiClient): voi
         supplier: data,
       });
       return jsonResponse(supplier);
+    }),
+  );
+
+  server.registerTool(
+    "check_sam_gov",
+    {
+      description:
+        "Check a supplier against the SAM.gov database for government contract eligibility. Returns cached results unless force=true.",
+      inputSchema: {
+        supplier_id: z.number().int().positive().describe("Supplier ID to check against SAM.gov"),
+        force: z
+          .boolean()
+          .optional()
+          .describe("Force a fresh check even if cached results exist (default: false)"),
+      },
+    },
+    withErrorHandling(async (args) => {
+      const result = await apiClient.post<SamGovCheck | SamGovUnchecked>(
+        apiClient.buildPath("/sam_gov/check"),
+        { supplier_id: args.supplier_id, force: args.force },
+      );
+      return jsonResponse(result);
+    }),
+  );
+
+  server.registerTool(
+    "list_supplier_approvals",
+    {
+      description:
+        "List pending supplier approval requests. Feature-flagged — requires supplier approvals to be enabled.",
+      inputSchema: {
+        search: z.string().optional().describe("Search supplier approval requests by name"),
+        page: z.number().int().positive().optional().describe("Page number for pagination"),
+      },
+    },
+    withErrorHandling(async (args) => {
+      const params = new URLSearchParams();
+      if (args.search) params.set("search", args.search);
+      if (args.page) params.set("page", String(args.page));
+      const query = params.toString();
+      const path = `${apiClient.buildPath("/supplier_approvals")}${query ? `?${query}` : ""}`;
+      const result = await apiClient.get<{ supplier_approvals: SupplierApproval[]; meta: PaginationMeta }>(path);
+      return jsonResponse(result);
     }),
   );
 }
