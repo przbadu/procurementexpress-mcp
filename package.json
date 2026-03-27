@@ -33,11 +33,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/procurementexpress/mcp.git"
+    "url": "git+https://github.com/przbadu/procurementexpress-mcp.git"
   },
-  "homepage": "https://github.com/procurementexpress/mcp#readme",
+  "homepage": "https://github.com/przbadu/procurementexpress-mcp#readme",
   "bugs": {
-    "url": "https://github.com/procurementexpress/mcp/issues"
+    "url": "https://github.com/przbadu/procurementexpress-mcp/issues"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.26.0",

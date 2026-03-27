@@ -4,10 +4,12 @@ A [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) server that p
 
 ## Features
 
-- **88 tools** covering the full ProcurementExpress API surface
+- **100+ tools** covering the full ProcurementExpress API surface
 - **Dual API version support** — V1 (token-based) and V3 (OAuth2) authentication
 - **Version-agnostic tool layer** — all tools work identically across API versions
 - **Type-safe** — comprehensive TypeScript interfaces for all API entities
+- **File uploads** — multipart file upload support for POs, comments, and digital invoices
+- **Government procurement** — SAM.gov checks, policies, supplier approvals
 - **Zero external runtime dependencies** — only `@modelcontextprotocol/sdk` and `zod`
 
 ## Quick Start
@@ -163,7 +165,7 @@ Set `PROCUREMENTEXPRESS_API_VERSION=v3`. Requires `PROCUREMENTEXPRESS_CLIENT_ID`
 | `create_department` | Create a new department |
 | `update_department` | Update a department |
 
-### Suppliers (5 tools)
+### Suppliers (7 tools)
 
 | Tool | Description |
 |------|-------------|
@@ -172,8 +174,10 @@ Set `PROCUREMENTEXPRESS_API_VERSION=v3`. Requires `PROCUREMENTEXPRESS_CLIENT_ID`
 | `get_supplier` | Get a specific supplier |
 | `create_supplier` | Create a supplier (name must be unique) |
 | `update_supplier` | Update a supplier |
+| `check_sam_gov` | Check a supplier against the SAM.gov database |
+| `list_supplier_approvals` | List pending supplier approval requests |
 
-### Products (4 tools)
+### Products (6 tools)
 
 | Tool | Description |
 |------|-------------|
@@ -181,8 +185,10 @@ Set `PROCUREMENTEXPRESS_API_VERSION=v3`. Requires `PROCUREMENTEXPRESS_CLIENT_ID`
 | `get_product` | Get a specific product |
 | `create_product` | Create a new product |
 | `update_product` | Update a product |
+| `bulk_create_products` | Bulk create multiple products in a single call |
+| `list_product_skus` | List all product SKUs |
 
-### Purchase Orders (15 tools)
+### Purchase Orders (19 tools)
 
 | Tool | Description |
 |------|-------------|
@@ -201,8 +207,12 @@ Set `PROCUREMENTEXPRESS_API_VERSION=v3`. Requires `PROCUREMENTEXPRESS_CLIENT_ID`
 | `receive_purchase_order_items` | Mark line items as received (partial or full delivery) |
 | `cancel_receiving_items` | Cancel all received deliveries for a PO |
 | `complete_purchase_order_delivery` | Mark a PO as fully delivered |
+| `bulk_save_purchase_orders` | Bulk create/update multiple POs |
+| `get_po_auto_approvers` | Get auto-assigned approvers for a PO |
+| `get_po_available_approvers` | Preview available approvers for a PO |
+| `get_po_approval_flow_link` | Get approval flow link to share with suppliers |
 
-### Invoices (11 tools)
+### Invoices (13 tools)
 
 | Tool | Description |
 |------|-------------|
@@ -217,6 +227,67 @@ Set `PROCUREMENTEXPRESS_API_VERSION=v3`. Requires `PROCUREMENTEXPRESS_CLIENT_ID`
 | `archive_invoice` | Archive an invoice |
 | `dearchive_invoice` | Restore an archived invoice |
 | `rerun_invoice_approval_flow` | Rerun approval flow for a specific invoice |
+| `list_invoice_purchase_orders` | List POs available to link to an invoice |
+| `list_invoice_purchase_order_items` | List PO items available to link to an invoice |
+
+### Custom Fields (6 tools)
+
+| Tool | Description |
+|------|-------------|
+| `list_custom_fields` | List all custom fields for the company |
+| `get_custom_field` | Get a custom field by ID |
+| `create_custom_field` | Create a custom field (text, dropdown, date, number, etc.) |
+| `update_custom_field` | Update an existing custom field |
+| `delete_custom_field` | Delete (archive) a custom field |
+| `update_custom_field_positions` | Reorder custom fields |
+
+### Compliance (10 tools)
+
+| Tool | Description |
+|------|-------------|
+| `check_compliance` | Trigger a compliance check on a PO or invoice (async) |
+| `bulk_check_compliance` | Trigger bulk compliance checks on multiple POs |
+| `get_bulk_check_status` | Get status of a bulk compliance check |
+| `justify_compliance_violation` | Justify a specific compliance violation |
+| `generate_compliance_memo` | Generate an AI compliance memo |
+| `list_compliance_scan_history` | List compliance scan history |
+| `get_compliance_scan_details` | Get details of a specific compliance scan |
+| `create_evidence_pack` | Create an evidence pack for a compliance check |
+| `get_evidence_pack` | Get an evidence pack by ID |
+| `download_evidence_pack` | Download an evidence pack ZIP file |
+
+### Uploads (3 tools)
+
+| Tool | Description |
+|------|-------------|
+| `upload_file_to_purchase_order` | Upload a file attachment to a PO (multipart) |
+| `upload_file_to_comment` | Upload a file to a comment (multipart) |
+| `get_upload_status` | Check upload status by token |
+
+### Policies (6 tools)
+
+| Tool | Description |
+|------|-------------|
+| `list_policies` | List company policies with filters |
+| `get_policy` | Get a policy by ID with version history |
+| `create_policy` | Create a new company policy |
+| `update_policy` | Update an existing policy |
+| `delete_policy` | Delete (soft delete) a policy |
+| `list_policy_templates` | List available policy templates |
+
+### Chat Messages (3 tools, V3 only)
+
+| Tool | Description |
+|------|-------------|
+| `list_chat_messages` | List chat messages for a document |
+| `create_chat_message` | Create a chat message on a PO/invoice |
+| `delete_chat_message` | Delete a chat message |
+
+### Digital Invoices (1 tool)
+
+| Tool | Description |
+|------|-------------|
+| `create_digital_invoice` | Create an invoice from a scanned document upload |
 
 ### Approval Flows (13 tools)
 
@@ -329,29 +400,36 @@ Once installed, Claude Code will automatically discover the skills and use them 
 ```
 src/
   index.ts              # Entry point — MCP server setup, auth tools, tool registration
-  api-client.ts         # HTTP client with versioned path building and auth headers
+  api-client.ts         # HTTP client with versioned path building, auth headers, multipart support
   auth.ts               # Dual auth manager (V1 token / V3 OAuth2)
   tool-helpers.ts       # Shared response helpers and error handling wrapper
   types.ts              # TypeScript interfaces for all API entities
+  schemas.ts            # Shared Zod schemas (custom field values, line items, nested attributes)
   tools/
-    approval-flows.ts   # Approval flow CRUD, publish/unpublish, runs, versions
+    approval-flows.ts   # Approval flow CRUD, publish/unpublish, runs, versions, rerun
     budgets.ts          # Budget CRUD
+    chat-messages.ts    # Chat messages (V3 only) — list, create, delete
     comments.ts         # PO and invoice comments
-    companies.ts        # Company details, employees, approvers, invitations
+    companies.ts        # Company details, employees, approvers, invitations, pending invites
+    compliance.ts       # Compliance checks, bulk checks, justifications, memos, evidence packs
+    custom-fields.ts    # Custom field CRUD + position reordering
     departments.ts      # Department CRUD
-    invoices.ts         # Invoice CRUD, approve/reject/cancel/archive, rerun approval
-    payments.ts         # Payment creation (standalone and PO-linked) and get
-    products.ts         # Product CRUD
-    purchase-orders.ts  # PO CRUD, approve/reject/cancel/archive/delete, delivery, PDF
+    digital-invoices.ts # Digital invoice creation from scanned documents
+    invoices.ts         # Invoice CRUD, approve/reject/cancel/archive, rerun approval, PO linking
+    payments.ts         # Payment creation (standalone, PO-linked, NPayment) and get
+    policies.ts         # Policy CRUD + policy templates
+    products.ts         # Product CRUD + bulk create + SKU listing
+    purchase-orders.ts  # PO CRUD, approve/reject/cancel/archive/delete, delivery, PDF, bulk save
     supplementary.ts    # Chart of accounts, QBO integration, email forwarding
-    suppliers.ts        # Supplier CRUD + top suppliers
+    suppliers.ts        # Supplier CRUD + top suppliers + SAM.gov check + supplier approvals
     tax-rates.ts        # Tax rate CRUD
+    uploads.ts          # File uploads (PO attachments, comment files, upload status)
     users.ts            # Current user profile and currency listing
     webhooks.ts         # Webhook CRUD + delete
 tests/
   e2e/
     setup.ts            # MockApiServer with version-agnostic route registration
-    *.test.ts           # E2E tests for each tool group
+    *.test.ts           # E2E tests for each tool group (211 tests)
 ```
 
 ## Development
@@ -359,8 +437,8 @@ tests/
 For contributors who want to work on the server itself:
 
 ```bash
-git clone https://github.com/procurementexpress/mcp.git
-cd mcp
+git clone https://github.com/przbadu/procurementexpress-mcp.git
+cd procurementexpress-mcp
 npm install
 ```
 
